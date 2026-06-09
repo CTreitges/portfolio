@@ -1,0 +1,37 @@
+[Unit]
+Description=Portfolio Website (Next.js standalone)
+Documentation=https://github.com/CTreitges
+After=network.target
+
+[Service]
+Type=simple
+User=portfolio
+Group=portfolio
+WorkingDirectory=/opt/portfolio/app
+# NODE_BIN wird von vps-setup.sh auf den echten node-Pfad gesetzt.
+ExecStart=__NODE_BIN__ server.js
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+EnvironmentFile=/etc/portfolio/portfolio.env
+Environment=NODE_ENV=production
+Environment=PORT=3100
+Environment=HOSTNAME=127.0.0.1
+
+# Hardening — die Site ist im Internet exponiert.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+MemoryMax=2G
+# Exakt enumerieren — sonst startet der Service unter ProtectSystem=strict nicht.
+ReadWritePaths=/opt/portfolio/logs
+ReadWritePaths=/opt/portfolio/app/.next/cache
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,20 @@
+# PRODUKTION: Let's-Encrypt-IP-Zertifikat (6-Tage-Profil "shortlived",
+# Caddy erneuert automatisch). Aktivieren NUR nachdem der Staging-Spike
+# (Caddyfile.staging) erfolgreich war.
+{
+	# Clients, die per IP zugreifen, senden KEIN SNI (SNI ist für Hostnamen).
+	# Ohne das matcht Caddy die Site nicht → TLS "internal error". default_sni
+	# behandelt SNI-lose Handshakes als die IP-Site.
+	default_sni <SERVER_IP>
+}
+
+https://<SERVER_IP> {
+	tls {
+		issuer acme {
+			profile shortlived
+		}
+	}
+	encode zstd gzip
+	header X-Robots-Tag "noindex, nofollow, noarchive"
+	reverse_proxy 127.0.0.1:3100
+}

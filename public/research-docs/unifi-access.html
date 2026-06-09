@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniFi Access — Gewerbehalle Systemübersicht</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f6f8; --card: #ffffff; --border: #d1d9e0;
+      --text: #1a252f; --muted: #6b7a8d;
+      --blue: #1565c0; --green: #2e7d32; --orange: #e65100;
+      --brown: #795548; --purple: #6a1b9a; --red: #c62828;
+      --header-from: #1a252f; --header-to: #2c3e50;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    header { background: linear-gradient(135deg, var(--header-from) 0%, var(--header-to) 100%); color: #fff; padding: 48px 40px 36px; position: relative; overflow: hidden; }
+    header::after { content: ''; position: absolute; right: -80px; top: -80px; width: 340px; height: 340px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+    header h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.5px; }
+    header .subtitle { color: #90a4ae; margin-top: 6px; font-size: 1rem; }
+    header .meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+    header .meta-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #b0bec5; }
+    header .meta-item span { background: rgba(255,255,255,0.12); border-radius: 4px; padding: 2px 10px; color: #e0e0e0; font-weight: 600; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; overflow-x: auto; }
+    nav ul { display: flex; list-style: none; padding: 0 24px; gap: 0; white-space: nowrap; }
+    nav ul li a { display: block; padding: 13px 13px; font-size: 0.79rem; font-weight: 600; color: var(--muted); text-decoration: none; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; }
+    nav ul li a:hover { color: var(--blue); border-bottom-color: var(--blue); }
+
+    main { max-width: 1300px; margin: 0 auto; padding: 40px 32px; }
+    section { margin-bottom: 60px; scroll-margin-top: 70px; }
+    h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+    h3 { font-size: 1.1rem; font-weight: 600; margin: 20px 0 10px; }
+    h4 { font-size: 0.95rem; font-weight: 600; margin: 12px 0 6px; }
+    p { margin-bottom: 12px; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 22px; }
+    .card + .card { margin-top: 14px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .card-grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .card-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+
+    .chip { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+    .chip-blue { background: #e3f2fd; color: var(--blue); }
+    .chip-green { background: #e8f5e9; color: var(--green); }
+    .chip-orange { background: #fff3e0; color: var(--orange); }
+    .chip-red { background: #ffebee; color: var(--red); }
+    .chip-purple { background: #f3e5f5; color: var(--purple); }
+    .chip-brown { background: #efebe9; color: var(--brown); }
+    .chip-gray { background: #f5f5f5; color: #555; }
+
+    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; background: var(--card); font-size: 0.87rem; }
+    thead th { background: var(--header-to); color: #fff; padding: 11px 13px; text-align: left; font-weight: 600; white-space: nowrap; }
+    tbody tr:nth-child(even) td { background: #f8fafc; }
+    tbody tr:hover td { background: #eef4fb; }
+    tbody td { padding: 9px 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tbody td:first-child { font-weight: 600; }
+    .yes { color: var(--green); font-weight: 700; }
+    .no { color: var(--red); font-weight: 700; }
+    .warn { color: var(--orange); font-weight: 700; }
+    .part { color: #1565c0; font-style: italic; font-size: 0.82rem; }
+
+    .ascii-box { background: #1a252f; color: #a8d8a8; border-radius: 10px; padding: 24px 28px; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.75; overflow-x: auto; }
+    .ascii-note { background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 14px; font-size: 0.88rem; }
+
+    .info-box { background: #e3f2fd; border-left: 4px solid var(--blue); border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
+    .warn-box { background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
+    .danger-box { background: #ffebee; border-left: 4px solid #ef5350; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
+    .green-box { background: #e8f5e9; border-left: 4px solid var(--green); border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
+
+    /* HW Cards */
+    .hw-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; }
+    .hw-card .hw-img { width: 100%; max-height: 155px; object-fit: contain; margin: 0 auto 14px; display: block; background: #f4f6f8; border-radius: 8px; padding: 10px; cursor: zoom-in; transition: opacity 0.15s; }
+    .hw-card .hw-img:hover { opacity: 0.85; }
+    .hw-card .hw-name { font-size: 0.95rem; font-weight: 700; font-family: 'Courier New', monospace; }
+    .hw-card .hw-price { font-size: 1.15rem; font-weight: 800; color: var(--blue); margin: 4px 0; }
+    .hw-card .hw-desc { font-size: 0.83rem; color: var(--muted); margin: 4px 0 10px; }
+    .hw-card .hw-specs { font-size: 0.81rem; padding-left: 15px; margin: 8px 0; }
+    .hw-card .hw-specs li { padding: 2px 0; }
+    .hw-card .hw-link { display: inline-block; margin-top: auto; padding-top: 10px; font-size: 0.79rem; color: var(--blue); text-decoration: none; }
+    .hw-card .hw-link:hover { text-decoration: underline; }
+    .hw-badge { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+    .badge-new { background: #e8f5e9; color: var(--green); }
+    .badge-sold { background: #ffebee; color: var(--red); }
+    .badge-top { background: #e3f2fd; color: var(--blue); }
+
+    /* Comparison highlight */
+    .best-pick { border: 2px solid var(--green) !important; position: relative; }
+    .best-pick::before { content: '★ Empfehlung'; position: absolute; top: -12px; left: 16px; background: var(--green); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 10px; border-radius: 10px; }
+
+    /* Opener cards */
+    .opener-card { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--brown); border-radius: 0 10px 10px 0; padding: 20px; margin-bottom: 14px; }
+    .opener-card h4 { color: var(--brown); margin-top: 0; }
+
+    /* Bell section */
+    .bell-card { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--purple); border-radius: 0 10px 10px 0; padding: 20px; margin-bottom: 14px; }
+    .bell-card h4 { color: var(--purple); margin-top: 0; margin-bottom: 10px; }
+    .indoor-card { background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%); border: 1px solid #ce93d8; border-radius: 10px; padding: 20px; }
+
+    /* Konfigurator */
+    .konfig-section { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .konfig-section h3 { margin-top: 0; color: var(--blue); font-size: 1rem; }
+    .konfig-door-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: border-color 0.2s; }
+    .konfig-door-card.active { border-color: var(--blue); background: #f0f7ff; }
+    .konfig-door-card .door-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .konfig-door-card .door-title { font-weight: 700; font-size: 0.95rem; flex: 1; }
+    .konfig-door-card .door-cost { font-weight: 800; color: var(--blue); font-size: 1rem; margin-left: auto; }
+    .konfig-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 10px; }
+    .konfig-row label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .konfig-row select { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; background: #fff; cursor: pointer; }
+    .konfig-toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .konfig-toggle input[type=checkbox] { width: 18px; height: 18px; cursor: pointer; accent-color: var(--blue); }
+    .total-box { background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%); color: #fff; border-radius: 14px; padding: 28px; text-align: center; margin-top: 20px; }
+    .total-box .total-label { font-size: 0.9rem; opacity: 0.8; }
+    .total-box .total-amount { font-size: 3rem; font-weight: 900; margin: 8px 0; letter-spacing: -1px; }
+    .total-box .total-note { font-size: 0.8rem; opacity: 0.7; }
+    .bom-table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.85rem; }
+    .bom-table td { padding: 6px 10px; border-bottom: 1px solid rgba(255,255,255,0.15); }
+    .bom-table td:last-child { text-align: right; font-weight: 700; }
+    .bom-table .bom-total { border-top: 2px solid rgba(255,255,255,0.5); font-weight: 900; font-size: 1rem; }
+
+    /* Static price table */
+    .price-config-table thead th { background: var(--header-from); }
+    .price-config-table .highlight { background: #e3f2fd !important; font-weight: 700; }
+
+    /* White total box */
+    .total-white-box { background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 28px; margin-top: 20px; }
+    .total-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--border); }
+    .total-header h3 { margin: 0; color: var(--blue); font-size: 1.1rem; }
+    .total-numbers { text-align: right; }
+    .total-netto-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+    .total-netto { font-size: 2.4rem; font-weight: 900; color: var(--blue); line-height: 1; }
+    .total-brutto { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+    .bom-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .bom-row:last-child { border-bottom: none; }
+    .bom-name { font-weight: 600; font-size: 0.9rem; }
+    .bom-detail { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .bom-price { font-weight: 700; color: var(--blue); white-space: nowrap; padding-left: 16px; }
+    .total-footer { border-top: 2px solid var(--border); margin-top: 16px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .total-mwst { font-size: 0.82rem; color: var(--muted); }
+    .total-brutto-val { font-weight: 800; font-size: 1rem; }
+    .total-empty { text-align: center; color: var(--muted); padding: 24px; font-size: 0.9rem; }
+
+    /* Lightbox */
+    #lb-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; cursor: zoom-out; }
+    #lb-overlay.active { display: flex; }
+    #lb-overlay img { max-width: 88vw; max-height: 88vh; object-fit: contain; border-radius: 12px; box-shadow: 0 8px 48px rgba(0,0,0,0.6); background: #fff; padding: 16px; }
+    #lb-close { position: fixed; top: 20px; right: 28px; color: #fff; font-size: 2.2rem; font-weight: 300; cursor: pointer; z-index: 10000; }
+
+    @media (max-width: 768px) {
+      header { padding: 28px 20px 22px; } header h1 { font-size: 1.45rem; }
+      main { padding: 24px 16px; }
+    }
+    @media print { nav { display: none; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>UniFi Access &mdash; Zugangskontrolle Gewerbehalle</h1>
+  <div class="subtitle">System-Übersicht &middot; Hardware-Vergleich &middot; Preiskalkulator &middot; Pitch-Dokument</div>
+  <div class="meta">
+    <div class="meta-item">System <span>UniFi Access</span></div>
+    <div class="meta-item">Preise <span>Netto EU-Store</span></div>
+    <div class="meta-item">Stand <span>Mai 2026</span></div>
+    <div class="meta-item">Hersteller <span>Ubiquiti</span></div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#prinzip">Prinzip</a></li>
+    <li><a href="#reader">Reader Vergleich</a></li>
+    <li><a href="#door-hub">Door Hub</a></li>
+    <li><a href="#ultra">Access Ultra</a></li>
+    <li><a href="#gate-hub">Gate Hub</a></li>
+    <li><a href="#locks">Schlösser</a></li>
+    <li><a href="#lpr">LPR Kamera</a></li>
+    <li><a href="#feature-vergleich">Feature Tabelle</a></li>
+    <li><a href="#zutritt">Zutrittsmethoden</a></li>
+    <li><a href="#klingel">Klingel &amp; Intercom</a></li>
+    <li><a href="#software">Software</a></li>
+    <li><a href="#lockdown">Lockdown</a></li>
+    <li><a href="#schloss-wahl">Schloss-Wahl</a></li>
+    <li><a href="#verkabelung">Verkabelung</a></li>
+    <li><a href="#rex">Drücker &amp; REX</a></li>
+    <li><a href="#konfigurator">Konfigurator</a></li>
+  </ul>
+</nav>
+
+<main>
+
+
+<!-- ===== SEK 2: SYSTEM-PRINZIP (kompakte Intro-Box, ohne Pricing-Tabelle) ===== -->
+<section id="prinzip">
+  <h2>UniFi Access &mdash; Prinzip in einem Satz</h2>
+  <div class="info-box"><strong>Jeder Zugangspunkt</strong> besteht aus <strong>Reader</strong> (liest Karte/NFC) + <strong>Hub</strong> (steuert Schloss) + <strong>Schloss</strong> (sperrt/&ouml;ffnet). Gate Hub ersetzt Door Hub bei Toren. Access Ultra kombiniert Reader + Hub in einem Ger&auml;t.</div>
+
+  <div class="card-grid-2" style="margin-top:20px;">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h4>PoE &mdash; Strom &uuml;ber Netzwerkkabel</h4>
+      <p>Alle UniFi Access Ger&auml;te werden &uuml;ber ein einziges Ethernet-Kabel mit Strom und Daten versorgt. Kein separates Stromkabel n&ouml;tig. Ein PoE-f&auml;higer Switch (z.&nbsp;B. USW-Pro-8-PoE, ~180&nbsp;&euro;) versorgt alle Ger&auml;te zentral.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h4>Controller &mdash; kein Cloud-Zwang</h4>
+      <p>UniFi Access l&auml;uft lokal auf einer UniFi Dream Machine, Cloud Gateway oder dediziertem Server. Kein Cloud-Abo n&ouml;tig. Remote-Zugriff optional via UniFi-Cloud oder eigenem VPN.</p>
+    </div>
+  </div>
+  <p style="font-size:0.88rem;color:var(--muted);margin-top:14px;text-align:center;">&darr; Im Folgenden alle Komponenten einzeln vorgestellt &mdash; <a href="#konfigurator">am Ende der Konfigurator</a> stellt das System zusammen.</p>
+</section>
+
+<!-- ===== SEK 3: READER VERGLEICH ===== -->
+<section id="reader">
+  <h2>Reader Vergleich &mdash; G3 · G3-Pro · G6 Entry · G6 Pro Entry</h2>
+  <div class="card-grid-4">
+
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2Ff20970ca-1951-4ed9-9016-3eea65981a94%2Fbe4c04c1-bf15-4bae-aacd-2bbc9d1a095c.png&q=75&w=400" alt="UA-G3 Reader" loading="lazy" onclick="openLB(this)">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">UA-G3 Reader <span class="hw-badge badge-top">G3</span></div>
+        <div class="hw-price">125 €</div>
+      </div>
+      <div class="hw-desc">Kompakter Außenleser, Touch Pass, kein Intercom</div>
+      <ul class="hw-specs">
+        <li>NFC + BLE 4.1</li>
+        <li>Touch Pass (Apple/Google Wallet)</li>
+        <li>Handwave-Unlock (berührungslos)</li>
+        <li><strong>KEIN Kamera, KEIN Intercom</strong></li>
+        <li>IP55 · PoE max 5W</li>
+        <li>Benötigt: Door Hub</li>
+        <li>10 Touch Passes gratis (1J)</li>
+      </ul>
+      <div style="margin-top:8px;"><span class="chip chip-blue">Einsatz</span> Nebenausgänge, AT1/AT2, Tore</div>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-controls/products/ua-g3" target="_blank">↗ Unifi Store — UA-G3</a>
+    </div>
+
+    <div class="hw-card best-pick">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F052e61ec-7d2b-4fac-80ed-1d7aa134b409%2Fb9933691-d470-4e58-b3ef-11b9b799887c.png&q=75&w=400" alt="UA-G3-Pro Reader" loading="lazy" onclick="openLB(this)">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">UA-G3-Pro <span class="hw-badge badge-top">G3</span></div>
+        <div class="hw-price">325 €</div>
+      </div>
+      <div class="hw-desc">Großer Reader mit Kamera, Intercom, Touch Pass — bewährt</div>
+      <ul class="hw-specs">
+        <li>NFC + BLE 4.2</li>
+        <li>Touch Pass (Apple/Google Wallet)</li>
+        <li>PIN-Unlock (Tastenfeld)</li>
+        <li><strong>Kamera 2MP + Two-Way Audio</strong></li>
+        <li>Klingelknopf integriert</li>
+        <li>IP55 · PoE</li>
+        <li>Benötigt: Door Hub</li>
+        <li>10 Touch Passes gratis (1J)</li>
+      </ul>
+      <div style="margin-top:8px;"><span class="chip chip-green">Einsatz</span> Haupttür, alle Außentüren mit Intercom</div>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-controls/products/ua-g3-pro" target="_blank">↗ Unifi Store — UA-G3-Pro</a>
+    </div>
+
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2Fe0cc2520-7241-4173-9c0e-a6913eaaf629%2F6506ea11-eee8-4576-ac1f-bf063fdb772a.png&q=75&w=400" alt="G6 Entry" loading="lazy" onclick="openLB(this)">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">G6 Entry <span class="hw-badge badge-new">G6 NEU</span></div>
+        <div class="hw-price">225 €</div>
+      </div>
+      <div class="hw-desc">Neue Generation: 5MP Kamera, Face ID, Protect+Access</div>
+      <ul class="hw-specs">
+        <li>NFC + BLE + Touch Pass</li>
+        <li><strong>5MP Portrait-Kamera (1920×2560)</strong></li>
+        <li>Enhanced Two-Way Audio</li>
+        <li>Face ID / Gesichtserkennung (via Hub)</li>
+        <li>Kein Display</li>
+        <li>Outdoor Covered (nicht freistehend)</li>
+        <li><strong>Benötigt: Door Hub</strong> (für NFC/Face ID)</li>
+        <li>Unifi Protect + Access integriert</li>
+        <li>10 Touch Passes gratis (1J)</li>
+      </ul>
+      <div style="margin-top:8px;"><span class="chip chip-blue">Einsatz</span> Haupttür, wo Face ID gewünscht</div>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-cameras-doorbells/products/uvc-g6-entry" target="_blank">↗ Unifi Store — G6 Entry</a>
+    </div>
+
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2Fe0cc2520-7241-4173-9c0e-a6913eaaf629%2F05e7bb6e-00aa-4fbb-8d96-daf69884aa8e.png&q=75&w=400" alt="G6 Pro Entry" loading="lazy" onclick="openLB(this)">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">G6 Pro Entry <span class="hw-badge badge-sold">AUSVERKAUFT</span></div>
+        <div class="hw-price">340 €</div>
+      </div>
+      <div class="hw-desc">Premium: 12MP + 3&quot; Touchdisplay + Face ID</div>
+      <ul class="hw-specs">
+        <li>NFC + BLE + Touch Pass</li>
+        <li><strong>12MP Portrait-Kamera (3024×4096)</strong></li>
+        <li>Enhanced Two-Way Audio</li>
+        <li><strong>3&quot; Touch-Display für Besucher</strong></li>
+        <li>Face ID / Gesichtserkennung</li>
+        <li>Interface Designer (anpassbares UI)</li>
+        <li>Outdoor Covered</li>
+        <li><strong>Benötigt: Door Hub</strong></li>
+        <li>Unifi Protect + Access integriert</li>
+        <li>10 Touch Passes gratis (1J)</li>
+      </ul>
+      <div style="margin-top:8px;"><span class="chip chip-orange">Status</span> Derzeit ausverkauft im EU-Store</div>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-cameras-doorbells/products/uvc-g6-pro-entry" target="_blank">↗ Unifi Store — G6 Pro Entry</a>
+    </div>
+
+  </div>
+
+  <h3>Vor- &amp; Nachteile auf einen Blick</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Merkmal</th><th>G3 Reader</th><th>G3-Pro</th><th>G6 Entry</th><th>G6 Pro Entry</th></tr></thead>
+      <tbody>
+        <tr><td>Preis (Netto)</td><td>125 €</td><td>325 €</td><td>225 €</td><td>340 €</td></tr>
+        <tr><td>NFC-Karte</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Touch Pass (Wallet)</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>PIN-Eingabe</td><td class="no">✗</td><td class="yes">✓</td><td class="no">✗</td><td class="part">via Display</td></tr>
+        <tr><td>Kamera</td><td class="no">✗</td><td class="yes">2MP</td><td class="yes">5MP Portrait</td><td class="yes">12MP Portrait</td></tr>
+        <tr><td>Two-Way Audio</td><td class="no">✗</td><td class="yes">✓</td><td class="yes">✓ (enhanced)</td><td class="yes">✓ (enhanced)</td></tr>
+        <tr><td>Klingelknopf</td><td class="no">✗</td><td class="yes">✓</td><td class="part">Touch-Area</td><td class="yes">✓ Display</td></tr>
+        <tr><td>Touch-Display</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td><td class="yes">3&quot; Touch</td></tr>
+        <tr><td>Face ID</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓ (m. Hub)</td><td class="yes">✓ (m. Hub)</td></tr>
+        <tr><td>QR-Code</td><td class="no">✗</td><td class="no">✗</td><td class="part">via Kamera</td><td class="yes">✓ Display+Kamera</td></tr>
+        <tr><td>Unifi Protect Integration</td><td class="no">✗</td><td class="part">teilw.</td><td class="yes">✓ nativ</td><td class="yes">✓ nativ</td></tr>
+        <tr><td>Hub benötigt</td><td class="yes">✓ Pflicht</td><td class="yes">✓ Pflicht</td><td class="yes">✓ Pflicht</td><td class="yes">✓ Pflicht</td></tr>
+        <tr><td>Outdoor Exposed</td><td class="yes">✓ IP55</td><td class="yes">✓ IP55</td><td class="warn">Covered only</td><td class="warn">Covered only</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn-box"><strong>G6 Entry / Pro Entry:</strong> Diese Geräte benötigen zwingend Überdachung (Outdoor Covered). Bei freistehender Montage ohne Dach → G3/G3-Pro wählen (IP55, Outdoor Exposed geeignet).</div>
+</section>
+
+<!-- ===== SEK 4: DOOR HUB ===== -->
+<section id="door-hub">
+  <h2>Door Hub &amp; Door Hub Mini &mdash; Controller pro Tür</h2>
+  <div class="info-box">Der Door Hub ist das Herzstück jeder Tür. Er empfängt das Signal vom Reader, prüft die Berechtigung und steuert das Schloss. <strong>Reader ohne Hub = keine Funktion.</strong></div>
+
+  <div class="card-grid-2">
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F9550c5cc-2b6d-4910-81ec-3cb37c85db50%2F3fc694c2-de62-41a8-8a06-3fa00d28c3e9.png&q=75&w=400" alt="Door Hub Mini" loading="lazy" onclick="openLB(this)">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">Door Hub Mini <span class="hw-badge badge-top">UA-Hub-Door-Mini</span></div>
+        <div class="hw-price">99 €</div>
+      </div>
+      <div class="hw-desc">Kompakter Hub für einfache Einzeltür-Installationen</div>
+      <ul class="hw-specs">
+        <li><strong>1× Relay-Ausgang</strong> (Schloss ODER Drücker, nicht beides)</li>
+        <li>1× Türkontakt-Eingang (door sensor)</li>
+        <li>1× REX-Eingang</li>
+        <li>1× Reader-Port (Wiegand/OSDP)</li>
+        <li>PoE-betrieben</li>
+        <li>Kompakt — für einfache Türen</li>
+      </ul>
+      <div class="warn-box" style="margin-top:10px;font-size:0.82rem;"><strong>Einschränkung:</strong> Nur 1 Relay → Schloss und Drücker/Buzzer können nicht getrennt gesteuert werden.</div>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-controls/products/ua-hub-door-mini" target="_blank">↗ Unifi Store — Door Hub Mini</a>
+    </div>
+
+    <div class="hw-card best-pick">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F90d00ca5-015c-4bc6-b3bd-0d1f8d5bdea3%2Fe22f9d0b-0ce1-452d-b433-170e6a1b3acf.png&q=75&w=400" alt="Door Hub" loading="lazy" onclick="openLB(this)">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">Door Hub <span class="hw-badge badge-top">UA-Hub-Door</span></div>
+        <div class="hw-price">179 €</div>
+      </div>
+      <div class="hw-desc">Vollwertiger Hub — empfohlen für alle Außentüren</div>
+      <ul class="hw-specs">
+        <li><strong>2× Relay-Ausgänge (AUX1 + AUX2)</strong></li>
+        <li>AUX1 → Schloss (NO/COM/NC)</li>
+        <li>AUX2 → Drücker / Buzzer / Klingel getrennt!</li>
+        <li>1× Türkontakt-Eingang</li>
+        <li>1× REX-Eingang</li>
+        <li>1× Reader-Port (Wiegand/OSDP)</li>
+        <li>PoE-betrieben</li>
+        <li>Tamper-Schutz (Einbruchserkennung)</li>
+      </ul>
+      <div class="green-box" style="margin-top:10px;font-size:0.82rem;"><strong>Empfehlung:</strong> 2 Relays → Schloss UND Drücker/Klingel unabhängig steuerbar. Für alle Außentüren und Intercom-Setup verwenden.</div>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-controls/products/ua-hub-door" target="_blank">↗ Unifi Store — Door Hub</a>
+    </div>
+  </div>
+
+  <h3>Wann welchen Hub?</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Szenario</th><th>Hub Mini (99€)</th><th>Door Hub (179€)</th></tr></thead>
+      <tbody>
+        <tr><td>Nur Schloss steuern</td><td class="yes">✓ ausreichend</td><td class="yes">✓</td></tr>
+        <tr><td>Schloss + Drücker getrennt</td><td class="no">✗ nur 1 Relay</td><td class="yes">✓ 2 Relays</td></tr>
+        <tr><td>Schloss + Klingel/Buzzer getrennt</td><td class="no">✗</td><td class="yes">✓</td></tr>
+        <tr><td>G3-Pro / G6 Entry mit Intercom</td><td class="warn">eingeschränkt</td><td class="yes">✓ empfohlen</td></tr>
+        <tr><td>Einfache Innentür / Neben-Exit</td><td class="yes">✓ ausreichend</td><td class="yes">✓ Overkill</td></tr>
+        <tr><td>Tamper-Erkennung (Gehäuse-Einbruch)</td><td class="no">✗</td><td class="yes">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SEK 5: ACCESS ULTRA ===== -->
+<section id="ultra">
+  <h2>Access Ultra &mdash; All-in-One für Innentüren</h2>
+  <div class="card-grid-2">
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F8c23291f-02aa-460a-a9bb-22cdf8cd3d5f%2F3ce33d93-a02e-4d23-a712-a07557c832b5.png&q=75&w=400" alt="Access Ultra" loading="lazy" onclick="openLB(this)">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">Access Ultra <span class="hw-badge badge-new">UA-Ultra</span></div>
+        <div class="hw-price">90 €</div>
+      </div>
+      <div class="hw-desc">Reader + Hub in einem Gerät — kein separater Door Hub nötig</div>
+      <ul class="hw-specs">
+        <li>Integrierter NFC-Reader</li>
+        <li>PIN-Keypad</li>
+        <li>1× Relay-Ausgang für Schloss</li>
+        <li>PoE-betrieben</li>
+        <li>Kompaktes Design für Innenmontage</li>
+        <li><strong>Nicht kompatibel mit externem Door Hub</strong></li>
+        <li>Kein Kamera, kein Intercom</li>
+      </ul>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-controls/products/ua-ultra" target="_blank">↗ Unifi Store — Access Ultra</a>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:14px;">
+      <h4>Warum Access Ultra für Innentüren?</h4>
+      <p>Für die Büro-Innentür (IT1) ist der Access Ultra die kosteneffizienteste Lösung. Statt Reader (125€) + Door Hub Mini (99€) = 224€ reicht der Access Ultra allein (90€) — <strong>Ersparnis: 134€ pro Innentür</strong>.</p>
+      <div class="green-box">
+        <strong>Innentür-Paket:</strong><br>
+        Access Ultra: 90€<br>
+        + Lock Secure: 80€<br>
+        + Access Button (REX): 35€<br>
+        <strong style="font-size:1.1rem;">= 205€ gesamt</strong>
+      </div>
+      <div class="warn-box" style="font-size:0.85rem;"><strong>Nicht für Außentüren:</strong> Kein Kamera, kein Intercom, keine IP55-Zertifizierung. Nur für Innenanwendungen geeignet.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEK 6: GATE HUB ===== -->
+<section id="gate-hub">
+  <h2>Gate Hub &mdash; Controller für Tore &amp; Schranken</h2>
+  <div class="card-grid-2">
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F5fa9cf68-2fd3-401d-ba24-6809df0f6419%2F6da0f5d0-8280-4c76-8dfa-843a74ba77ce.png&q=75&w=400" alt="Gate Hub" loading="lazy" onclick="openLB(this)">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">Gate Hub <span class="hw-badge badge-top">UA-Hub-Gate</span></div>
+        <div class="hw-price">250 €</div>
+      </div>
+      <div class="hw-desc">Spezialisierter Hub für Tore — Impulskontakt an bestehenden Antrieb</div>
+      <ul class="hw-specs">
+        <li>Impulskontakt-Ausgang (1s Schließer)</li>
+        <li>Kompatibel mit allen gängigen Torantrieben</li>
+        <li>Reader-Port für G3/G3-Pro</li>
+        <li>LPR-Kamera Integration (automatische Öffnung)</li>
+        <li>Torstatus-Monitoring (offen/zu)</li>
+        <li>Wetterfest für Außenmontage</li>
+        <li><em>G6 Series Integration: coming soon</em></li>
+      </ul>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-controls/products/ua-hub-gate" target="_blank">↗ Unifi Store — Gate Hub</a>
+    </div>
+    <div>
+      <div class="ascii-box" style="margin-bottom:14px;"><pre>
+Gate Hub Prinzip:
+─────────────────
+ UniFi Controller
+       │
+ [Gate Hub] ←── G3 Reader (Karte/NFC)
+       │         oder LPR Kamera (Kennzeichen)
+       │
+  Relais-Impuls (1 Sekunde)
+       │
+  Vorhandene Torantrieb-Steuerplatine
+       │
+  Tor öffnet / schließt</pre></div>
+      <div class="info-box" style="font-size:0.85rem;"><strong>Vorhandene Antriebe:</strong> Da beide Torantriebe (T1/T2) bereits installiert sind, muss nur der Gate Hub + 1 Reader pro Tor ergänzt werden. Der Hub schickt einen kurzen Impuls an den Eingang "OPEN" der Steuerplatine — exakt wie ein manueller Taster.</div>
+      <div class="warn-box" style="font-size:0.85rem;margin-top:10px;"><strong>G6 Entry / G6 Pro Entry am Tor:</strong> Laut Unifi-Store ist die vollständige Access-Integration (NFC-Zugang, Face ID, Berechtigungsverwaltung) für die G6-Serie am Gate Hub noch <strong>„coming soon"</strong>. Als reine Kamera (Unifi Protect) funktionieren G6-Geräte bereits. Für zuverlässigen NFC-Zugang am Tor aktuell G3 oder G3-Pro verwenden.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEK 7: SCHLÖSSER ===== -->
+<section id="locks">
+  <h2>Schlösser &mdash; Lock Secure vs. Lock Electric</h2>
+  <div class="card-grid-2">
+
+    <div class="hw-card best-pick">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F4169e695-52be-466d-af67-4f258887ea6c%2Fc68fdb7a-619f-44c2-af6e-c2e541a98f2a.png&q=75&w=400" alt="Lock Secure Strike" loading="lazy" onclick="openLB(this)">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">Fail-Secure Strike Lock <span class="hw-badge badge-top">UACC-Lock-Strike-Secure-15mm</span></div>
+        <div class="hw-price">80 €</div>
+      </div>
+      <div class="hw-desc">Elektro-Türöffner (Schließblech), Fail-secure, 1.200 kg Haltekraft</div>
+      <ul class="hw-specs">
+        <li>Typ: Elektrischer Türöffner (Strike / Schließblech)</li>
+        <li><strong>Fail-secure:</strong> Strom weg = Tür bleibt gesperrt ✓</li>
+        <li>Haltekraft: 1.200 kg</li>
+        <li>Benötigt: 15mm Normfalz am Rahmen</li>
+        <li>Montage: im Türrahmen (Schließseite)</li>
+        <li>Standard + Narrow-Variante verfügbar</li>
+        <li>Kompatibel: Hub-Door, Hub-Mini, Ultra, Gate Hub</li>
+      </ul>
+      <div class="green-box" style="margin-top:10px;font-size:0.82rem;"><strong>Empfehlung</strong> für alle Außentüren. Günstig, zuverlässig, fail-secure = sicher bei Stromausfall.</div>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-locks/products/uacc-lock-strike-secure-15mm" target="_blank">↗ Unifi Store — Strike Lock</a>
+    </div>
+
+    <div class="hw-card">
+      <div style="background:#f4f6f8;border-radius:8px;padding:20px;text-align:center;margin-bottom:14px;font-size:2rem;">🔒</div>
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">Electric Lock (Bolt) <span class="hw-badge badge-top">UA-Lock-Electric</span></div>
+        <div class="hw-price">~89 €</div>
+      </div>
+      <div class="hw-desc">Elektrischer Riegel (Bolt), Fail-secure, 1.200 kg</div>
+      <ul class="hw-specs">
+        <li>Typ: Elektrischer Riegel (Bolt)</li>
+        <li><strong>Fail-secure:</strong> Strom weg = verriegelt ✓</li>
+        <li>Haltekraft: 1.200 kg</li>
+        <li>Montage: Türblatt-seitig (Riegelschloss)</li>
+        <li>Keine Normfalz-Anforderung</li>
+        <li>Höhere mechanische Widerstandskraft</li>
+        <li>Kompatibel: Hub-Door, Hub-Mini, Ultra, Gate Hub</li>
+      </ul>
+      <div class="info-box" style="margin-top:10px;font-size:0.82rem;"><strong>Wann wählen?</strong> Wenn kein Normfalz (15mm) im Türrahmen vorhanden oder höhere Einbruchssicherheit gewünscht.</div>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-locks" target="_blank">↗ Unifi Store — Locks</a>
+    </div>
+
+  </div>
+
+  <div class="table-wrap" style="margin-top:20px;">
+    <table>
+      <thead><tr><th>Merkmal</th><th>Lock Secure (Strike 15mm)</th><th>Lock Electric (Bolt)</th></tr></thead>
+      <tbody>
+        <tr><td>Preis</td><td>80 €</td><td>~89 €</td></tr>
+        <tr><td>Typ</td><td>Schließblech-Öffner (Strike)</td><td>Elektrischer Riegel (Bolt)</td></tr>
+        <tr><td>Fail-secure (Strom weg = zu)</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Normfalz erforderlich</td><td class="warn">✓ 15mm Normfalz nötig</td><td class="yes">✗ nicht nötig</td></tr>
+        <tr><td>Montage</td><td>Im Rahmen (Gegenseite der Falle)</td><td>Im Türblatt (Riegelseite)</td></tr>
+        <tr><td>Einbruchswiderstand</td><td>Standard</td><td>Höher</td></tr>
+        <tr><td>Geeignet für Außentür</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Geeignet für Innentür</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn-box"><strong>Magnentschlösser:</strong> Nicht empfohlen. Magnentschlösser (Fail-safe) öffnen bei Stromausfall — kritisches Sicherheitsrisiko bei Außentüren. Für Brandschutztüren mit gesetzlicher Anforderung prüfen.</div>
+</section>
+
+<!-- ===== SEK 8: LPR ===== -->
+<section id="lpr">
+  <h2>UVC-AI-LPR &mdash; Kennzeichen-Kamera</h2>
+  <div class="card-grid-2">
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2Fad7cda21-71d0-4d92-a97e-93a0050b15ff%2Fe2a74de7-5e2b-42fa-9c03-541a6acf6620.png&q=75&w=400" alt="UVC-AI-LPR" loading="lazy" onclick="openLB(this)">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">AI LPR Kamera <span class="hw-badge badge-top">UVC-AI-LPR-B</span></div>
+        <div class="hw-price">449 €</div>
+      </div>
+      <div class="hw-desc">Kennzeichenerkennung — automatisches Öffnen für zugelassene Fahrzeuge</div>
+      <ul class="hw-specs">
+        <li>4K Kamera mit 3× optischem Zoom</li>
+        <li>Bis 90 km/h Fahrzeuggeschwindigkeit</li>
+        <li>Langstrecken-IR-Nachtsicht</li>
+        <li>Direkt mit Gate Hub verbunden</li>
+        <li>Kennzeichen hinterlegen in UniFi Access</li>
+        <li>Automatisches Tor-Öffnen bei Treffer</li>
+        <li>Nur für Kennzeichen-Erkennung optimiert</li>
+        <li>Nacht: für andere Details separate Kamera empfohlen</li>
+      </ul>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/door-access-cameras-doorbells/products/uvc-ai-lpr" target="_blank">↗ Unifi Store — UVC-AI-LPR</a>
+    </div>
+    <div>
+      <h4>Sinnvoll für Tore?</h4>
+      <p>Die LPR-Kamera macht das Tor-Öffnen für Fahrzeuge vollautomatisch: Fahrzeug fährt vor → Kamera erkennt Kennzeichen → Gate Hub öffnet sofort. Keine Karte, kein App-Touch nötig.</p>
+      <div class="card" style="margin-top:14px;">
+        <strong>Installation LPR am Tor:</strong>
+        <ul style="padding-left:16px;margin-top:8px;font-size:0.85rem;">
+          <li>LPR-Kamera auf ca. 3-4m Höhe, Blickwinkel auf Fahrzeugnummernschild</li>
+          <li>Anschluss per PoE direkt an Gate Hub oder Switch</li>
+          <li>Kennzeichen in UniFi Access-App hinterlegen</li>
+          <li>Gate Hub konfigurieren: bei LPR-Treffer → Tor öffnen</li>
+        </ul>
+      </div>
+      <div class="info-box" style="margin-top:14px;font-size:0.85rem;"><strong>Empfehlung:</strong> LPR sinnvoll bei T1 (Nordtor, Hauptfahrzeugzufahrt). T2 (Südtor) reicht oft mit manuellem Reader.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEK 9: FEATURE VERGLEICH ===== -->
+<section id="feature-vergleich">
+  <h2>Hardware Feature Vergleich &mdash; Alle Komponenten</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>G3 Reader<br><small>125 €</small></th>
+          <th>G3-Pro<br><small>325 €</small></th>
+          <th>G6 Entry<br><small>225 €</small></th>
+          <th>G6 Pro Entry<br><small>340 €</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>NFC-Karte (MIFARE)</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>BLE (Bluetooth)</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Apple Wallet (Touch Pass)</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Google Wallet (Touch Pass)</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>PIN-Eingabe</td><td class="no">✗</td><td class="yes">✓ Keypad</td><td class="no">✗</td><td class="yes">✓ via Display</td></tr>
+        <tr><td>QR-Code</td><td class="no">✗</td><td class="no">✗</td><td class="part">via Kamera</td><td class="yes">✓ Display+Kamera</td></tr>
+        <tr><td>Face ID (Gesichtserkennung)</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓ (mit Hub)</td><td class="yes">✓ (mit Hub)</td></tr>
+        <tr><td>Klingel / Intercom</td><td class="no">✗</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Kamera</td><td class="no">✗</td><td class="yes">2 MP</td><td class="yes">5 MP Portrait</td><td class="yes">12 MP Portrait</td></tr>
+        <tr><td>Two-Way Audio</td><td class="no">✗</td><td class="yes">✓</td><td class="yes">✓ enhanced</td><td class="yes">✓ enhanced</td></tr>
+        <tr><td>Touch-Display</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td><td class="yes">3&quot; Touchscreen</td></tr>
+        <tr><td>Interface Designer (Display)</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓</td></tr>
+        <tr><td>Hub benötigt</td><td class="yes">Pflicht</td><td class="yes">Pflicht</td><td class="yes">Pflicht</td><td class="yes">Pflicht</td></tr>
+        <tr><td>Outdoor Exposed (IP55)</td><td class="yes">✓ IP55</td><td class="yes">✓ IP55</td><td class="warn">Covered only</td><td class="warn">Covered only</td></tr>
+        <tr><td>Unifi Protect Integration</td><td class="no">✗</td><td class="part">teilweise</td><td class="yes">✓ nativ</td><td class="yes">✓ nativ</td></tr>
+        <tr><td>Preis Netto (EU-Store)</td><td><strong>125 €</strong></td><td><strong>325 €</strong></td><td><strong>225 €</strong></td><td><strong>340 €</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SEK 10: ZUTRITTSMETHODEN ===== -->
+<section id="zutritt">
+  <h2>Zutrittsmethoden &mdash; Wer öffnet wie?</h2>
+  <div class="card-grid">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h4>🪪 NFC-Karte / Keyfob</h4>
+      <p>Klassische Methode. MIFARE-Karten oder Keyfobs (Schlüsselanhänger) ans Lesegerät halten. Karten ab 25€/10 Stück. Sofort einsatzbereit, kein Smartphone nötig.</p>
+      <span class="chip chip-blue">Alle Reader</span>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h4>📱 Apple / Google Wallet (Touch Pass)</h4>
+      <p>Smartphone oder Apple Watch ans Lesegerät halten. Funktioniert via NFC. 10 Passes gratis je Reader (1 Jahr), danach ~5€/Nutzer/Jahr. Sehr komfortabel, kein Plastik.</p>
+      <span class="chip chip-blue">G3, G3-Pro, G6, G6-Pro</span>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h4>🔵 BLE Hands-Free</h4>
+      <p>Automatisches Öffnen beim Annähern mit UniFi Access App. Kein aktives Tippen nötig. Konfigurierbar: Proximity-Erkennung ab ~1m.</p>
+      <span class="chip chip-green">Alle Reader (mit App)</span>
+    </div>
+    <div class="card" style="border-left:4px solid var(--orange);">
+      <h4>🔢 PIN-Code</h4>
+      <p>Tasteneingabe ohne Karte/Smartphone. Gut für Besucher, Lieferanten. Codes zeitlich begrenzt einstellbar (z.B. nur dienstags 08–18 Uhr).</p>
+      <span class="chip chip-orange">G3-Pro, Access Ultra</span>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h4>📷 Face ID / Gesichtserkennung</h4>
+      <p>Kamera erkennt Gesicht → Tür öffnet. Nur mit G6 Entry oder G6 Pro Entry + Door Hub. Keine Karte, kein Smartphone. KI-basiert, hohe Erkennungsrate.</p>
+      <span class="chip chip-purple">G6 Entry, G6 Pro Entry</span>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h4>📋 QR-Code</h4>
+      <p>Besucher zeigen QR-Code (aus E-Mail/App) vor die Kamera. G6 Entry erkennt QR via Kamera-Software. G6 Pro Entry: Besucher scannt direkt am 3"-Display. Ideal für Gastbesucher.</p>
+      <span class="chip chip-purple">G6 Entry (Kamera), G6 Pro Entry (Display)</span>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h4>🚗 Kennzeichen (LPR)</h4>
+      <p>Fahrzeug fährt vor → Kamera liest Kennzeichen → Tor öffnet automatisch. Keine Aktion des Fahrers. Nur für Tore mit Gate Hub + UVC-AI-LPR.</p>
+      <span class="chip chip-green">Gate Hub + LPR-Kamera</span>
+    </div>
+    <div class="card" style="border-left:4px solid var(--muted);">
+      <h4>📲 Remote per App</h4>
+      <p>Beliebige berechtigte Person öffnet Tür per Tastendruck in der UniFi Access App — von überall, remote. Ideal für Klingelantwort: Besucher klingelt → Mitarbeiter öffnet per Handy.</p>
+      <span class="chip chip-gray">Alle Türen (App-Nutzer)</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEK 11: KLINGEL & INTERCOM ===== -->
+<section id="klingel">
+  <h2>Klingel &amp; Intercom &mdash; Türkommunikation</h2>
+  <div class="info-box">
+    <strong>Wie funktioniert das UniFi Intercom-System?</strong> Der Besucher klingelt am Reader (G3-Pro, G6 Entry, G6 Pro Entry). Der Anruf geht via IP-Netzwerk an die UniFi Access App auf konfigurierten Smartphones. Der Empfänger sieht das Live-Kamerabild und kann per App-Klick die Tür öffnen — von überall.
+  </div>
+
+  <h3>Außengeräte mit Klingel-/Intercom-Funktion</h3>
+  <div class="card-grid">
+    <div class="bell-card">
+      <h4>UA-G3-Pro — 325 €</h4>
+      <div style="font-size:0.85rem;margin-bottom:10px;">
+        <span class="chip chip-purple">Klingel</span>
+        <span class="chip chip-blue" style="margin-left:4px;">2MP Kamera</span>
+        <span class="chip chip-green" style="margin-left:4px;">Two-Way Audio</span>
+      </div>
+      <ul style="font-size:0.85rem;padding-left:16px;">
+        <li>Klingelknopf: Touch-sensitiver Bereich am Reader</li>
+        <li>Kamera 2MP — Besucher-Identifikation</li>
+        <li>Two-Way Audio (Mikrofon + Lautsprecher)</li>
+        <li>Anruf geht direkt an UniFi Access App</li>
+        <li>Outdoor Exposed (IP55) — ohne Dach montierbar</li>
+        <li>Gleichzeitig: NFC-Reader + PIN-Pad + Intercom</li>
+      </ul>
+    </div>
+    <div class="bell-card">
+      <h4>G6 Entry — 225 €</h4>
+      <div style="font-size:0.85rem;margin-bottom:10px;">
+        <span class="chip chip-purple">Klingel</span>
+        <span class="chip chip-blue" style="margin-left:4px;">5MP Kamera</span>
+        <span class="chip chip-green" style="margin-left:4px;">Enhanced Audio</span>
+      </div>
+      <ul style="font-size:0.85rem;padding-left:16px;">
+        <li>Klingelbereich: berührungsempfindliche Fläche</li>
+        <li>5MP Portrait-Kamera (ideal für Face ID)</li>
+        <li>Enhanced Two-Way Audio</li>
+        <li>Anruf an UniFi Access App + Protect-Kameraintegration</li>
+        <li>Nur Outdoor Covered (Überdachung erforderlich!)</li>
+        <li>Benötigt zusätzlich Door Hub</li>
+      </ul>
+    </div>
+    <div class="bell-card">
+      <h4>G6 Pro Entry — 340 € <span class="chip chip-red" style="font-size:0.7rem;">ausverkauft</span></h4>
+      <div style="font-size:0.85rem;margin-bottom:10px;">
+        <span class="chip chip-purple">Klingel</span>
+        <span class="chip chip-blue" style="margin-left:4px;">12MP Kamera</span>
+        <span class="chip chip-green" style="margin-left:4px;">3&quot; Display</span>
+      </div>
+      <ul style="font-size:0.85rem;padding-left:16px;">
+        <li>3" Touchscreen-Display: Besucher interagiert aktiv</li>
+        <li>Besucher kann Ansprechpartner auswählen (z.B. "Büro", "Lager")</li>
+        <li>12MP Portrait-Kamera für beste Bildqualität</li>
+        <li>Enhanced Two-Way Audio</li>
+        <li>Interface Designer: Display-Inhalt frei konfigurierbar</li>
+        <li>QR-Code-Scan über Display möglich</li>
+        <li>Nur Outdoor Covered + benötigt Door Hub</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-top:28px;">Innen-Empfang &mdash; Wo klingelt's rein?</h3>
+  <div class="card-grid">
+    <div class="indoor-card">
+      <h4>📱 UniFi Access App — 0 € extra</h4>
+      <p style="font-size:0.85rem;margin-bottom:10px;"><strong>Standard-Lösung.</strong> Jeder berechtigte Nutzer erhält eine Push-Benachrichtigung auf sein Smartphone. Im App-Fenster: Live-Kamera, Sprechen, Tür öffnen.</p>
+      <ul style="font-size:0.83rem;padding-left:16px;">
+        <li>iOS + Android kostenlos</li>
+        <li>Öffnen per Tap — von überall</li>
+        <li>Benachrichtigung auch wenn App im Hintergrund</li>
+        <li>Routing: pro Tür wählbar, wer Anrufe bekommt</li>
+      </ul>
+      <div style="margin-top:10px;"><span class="chip chip-green">Empfehlung</span> primäre Lösung</div>
+    </div>
+    <div class="indoor-card">
+      <h4>🖥️ Tablet-Station (iPad/Android) — eigenes Gerät</h4>
+      <p style="font-size:0.85rem;margin-bottom:10px;">Tablet permanent im Büro montiert (z.B. Wandhalter), App im Dauerbetrieb. Funktioniert wie eine klassische Videosprechanlage — immer sichtbar, immer bereit.</p>
+      <ul style="font-size:0.83rem;padding-left:16px;">
+        <li>Jedes iOS/Android Tablet nutzbar</li>
+        <li>Tablet-Halter: ~20–50€ (3rd Party)</li>
+        <li>Kein Unifi-spezifisches Produkt nötig</li>
+        <li>Immer-An: App im Kiosk-Modus</li>
+      </ul>
+      <div style="margin-top:10px;"><span class="chip chip-blue">Sinnvoll</span> für Empfangsbereich</div>
+    </div>
+    <div class="indoor-card">
+      <h4>📟 G3-Pro als Indoor-Station — 325 €</h4>
+      <p style="font-size:0.85rem;margin-bottom:10px;">Der G3-Pro Reader kann auch <strong>innen</strong> als dedizierte Intercom-Station montiert werden. Funktioniert als Gegensprechanlage mit Lautsprecher/Mikrofon und Tür-Öffnen-Taste.</p>
+      <ul style="font-size:0.83rem;padding-left:16px;">
+        <li>Display: kleines Statusdisplay</li>
+        <li>Sprechen und Öffnen direkt am Gerät</li>
+        <li>Wandmontage + eigener Door Hub (Mini reicht)</li>
+        <li>Professionelle Festinstallation</li>
+      </ul>
+      <div style="margin-top:10px;"><span class="chip chip-orange">Premium</span> für feste Empfangsstation</div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:28px;">Routing &mdash; Wer empfängt den Anruf?</h3>
+  <div class="ascii-box" style="margin-bottom:16px;"><pre>
+  Besucher klingelt an [HT Haupttür]
+           │
+           ↓
+  UniFi Access Controller entscheidet:
+           │
+    ┌──────┴──────────────────────────────┐
+    │                                      │
+  Montag-Freitag 08-18 Uhr             Nachts / Wochenende
+    │                                      │
+  → Büro-Gruppe (3 Mitarbeiter)        → Sicherheit / Springer
+    Alle 3 Smartphones klingeln           1 Person klingelt
+    │
+  Erster der antwortet → Video + Öffnen-Taste
+</pre></div>
+
+  <div class="card-grid-2" style="margin-bottom:20px;">
+    <div class="card">
+      <h4>Routing-Optionen in UniFi Access</h4>
+      <ul style="font-size:0.85rem;padding-left:16px;margin-top:8px;">
+        <li><strong>Pro Tür:</strong> Jede Tür hat eigene Empfänger-Liste</li>
+        <li><strong>Gruppen:</strong> "Büro", "Lager", "Management" etc.</li>
+        <li><strong>Alle klingeln:</strong> Gleichzeitig an alle Gruppe-Mitglieder</li>
+        <li><strong>Zeitbasiert:</strong> Tagsüber Büro, nachts Sicherheit</li>
+        <li><strong>Fallback:</strong> Kein Antwort nach X Sek → andere Gruppe</li>
+        <li><strong>Remote:</strong> Öffnen von außerhalb via App (VPN/Cloud)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Physische Klingel / Bell (optional)</h4>
+      <ul style="font-size:0.85rem;padding-left:16px;margin-top:8px;">
+        <li><strong>App-Notification:</strong> Standard, kostenlos, überall</li>
+        <li><strong>Relay-Klingel:</strong> AUX2 am Door Hub → externe 12V/24V Klingel (~15–30€)</li>
+        <li><strong>IP-Gong/Klingel:</strong> Netzwerkbasierter Gong via SIP (~50–120€)</li>
+        <li><strong>Access Button (35€):</strong> Separater Klingelknopf an Hub angeschlossen</li>
+      </ul>
+      <div class="info-box" style="margin-top:10px;font-size:0.82rem;">Door Hub AUX2 → NO/COM → Klingel 12V/24V DC. Aktiviert bei jedem Klingelknopf-Druck am Reader.</div>
+    </div>
+  </div>
+
+  <h3>Anschluss &mdash; Alles über Netzwerk</h3>
+  <div class="ascii-box"><pre>
+  NETZWERK-BASIERT (IP) — kein separates Klingelkabel nötig:
+  ─────────────────────────────────────────────────────────
+  PoE-Switch ──Ethernet──→ [Door Hub] ──→ [G3-Pro Reader]
+                               │
+                     UniFi Access Controller (lokal)
+                               │
+                    ──────────────────────────
+                    │                         │
+              Smartphone-App           Tablet-Station
+              (Push via Internet)      (Lokal via WLAN)
+
+  OPTIONAL — Physische Klingel (Relay):
+  ──────────────────────────────────────
+  [Door Hub] AUX2 → NO ──→ 12V/24V Klingel
+                    COM ──→ Netzteil GND
+
+  PoE-Kabel = Strom + Daten in einem. Kein 230V an Tür/Reader nötig!
+</pre></div>
+</section>
+
+<!-- ===== SEK 12: SOFTWARE ===== -->
+<section id="software">
+  <h2>Software &amp; Verwaltung &mdash; Wie steuert man das System?</h2>
+  <div class="card-grid">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h4>🖥️ UniFi OS Web-Interface</h4>
+      <p>Browser-basierte Verwaltung (Chrome/Firefox). Lokal erreichbar im Netzwerk. Vollständige Konfiguration aller Türen, Nutzer, Zeiten.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h4>📱 UniFi Access App (iOS/Android)</h4>
+      <p>Mobile App für Administratoren. Tür öffnen, Nutzer verwalten, Zugriffslog einsehen — alles unterwegs. Auch für Intercom-Empfang.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h4>🌐 Remote-Zugriff (Von Zuhause)</h4>
+      <p>Via UniFi Cloud Account kostenlos. Kein VPN nötig. Oder eigenes VPN. Tür von überall öffnen, Logs einsehen, Nutzer ändern.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--orange);">
+      <h4>⏰ Zeitpläne & Schedules</h4>
+      <p>Türen automatisch zu bestimmten Zeiten öffnen/sperren. Z.B.: Haupttür Mo-Fr 08-18 Uhr entsperrt, Wochenende immer gesperrt.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h4>👥 Zugriffsgruppen</h4>
+      <p>Nutzer in Gruppen ("Büro", "Lager", "Management"). Pro Gruppe definieren, welche Türen zu welchen Zeiten zugänglich sind.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h4>📋 Audit-Log</h4>
+      <p>Vollständiges Zugriffsprotokoll: Wer hat wann welche Tür geöffnet. Export möglich. DSGVO-konforme Aufbewahrung konfigurierbar.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--brown);">
+      <h4>🎟️ Gastzugang / Temporär</h4>
+      <p>Zeitlich begrenzte Zugangscodes oder Touch Passes für Besucher/Handwerker. Automatisch ablaufend, keine manuelle Deaktivierung nötig.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h4>🔔 Alarme &amp; Benachrichtigungen</h4>
+      <p>Tür offen zu lang → Alarm. Unberechtigter Zugangsversuch → Push-Meldung. Tamper (Hub geöffnet) → sofort melden.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEK LOCKDOWN ===== -->
+<section id="lockdown">
+  <h2>Lockdown &mdash; Alle Türen sperren &amp; Gebäude verlassen</h2>
+  <div class="info-box">
+    <strong>Fail-secure Grundprinzip:</strong> Alle Schlösser sind bei Stromausfall automatisch gesperrt — kein Befehl nötig. Das System ist im Ruhezustand sicher.
+  </div>
+
+  <!-- ÜBERSICHTS-TABELLE ALLE VARIANTEN -->
+  <div class="table-wrap" style="margin-bottom:28px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Variante</th>
+          <th>Alle sperren (Lockdown)</th>
+          <th>Alle öffnen</th>
+          <th>App nötig?</th>
+          <th>Netz nötig?</th>
+          <th>Empfehlung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Dreh-Schalter (3-stufig)</strong></td>
+          <td class="yes">✓ Position 2</td>
+          <td class="yes">✓ Position 1</td>
+          <td class="yes">Nein</td>
+          <td class="warn">Nur lokaler Controller</td>
+          <td><span class="chip chip-green">Hauptlösung</span></td>
+        </tr>
+        <tr>
+          <td><strong>Zeitplan (Schedule)</strong></td>
+          <td class="yes">✓ z.B. 18:30 Uhr</td>
+          <td class="yes">✓ z.B. 07:00 Uhr</td>
+          <td class="yes">Nein</td>
+          <td class="warn">Nur lokaler Controller</td>
+          <td><span class="chip chip-blue">Ergänzung</span></td>
+        </tr>
+        <tr>
+          <td><strong>App (UniFi Access)</strong></td>
+          <td class="yes">✓ Lockdown-Button</td>
+          <td class="yes">✓ Unlock All</td>
+          <td class="no">Ja</td>
+          <td class="no">Ja (Cloud/VPN)</td>
+          <td><span class="chip chip-orange">Backup / Fernzugriff</span></td>
+        </tr>
+        <tr>
+          <td><strong>NFC-Karte</strong></td>
+          <td class="no">Nein</td>
+          <td class="warn">Einzeltür</td>
+          <td class="yes">Nein</td>
+          <td class="warn">Nur lokaler Controller</td>
+          <td><span class="chip chip-gray">Einzeltür-Exit</span></td>
+        </tr>
+        <tr>
+          <td><strong>Fail-secure (Strom weg)</strong></td>
+          <td class="yes">✓ automatisch</td>
+          <td class="no">Nein</td>
+          <td class="yes">Nein</td>
+          <td class="yes">Nein</td>
+          <td><span class="chip chip-red">Notfall-Fallback</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Alle Varianten im Detail</h3>
+  <div class="card-grid">
+
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h4>1. NFC-Karte — Tür öffnet kurz, schließt automatisch</h4>
+      <p style="font-size:0.85rem;">Letzte Person geht raus, hält Karte an Außen-Reader → Tür öffnet für <strong>konfigurierbare Zeit (2–10 Sek.)</strong>, Person tritt raus, Tür schließt und verriegelt automatisch (Fail-secure). Kein App-Tap, kein manuelles Sperren nötig.</p>
+      <div style="margin-top:8px;"><span class="chip chip-green">Empfehlung</span> einfachste tägliche Routine</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h4>2. Schlüsselschalter innen — 1 Drehen sperrt alles</h4>
+      <p style="font-size:0.85rem;">Schlüsselschalter (Key Switch) neben der Ausgangstür. Drehen → Lockdown-Signal an Controller → alle Türen gesperrt. Person geht durch letzte Tür raus (die sich nach NFC-Tap schließt). <strong>Kein Handy nötig.</strong></p>
+      <ul style="font-size:0.82rem;padding-left:16px;margin-top:8px;">
+        <li>UniFi <strong>Access Rescue KeySwitch</strong> — 70 €</li>
+        <li>Anschluss: direkt an REX-Eingang → als Lockdown-Trigger konfigurieren</li>
+        <li>Beliebiger Schlüsselschalter (NO-Kontakt, ~15–25 €) alternativ möglich</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h4>3. Kippschalter + Status-LED (DIY)</h4>
+      <p style="font-size:0.85rem;">Kippschalter innen (z.B. im Schaltkasten beim Ausgang): Umlegen → Lockdown. Status-LED zeigt den aktuellen Zustand:</p>
+      <div class="ascii-box" style="font-size:0.78rem;line-height:1.7;margin:10px 0;padding:14px 18px;"><pre>  Kippschalter ──→ REX-Eingang Hub → Lockdown-Signal
+  AUX2-Ausgang ──→ 12V → LED-Vorwiderstand → LED → GND
+      Grün = normal    Rot = gesperrt</pre></div>
+      <p style="font-size:0.82rem;">AUX2 kann als „Lockdown-Status"-Ausgang konfiguriert werden. Kosten: Schalter + LED + Widerstand ~5–15 €.</p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--orange);">
+      <h4>4. Zeitplan — automatisch sperren</h4>
+      <p style="font-size:0.85rem;">In UniFi Access Schedules einstellen: z.B. täglich 18:30 Uhr → alle Türen auf „Locked". Kein manueller Eingriff nötig. Person muss nur vor 18:30 raus sein oder kennt den Code zum Öffnen nach Feierabend.</p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--red);">
+      <h4>5. App — Lockdown-Button (mit Handy)</h4>
+      <p style="font-size:0.85rem;">UniFi Access App → Lockdown → alle Türen gesperrt. Funktioniert von überall (lokal oder remote über Cloud/VPN). Für Situationen wo man schnell aus der Ferne sperren muss (vergessen, Notfall).</p>
+    </div>
+
+  </div>
+
+  <h3 style="margin-top:28px;">Alle Türen auf einmal öffnen (Morgenbetrieb / Lieferung)</h3>
+  <div class="card-grid" style="margin-bottom:24px;">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h4>App — Unlock All</h4>
+      <p style="font-size:0.85rem;">UniFi Access App → alle Türen auswählen → „Unlock". Oder pro Gruppe (z.B. nur Lagertüren öffnen). Remote oder lokal.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h4>Zeitplan — automatisch öffnen</h4>
+      <p style="font-size:0.85rem;">Schedule: Mo–Fr 07:00 → alle Türen auf „Unlocked" (verriegelungsfrei). Ab 18:30 → wieder Locked. Kein manueller Eingriff im Alltag.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h4>Zweiter Schlüsselschalter innen</h4>
+      <p style="font-size:0.85rem;">Schalter-Position 1 = Lockdown, Schalter-Position 2 = Unlock All. Als 3-stelliger Drehschalter (0=Normal / 1=Alles auf / 2=Lockdown) — professionelle Lösung für Rezeption/Pforte.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--orange);">
+      <h4>Mastercard / Spezielle NFC-Karte</h4>
+      <p style="font-size:0.85rem;">In UniFi Access kann einer NFC-Karte eine Gruppenaktion zugewiesen werden (via API/Automation). Praxistipp: Karte „Morgen-Öffnung" gibt alle Türen frei — ohne Smartphone.</p>
+    </div>
+  </div>
+
+  <h3>Praxis-Workflow — Gebäude verlassen ohne App</h3>
+  <div class="ascii-box"><pre>
+  ABLAUF (kein Smartphone nötig):
+  ─────────────────────────────────────────────────────────────
+
+  1. Schlüsselschalter → Position 2 (LOCKDOWN)
+     ├→ Einmaliger Impuls an Controller
+     ├→ Alle Türen sperren sofort (auch Innentür IT1)
+     └→ Status-LED wechselt auf ROT
+
+  2. Zur Ausgangstür gehen (z.B. Haupttür AT3)
+     → alle anderen Türen bleiben gesperrt
+
+  3. Taster drücken  ODER  Sensor nähern (PIR/Radar)
+     ├→ REX-Signal an Door Hub der Ausgangstür
+     ├→ Relay öffnet für X Sekunden (einstellbar: 5–10 Sek.)
+     └→ Tür öffnet → Person tritt raus
+
+  4. Tür schließt automatisch nach X Sekunden
+     └→ Fail-secure Schloss rastet automatisch ein
+
+  5. FERTIG — alle Türen gesperrt, kein Handy nötig
+     Optional: kurzer App-Check aus dem Auto ✓
+
+  ─────────────────────────────────────────────────────────────
+  WICHTIG: REX öffnet AUCH IM LOCKDOWN (Fluchtweg EN 13637)
+  Alle anderen Türen bleiben gesperrt — NFC oder Knopf nötig.
+  Unlock Duration: Tür → Settings → 5–10 Sekunden einstellen.
+  </pre></div>
+
+  <div class="card-grid" style="margin-top:16px;margin-bottom:4px;">
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h4>Exit-Sensor an Ausgangstür — Optionen</h4>
+      <table style="font-size:0.83rem;width:100%;border-collapse:collapse;margin-top:8px;">
+        <tr style="background:#f8fafc;"><td style="padding:6px 8px;border-bottom:1px solid var(--border);font-weight:600;">Grüner Taster</td><td style="padding:6px 8px;border-bottom:1px solid var(--border);">Drücken → Tür öffnet X Sek.</td><td style="padding:6px 8px;border-bottom:1px solid var(--border);text-align:right;">~10 €</td></tr>
+        <tr><td style="padding:6px 8px;border-bottom:1px solid var(--border);font-weight:600;">UniFi Access Button</td><td style="padding:6px 8px;border-bottom:1px solid var(--border);">Gleich, Unifi-Design + LED</td><td style="padding:6px 8px;border-bottom:1px solid var(--border);text-align:right;">35 €</td></tr>
+        <tr style="background:#f8fafc;"><td style="padding:6px 8px;border-bottom:1px solid var(--border);font-weight:600;">PIR Bewegungsmelder</td><td style="padding:6px 8px;border-bottom:1px solid var(--border);">Annähern → öffnet automatisch</td><td style="padding:6px 8px;border-bottom:1px solid var(--border);text-align:right;">~45 €</td></tr>
+        <tr><td style="padding:6px 8px;font-weight:600;">Radar / Geste-Sensor</td><td style="padding:6px 8px;">Handwelle → öffnet, kein Berühren</td><td style="padding:6px 8px;text-align:right;">~60 €</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h4>Alle anderen Türen im Lockdown — wie wieder öffnen?</h4>
+      <p style="font-size:0.85rem;">Nach dem Lockdown sind alle nicht-REX-Türen gesperrt. Zum Wiederöffnen (z.B. nächsten Morgen):</p>
+      <ul style="font-size:0.83rem;padding-left:16px;margin-top:8px;">
+        <li><strong>Schlüsselschalter → Position 1</strong> (Unlock All) — alle öffnen gleichzeitig</li>
+        <li><strong>NFC-Karte</strong> an beliebigem Außenreader — öffnet diese Tür einzeln</li>
+        <li><strong>App</strong> → einzelne Tür oder alle freigeben</li>
+        <li><strong>Zeitplan</strong> → automatisch z.B. Mo–Fr 07:00 Uhr</li>
+      </ul>
+      <div class="green-box" style="margin-top:10px;font-size:0.82rem;"><strong>Workflow komplett ohne App:</strong> Schalter Position 1 = alles offen · Position 2 = alles zu · REX-Knopf = Ausgang.</div>
+    </div>
+  </div>
+
+  <div class="warn-box" style="margin-top:12px;font-size:0.85rem;">
+    <strong>REX und Lockdown:</strong> Der REX-Eingang ist nach <strong>EN 13637</strong> als Fluchtweg klassifiziert und öffnet immer — auch im Lockdown. Das ist gewollt und gesetzlich vorgeschrieben. Alle anderen Türen bleiben im Lockdown gesperrt und müssen mit NFC, App oder Schlüsselschalter wieder geöffnet werden.
+  </div>
+
+  <!-- 3-Stufen Schlüsselschalter -->
+  <h3 style="margin-top:28px;">3-Stufen-Schlüsselschalter — Empfehlung für die Praxis</h3>
+  <div class="card-grid-2" style="margin-bottom:20px;">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h4>Aufbau &amp; Funktionsweise</h4>
+      <div class="ascii-box" style="font-size:0.78rem;line-height:1.8;margin:10px 0;padding:14px 18px;"><pre>
+  Schlüsselschalter (3-stufig):
+  ┌─────────────────────────────┐
+  │  0 = Normal (kein Kontakt)  │
+  │  1 = Unlock All → Kontakt A │
+  │  2 = Lockdown   → Kontakt B │
+  └─────────────────────────────┘
+  Kontakt A → REX-Eingang Hub (Unlock-Trigger)
+  Kontakt B → REX-Eingang Hub (Lockdown-Trigger)
+  (zwei separate REX-Eingänge oder ein Hub mit Doppel-Input)</pre></div>
+      <div class="info-box" style="font-size:0.82rem;margin-top:8px;">
+        <strong>Signal-Typ: Impuls (Momentary)</strong><br>
+        Der Schalter sendet beim Umstellen einen <em>einmaligen Impuls</em>. Der Controller ändert den Zustand und hält ihn — der Schalter hält nichts aktiv.<br><br>
+        <strong>App kann jederzeit überschreiben</strong> — auch wenn der Schalter noch auf Position 2 steht. Der Zustand liegt im Controller (Software), nicht im Schalter (Hardware).
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <h4>Preise &amp; Optionen</h4>
+      <table style="font-size:0.83rem;width:100%;border-collapse:collapse;margin-top:8px;">
+        <tr><td style="padding:5px 0;border-bottom:1px solid var(--border);">UniFi Rescue KeySwitch (2-stufig)</td><td style="text-align:right;font-weight:700;">70 €</td></tr>
+        <tr><td style="padding:5px 0;border-bottom:1px solid var(--border);">3-stufiger Schlüsselschalter (Aufputz)</td><td style="text-align:right;font-weight:700;">~25–45 €</td></tr>
+        <tr><td style="padding:5px 0;border-bottom:1px solid var(--border);">3-stufiger Schlüsselschalter (Unterputz)</td><td style="text-align:right;font-weight:700;">~35–60 €</td></tr>
+        <tr><td style="padding:5px 0;border-bottom:1px solid var(--border);">Verkabelung (2-adriges Kabel zum Hub)</td><td style="text-align:right;font-weight:700;">~5–15 €</td></tr>
+        <tr><td style="padding:5px 0;">Status-LED + Vorwiderstand</td><td style="text-align:right;font-weight:700;">~3–8 €</td></tr>
+      </table>
+      <div class="warn-box" style="font-size:0.82rem;margin-top:10px;">Schlüsselschalter statt Kippschalter: nur Berechtigte können sperren/öffnen. Kein versehentliches Umlegen.</div>
+    </div>
+  </div>
+
+  <!-- Status LED -->
+  <h3>Status-LED — Gebäude gesperrt oder offen?</h3>
+  <div class="card-grid-2">
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h4>Wie funktioniert die Status-LED?</h4>
+      <p style="font-size:0.85rem;">Der Door Hub hat einen konfigurierbaren <strong>AUX-Ausgang</strong>. Dieser kann so eingestellt werden, dass er aktiv ist, wenn das System im Lockdown ist — und aus, wenn alles normal läuft. Daran hängt eine LED.</p>
+      <div class="ascii-box" style="font-size:0.78rem;line-height:1.8;margin:10px 0;padding:14px 18px;"><pre>
+  Option A — Einfarb-LED:
+  AUX2 NO ──→ 12V ──→ [Vorwiderstand ~470Ω]
+                         ──→ [Rote LED] ──→ GND
+  LED leuchtet = Lockdown aktiv
+  LED aus      = Normal / offen
+
+  Option B — Zweifarbige Ampel-LED:
+  AUX2 → Rote LED   (Lockdown)
+  AUX1 → Grüne LED  (Unlock All / normal offen)</pre></div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--purple);">
+      <h4>Konfiguration in UniFi Access</h4>
+      <p style="font-size:0.85rem;">Im Controller pro Hub konfigurierbar:</p>
+      <ul style="font-size:0.83rem;padding-left:16px;margin-top:8px;">
+        <li>AUX2 → Modus: <strong>"Lockdown Status"</strong> → aktiv wenn Lockdown</li>
+        <li>AUX1 → Modus: <strong>"Door Unlocked Status"</strong> → aktiv wenn freigegeben</li>
+        <li>Spannungsversorgung LED: 12V über separates Netzteil oder Hub-intern</li>
+        <li>Vorwiderstand: 470 Ω bei 12V / rote LED (berechnen nach LED-Specs)</li>
+      </ul>
+      <div class="green-box" style="margin-top:12px;font-size:0.82rem;">
+        <strong>Ergebnis:</strong> Kleines LED-Panel neben dem Schlüsselschalter — auf einen Blick sichtbar ob alles gesperrt ist, bevor man das Gebäude verlässt.
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid-2" style="margin-top:20px;">
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <h4>Türöffnungszeit konfigurieren (Unlock Duration)</h4>
+      <p style="font-size:0.85rem;">In UniFi Access pro Tür einstellbar: wie lange der Hub das Relay öffnet nach NFC-Tap. Standard: 3 Sek. Empfehlung Haupttür: 5–7 Sek. Nach Ablauf rastet Fail-secure Schloss automatisch ein.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--orange);">
+      <h4>App-Override — immer möglich</h4>
+      <p style="font-size:0.85rem;">Da der Zustand im Controller (Software) liegt, kann die App jederzeit überschreiben — egal in welcher Position der physische Schalter steht. Schalter = Auslöser, App = Master.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEK SCHLOSS-WAHL ===== -->
+<section id="schloss-wahl">
+  <h2>Motorschloss &amp; Elektronik-Profilzylinder &mdash; mit Trockenkontakt am UniFi Door Hub</h2>
+
+  <div class="info-box">
+    <strong>Hartes Auswahlkriterium f&uuml;r diese Sektion:</strong>
+    Verriegelungen jenseits des Strikes (siehe <a href="#locks">Schl&ouml;sser-Sektion</a>), die <strong>direkt am UniFi Door Hub</strong> angeschlossen werden &mdash;
+    entweder per <strong>nativem potentialfreien Eingang</strong> am Schloss/Schloss-Motor
+    oder via <strong>I/O-Box / Relais-Bridge</strong>. Kein Cloud-Webhook, keine getrennte Hersteller-App.
+    Status-R&uuml;ckmeldung (Riegel ein/aus) via Mikroswitch oder Reed auf Hub-Eingang.
+  </div>
+
+  <div class="warn-box" style="margin-top:14px;">
+    <strong>Was UniFi Door Hub liefert:</strong>
+    Lock&nbsp;DRY (NO/COM/NC) potentialfrei <strong>30&nbsp;V&nbsp;DC, max 1&nbsp;A</strong> &middot;
+    Lock&nbsp;Powered <strong>12&nbsp;V&nbsp;DC, max 1&nbsp;A</strong> &middot;
+    AUX Out 12&nbsp;V/0,33&nbsp;A f&uuml;r Status-LED &middot;
+    DPS-Eingang f&uuml;r T&uuml;rkontakt &middot; REX-Eingang f&uuml;r Exit-Taster.
+    <br>Damit l&auml;sst sich jedes Schloss mit eigenem Netzteil (12&nbsp;V AC / 12&ndash;24&nbsp;V DC) sauber schalten &mdash; Hub gibt nur den Impuls auf Dry-COM/NO.
+  </div>
+
+  <h3 style="margin-top:28px;">Vier realistische Wege &mdash; vom Schienen-Tausch bis zur DIY-Bridge</h3>
+  <div class="card-grid-2">
+
+    <!-- CARD 1: Schienen-Tausch — GU SECURY Automatic + A-Öffner Servo (EMPFEHLUNG) -->
+    <div class="hw-card" style="border-left:4px solid var(--green);">
+      <div style="background:#e8f5e9;border-radius:8px;padding:18px;text-align:center;margin-bottom:14px;font-size:2.4rem;">&#9881;&#65039;&#128272;</div>
+      <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:8px;">
+        <div>
+          <span class="chip chip-green" style="font-size:0.72rem;font-weight:700;">EMPFEHLUNG &mdash; G&Uuml;NSTIGSTES VOLLWERTIGES MODELL</span>
+          <div class="hw-name" style="margin-top:6px;">Schienen-Tausch: GU SECURY Automatic + A-&Ouml;ffner Servo</div>
+          <div class="hw-desc">Mehrfachverriegelung mit motorischem &Ouml;ffner &middot; potentialfrei am Hub</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="hw-price">~570 &euro;</div>
+          <div style="font-size:0.78rem;color:var(--muted);">Schloss 341 &euro; + Anbauset A-&Ouml;ffner 229 &euro; brutto</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;">
+        <span class="chip chip-green">Dry-NO/COM nativ</span>
+        <span class="chip chip-blue">Hub Mini reicht</span>
+        <span class="chip chip-purple">3-fach Verriegelung</span>
+        <span class="chip chip-brown">200.000 Zyklen</span>
+        <span class="chip chip-blue">12V AC / 12-24V DC, 1A</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0;">
+        <div class="green-box" style="margin:0;padding:10px 12px;">
+          <strong style="font-size:0.85rem;">+ Vorteile</strong>
+          <ul style="padding-left:18px;font-size:0.82rem;margin-top:6px;">
+            <li><strong>Direkter Anschluss</strong> am Hub Dry-NO+COM &mdash; kein Extra-Relais</li>
+            <li>Mechanisch <strong>selbstverriegelnd</strong> beim T&uuml;rzufall (Automatik-Falle)</li>
+            <li>A-&Ouml;ffner zieht beim Impuls beide Fallenriegel zur&uuml;ck</li>
+            <li>Im <strong>UniFi-Forum dokumentiert</strong> funktionierend (s.&nbsp;Link unten)</li>
+            <li>Hub Mini (99 &euro;) reicht aus &mdash; ein Relay gen&uuml;gt</li>
+            <li>Riegel-R&uuml;ckmelde&shy;kontakt optional via GU-SECUREconnect</li>
+            <li>VdS-zertifiziert, EN 1627-1630 RC2 m&ouml;glich</li>
+          </ul>
+        </div>
+        <div class="danger-box" style="margin:0;padding:10px 12px;">
+          <strong style="font-size:0.85rem;">&minus; Nachteile</strong>
+          <ul style="padding-left:18px;font-size:0.82rem;margin-top:6px;">
+            <li>Schienen-Tausch n&ouml;tig (Schreiner ~2&ndash;3&nbsp;h pro T&uuml;r)</li>
+            <li>Eigenes Netzteil empfohlen (Hub-1A-Limit wird ausgereizt)</li>
+            <li>Status-LED braucht zus&auml;tzlich Reed-Sensor (~8&nbsp;&euro;)</li>
+            <li>Bei 2-Schloss-Setup an einem Netzteil: Koppelrelais n&ouml;tig (2&nbsp;A &gt; 1&nbsp;A Hub-Limit)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-box" style="font-size:0.82rem;margin-top:8px;padding:10px 12px;">
+        <strong>Wann w&auml;hlen?</strong> <em>Default f&uuml;r alle Au&szlig;ent&uuml;ren</em>, an denen mehr als nur die Falle gehalten werden soll &mdash; haupteingang HT, Nebent&uuml;ren mit Verriegelungs-Anforderung. <strong>Bestes Preis-Leistungs-Verh&auml;ltnis</strong> bei vollwertiger UniFi-Integration.
+      </div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;">
+        <a class="hw-link" href="https://www.g-u.de/de-de/produkte/tuertechnik/gu-secury-mehrfachverriegelungen/a-oeffner" target="_blank">&#8599; G-U: SECURY A-&Ouml;ffner Anbauset</a>
+        <a class="hw-link" href="https://ubiquiti-networks-forum.de/board/thread/9646-verkabelung-access-hub-mit-gu-secury-automatic-with-a-opener-a-opener-servo/" target="_blank">&#8599; UniFi-Forum: Verkabelungs-Thread</a>
+        <a class="hw-link" href="https://www.ekey.net/wp-content/dokumente/Verkabelungsplan_ekey_dLine_GU-SECURY_Automatic_de_web_ID360.pdf" target="_blank">&#8599; ekey Verkabelungsplan (PDF)</a>
+      </div>
+    </div>
+
+    <!-- CARD 2: Nuki Smart Lock Pro 5 + Webhook + Open-Source-Connector -->
+    <div class="hw-card" style="border-left:4px solid var(--blue);">
+      <div style="background:#e3f2fd;border-radius:8px;padding:18px;text-align:center;margin-bottom:14px;font-size:2.4rem;">&#128241;&#128279;</div>
+      <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:8px;">
+        <div>
+          <span class="chip chip-blue" style="font-size:0.72rem;font-weight:700;">G&Uuml;NSTIGSTER AUFSATZ &mdash; KEIN ZYLINDERTAUSCH N&Ouml;TIG</span>
+          <div class="hw-name" style="margin-top:6px;">Aufsatz: Nuki Smart Lock Pro 5 + Webhook + GitHub-Connector</div>
+          <div class="hw-desc">Aufsatz auf bestehenden Zylinder &middot; Software-Bridge zur UniFi-API</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="hw-price">~301 &euro;</div>
+          <div style="font-size:0.78rem;color:var(--muted);">Nuki Pro 5 (252 &euro;) + WiFi-Modul (49 &euro;)</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;">
+        <span class="chip chip-green">Aufsatz &mdash; 5 Min Einbau</span>
+        <span class="chip chip-blue">Webhook nativ (Web-API)</span>
+        <span class="chip chip-purple">Apple Home Key / Aliro</span>
+        <span class="chip chip-brown">Open-Source-Bridge</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0;">
+        <div class="green-box" style="margin:0;padding:10px 12px;">
+          <strong style="font-size:0.85rem;">+ Vorteile</strong>
+          <ul style="padding-left:18px;font-size:0.82rem;margin-top:6px;">
+            <li><strong>Kein Schreiner</strong>, kein Zylindertausch &mdash; einfach auf Innenseite aufkleben/schrauben</li>
+            <li><strong>Webhook offiziell dokumentiert</strong> in der Nuki Web-API (HTTPS/TLS)</li>
+            <li>Apple Home Key (Wallet) nativ, Aliro 1.0 / Google / Alexa</li>
+            <li><strong>Open-Source-Connector</strong> mrxder/Nuki-UniFi-Access-Connector &mdash; Lock/Unlock-Events kommen in UniFi-Audit-Log</li>
+            <li>WiFi-Modul eingebaut (49 &euro; Einmal-Unlock)</li>
+            <li>Innen sichtbar, au&szlig;en unsichtbar (Schl&uuml;ssel weiter nutzbar)</li>
+          </ul>
+        </div>
+        <div class="danger-box" style="margin:0;padding:10px 12px;">
+          <strong style="font-size:0.85rem;">&minus; Nachteile</strong>
+          <ul style="padding-left:18px;font-size:0.82rem;margin-top:6px;">
+            <li>Cloud-Roundtrip (~500&ndash;1.500 ms Latenz vs. Hardware-Bridge instantan)</li>
+            <li>Logs landen <em>zus&auml;tzlich</em> in Nuki-Cloud (DSGVO pr&uuml;fen)</li>
+            <li>Connector ben&ouml;tigt Server (Container) zum Betrieb</li>
+            <li>Akku-Tausch alle ~6 Monate (4&times; AA / Power-Pack-Variante)</li>
+            <li>Aufsatz innen sichtbar &mdash; nicht jedem gef&auml;llt das</li>
+            <li><strong>Kein verriegelnder Riegel</strong> &mdash; dreht nur den vorhandenen Zylinder</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-box" style="font-size:0.82rem;margin-top:8px;padding:10px 12px;">
+        <strong>Wann w&auml;hlen?</strong> Innent&uuml;r IT1 oder Nebent&uuml;r, wenn Apple Home Key gew&uuml;nscht ist. Auch f&uuml;r Mietobjekte ideal &mdash; Aufsatz reversibel, Schl&uuml;ssel weiter benutzbar.
+      </div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;">
+        <a class="hw-link" href="https://nuki.io/de-de/produkte/smart-lock-pro-5-gen" target="_blank">&#8599; Nuki Smart Lock Pro 5 (Hersteller)</a>
+        <a class="hw-link" href="https://developer.nuki.io/" target="_blank">&#8599; Nuki Developer-API + Webhook-Doku</a>
+        <a class="hw-link" href="https://github.com/mrxder/Nuki-UniFi-Access-Connector" target="_blank">&#8599; Open-Source-Connector (GitHub)</a>
+      </div>
+    </div>
+
+    <!-- CARD 3: Elektronik-Profilzylinder + Shelly 1 Mini Gen3 (DIY-Bridge) -->
+    <div class="hw-card" style="border-left:4px solid var(--purple);">
+      <div style="background:#f3e5f5;border-radius:8px;padding:18px;text-align:center;margin-bottom:14px;font-size:2.4rem;">&#128273;&#128268;</div>
+      <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:8px;">
+        <div>
+          <span class="chip chip-purple" style="font-size:0.72rem;font-weight:700;">DIY-BRIDGE &mdash; ECHTER ZYLINDERTAUSCH, G&Uuml;NSTIG</span>
+          <div class="hw-name" style="margin-top:6px;">Elektronik-Profilzylinder + Shelly 1 Mini Gen3 (WLAN-Trockenkontakt)</div>
+          <div class="hw-desc">Zylindertausch + WLAN-Relais mit Webhook als potentialfreie Bridge</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="hw-price">~315&ndash;515 &euro;</div>
+          <div style="font-size:0.78rem;color:var(--muted);">Shelly 1 Mini Gen3 (~12-17 &euro;) + Zylinder je nach Modell</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;">
+        <span class="chip chip-green">5-10 Min Zylindertausch</span>
+        <span class="chip chip-blue">Shelly Trockenkontakt nativ</span>
+        <span class="chip chip-purple">WLAN-Bridge</span>
+        <span class="chip chip-orange">DIY-Konfiguration n&ouml;tig</span>
+      </div>
+
+      <h4 style="margin:14px 0 6px;font-size:0.92rem;">Zylinder-Optionen (Beispiele)</h4>
+      <div class="table-wrap">
+        <table style="font-size:0.82rem;">
+          <thead><tr><th>Modell</th><th>Preis</th><th>Webhook-Quelle</th><th>Link</th></tr></thead>
+          <tbody>
+            <tr><td>DOM Tapkey Pro V2 Profilzylinder</td><td>~400&ndash;500 &euro;</td><td>Tapkey Web-API + Webhook (Cloud)</td><td><a href="https://shop.tapkey.com/" target="_blank">shop.tapkey.com</a></td></tr>
+            <tr><td>DOM ENiQ Pro V2 Doppelzylinder</td><td>~499 &euro;</td><td>ENiQ Online + Webhook (ENiQ App)</td><td><a href="https://www.dom-security.com/de/de/produkte/dom-eniq-pro-v2" target="_blank">dom-security.com</a></td></tr>
+            <tr><td>ISEO Libra Smart Halbzylinder</td><td>~280&ndash;350 &euro;</td><td>Argo Cloud + Webhook (Argo-Gateway)</td><td><a href="https://www.sicherheitsladen-gera.de/Elektronische-Zutrittssysteme/ISEO-ARGO/ISEO-LIBRA/" target="_blank">sicherheitsladen-gera.de</a></td></tr>
+            <tr><td>Burg-W&auml;chter secuENTRY ENTRY 7600</td><td>~210&ndash;280 &euro;</td><td>secuENTRY KeyApp (Bluetooth, kein Webhook)</td><td><a href="https://www.burg.biz/produkte/secuentry/" target="_blank">burg.biz</a></td></tr>
+            <tr><td>Tedee PRO Smart Lock (Aufsatz)</td><td>~309 &euro;</td><td>Tedee Webhook + Home Assistant</td><td><a href="https://tedee.com/de/products/tedee-pro/" target="_blank">tedee.com</a></td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:4px;">DIY-Voraussetzung: der Zylinder muss eine Webhook- / IFTTT- / Home-Assistant-Trigger-API haben &mdash; sonst keine Bridge m&ouml;glich.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0;">
+        <div class="green-box" style="margin:0;padding:10px 12px;">
+          <strong style="font-size:0.85rem;">+ Vorteile</strong>
+          <ul style="padding-left:18px;font-size:0.82rem;margin-top:6px;">
+            <li><strong>Echter Zylindertausch</strong> &mdash; 5-10 Min mit Kreuzschraubendreher</li>
+            <li>Shelly 1 Mini Gen3: <strong>~12-17 &euro;</strong>, WLAN, potentialfreier Schaltkontakt</li>
+            <li>Status-Webhook von Zylinder &rarr; Shelly Schaltimpuls &rarr; Hub-Dry-Eingang</li>
+            <li>Funktioniert mit jedem App-gesteuerten Smart-Lock + Webhook</li>
+            <li><strong>~60-70% g&uuml;nstiger</strong> als SimonsVoss SmartRelais-Bridge (siehe unten)</li>
+          </ul>
+        </div>
+        <div class="danger-box" style="margin:0;padding:10px 12px;">
+          <strong style="font-size:0.85rem;">&minus; Nachteile</strong>
+          <ul style="padding-left:18px;font-size:0.82rem;margin-top:6px;">
+            <li>Konfiguration: Zylinder-App &harr; Shelly-Webhook selbst einrichten</li>
+            <li>Hersteller-Cloud-Roundtrip (~200-800 ms zus&auml;tzliche Latenz)</li>
+            <li>Logs in Hersteller-Cloud + UniFi getrennt</li>
+            <li>Nur ein Riegel (kein 3-fach-Verriegeln)</li>
+            <li>Zylinder-Akku-Tausch (~12-18 Monate je Modell)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-box" style="font-size:0.82rem;margin-top:8px;padding:10px 12px;">
+        <strong>Wann w&auml;hlen?</strong> Wenn Schienen-Tausch unm&ouml;glich (Mietobjekt, Denkmalschutz) und ein echter Zylindertausch akzeptabel ist. <strong>G&uuml;nstigste Variante mit Hardware-Trockenkontakt-Bridge.</strong>
+      </div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;">
+        <a class="hw-link" href="https://www.shelly.com/products/shelly-1-mini-gen3" target="_blank">&#8599; Shelly 1 Mini Gen3 (Hersteller)</a>
+        <a class="hw-link" href="https://www.amazon.de/Shelly-Smart-Schalter-Relais-Trockenkontakt-Lichtschalter-Hausautomation/dp/B0D8YPW46Y" target="_blank">&#8599; Amazon.de (~12-17 &euro;)</a>
+        <a class="hw-link" href="https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/Webhook/" target="_blank">&#8599; Shelly Webhook-Doku</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Premium-Hardware-Bridge: SimonsVoss SmartRelais 2 (jetzt als kleinere Sub-Karte) -->
+  <h3 style="margin-top:28px;">Premium-Hardware-Bridge &mdash; SimonsVoss SmartRelais 2</h3>
+  <div class="hw-card" style="border-left:4px solid var(--orange);max-width:880px;">
+    <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div class="hw-name">SimonsVoss Digital Cylinder AX + SmartRelais 2 (SREL2.G2.W)</div>
+        <div class="hw-desc">Geschlossenes Industrie-System mit potentialfreiem Hardware-Relais</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="hw-price">~1.070 &euro;</div>
+        <div style="font-size:0.78rem;color:var(--muted);">Zylinder ~300 &euro; + SmartRelais 2 (~772 &euro;)</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;">
+      <span class="chip chip-purple">Reines Hardware-Relais (keine Cloud)</span>
+      <span class="chip chip-orange">Industrie-Schlie&szlig;technik</span>
+    </div>
+    <p style="font-size:0.88rem;margin-top:8px;"><strong>Wann sinnvoll?</strong>
+      Nur f&uuml;r <strong>Industrie-Schlie&szlig;technik mit gro&szlig;en Schlie&szlig;anl&auml;gen</strong> (&gt;20 Zylinder, zentrale LSM-Verwaltung). Funktional identisch zu Card&nbsp;3 (Hardware-Trockenkontakt), aber 3-4&times; teurer als die Shelly-DIY-Bridge. Vorteil: alles in einem geschlossenen System ohne Cloud.</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;">
+      <a class="hw-link" href="https://www.simons-voss.com/de/komponenten/digitalzylinder-ax.html" target="_blank">&#8599; SimonsVoss Digital Cylinder AX</a>
+      <a class="hw-link" href="https://www.simons-voss.com/de/komponenten/digitales-smart-relais.html" target="_blank">&#8599; SmartRelais 2 (SREL2.G2.W)</a>
+      <a class="hw-link" href="https://www.expert-security.de/simonsvoss-digitales-smart-relais-2-srel2-g2-w.html" target="_blank">&#8599; Expert-Security Shop</a>
+    </div>
+  </div>
+
+  <!-- Premium-Alternative: KFV Genius -->
+  <h3 style="margin-top:28px;">Premium-Alternative &mdash; KFV Genius AS 2600 SLCA</h3>
+  <div class="hw-card" style="border-left:4px solid var(--purple);max-width:880px;">
+    <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div class="hw-name">KFV Genius AS 2600 SLCA</div>
+        <div class="hw-desc">RC2+-Mehrfachverriegelung mit integrierter Steuerelektronik &amp; Netzteil</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="hw-price">~1.255 &euro; netto / ~1.494 &euro; brutto</div>
+        <div style="font-size:0.78rem;color:var(--muted);">Komplettpaket inkl. Netzteil + Kabel&uuml;bergang (Layer Gro&szlig;handel)</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;">
+      <span class="chip chip-purple">RC2+ nativ</span>
+      <span class="chip chip-green">Netzteil inklusive</span>
+      <span class="chip chip-blue">Bolzen-Schwenkriegel-Kombination</span>
+    </div>
+    <p style="font-size:0.88rem;margin-top:8px;"><strong>Wann sinnvoll?</strong>
+      Nur wenn (a) <strong>versicherungsgeforderte RC2+-Einbruchhemmung</strong> verlangt wird, (b) das T&uuml;rblatt ohnehin erneuert wird, oder (c) <strong>schwenkbare Hartmetallriegel</strong> statt nur Fallenriegel ben&ouml;tigt werden.
+      Funktionell identisch zur GU SECURY am UniFi Door Hub (Dry-NO/COM), aber <strong>~2,2&times; teurer</strong> &mdash; daher kein Default.</p>
+    <a class="hw-link" href="https://www.haefele.de/de/produkt/mehrfachverriegelung-mit-motorischer-bolzen-schwenkriegel-kombination-kfv-as-2600-slca-genius/P-01498728/" target="_blank">&#8599; KFV Genius AS 2600 SLCA bei H&auml;fele</a>
+  </div>
+
+  <!-- Klare Entscheidungs-Box -->
+  <div class="rec-box" style="margin-top:24px;padding:18px;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 100%);border:2px solid #66bb6a;border-radius:12px;">
+    <h4 style="color:var(--green);margin-top:0;">Entscheidungslogik &mdash; in 30&nbsp;Sekunden</h4>
+    <ol style="padding-left:20px;font-size:0.9rem;margin-top:8px;">
+      <li>T&uuml;r braucht nur Falle &amp; Klinke? &rarr; <strong>UniFi Strike Lock (80&nbsp;&euro;)</strong> &mdash; nicht diese Sektion.</li>
+      <li>T&uuml;r soll wirklich verriegeln, Schienen-Tausch m&ouml;glich? &rarr; <strong>GU SECURY Automatic + A-&Ouml;ffner Servo (~570&nbsp;&euro;)</strong> &mdash; bester Kompromiss aus Sicherheit, Komfort und UniFi-Integration.</li>
+      <li>Mietobjekt / Apple Home Key gew&uuml;nscht / Aufsatz statt T&uuml;ren&auml;nderung? &rarr; <strong>Nuki Pro 5 + Webhook (~301&nbsp;&euro;)</strong>.</li>
+      <li>Zylindertausch akzeptabel, Bridge selbst konfigurieren? &rarr; <strong>Elektronik-Profilzylinder + Shelly 1 Mini Gen3 (~315&ndash;515&nbsp;&euro;)</strong> &mdash; g&uuml;nstigste Hardware-Trockenkontakt-Variante.</li>
+      <li>Versicherung verlangt RC2+ oder T&uuml;rblatt wird ohnehin getauscht? &rarr; <strong>KFV Genius AS 2600 SLCA (~1.494&nbsp;&euro; brutto)</strong>.</li>
+      <li>Industrie-Schlie&szlig;anlage &gt;20 Zylinder mit zentralem Management? &rarr; <strong>SimonsVoss AX + SmartRelais 2 (~1.070&nbsp;&euro;)</strong>.</li>
+    </ol>
+    <p style="font-size:0.85rem;margin-top:10px;color:var(--muted);"><strong>Faustregel:</strong> Wenn der Schreiner-Aufwand kein Hindernis ist, gewinnt GU SECURY (echtes Verriegeln + UniFi-Logs). Wenn Aufsatz reicht, gewinnt Nuki Pro (Apple Home Key + Open-Source-Connector). Bei DIY-Mentalit&auml;t ist die Shelly-Bridge das gr&ouml;&szlig;te Preis-Leistungs-Verh&auml;ltnis.</p>
+  </div>
+
+  <!-- ====== NEU: Schritt-für-Schritt-Anleitung — was muss man konkret tauschen? ====== -->
+  <h3 style="margin-top:32px;">Was muss man konkret tauschen? &mdash; Schritt-f&uuml;r-Schritt pro Variante</h3>
+  <div class="info-box" style="margin-bottom:14px;">
+    Wer einen <strong>Profilzylinder</strong> tauscht, kommt mit Schraubendreher + 5&ndash;10 Min aus.
+    Wer eine <strong>Mehrfachverriegelung (Schiene)</strong> tauscht, braucht Schreiner-Erfahrung + 2&ndash;3&nbsp;h pro T&uuml;r.
+    Wer einen <strong>Aufsatz</strong> (Nuki) montiert, klebt/schraubt 5 Minuten innen auf den vorhandenen Zylinder.
+  </div>
+
+  <div class="card-grid-2">
+    <!-- Anleitung A: Profilzylinder tauschen -->
+    <div class="hw-card" style="border-left:4px solid var(--purple);">
+      <h4 style="margin-top:0;color:var(--purple);">A) Profilzylinder tauschen (Card 3: DIY-Bridge)</h4>
+      <p style="font-size:0.85rem;color:var(--muted);">Aufwand <strong>5&ndash;10 Min</strong> &middot; Werkzeug: Kreuzschraubendreher</p>
+      <ol style="font-size:0.86rem;padding-left:20px;">
+        <li><strong>Vorhandenen Zylinder ausmessen:</strong> Mitte der Stulpschraube am T&uuml;rstulp &rarr; au&szlig;en (A) und innen (B) messen. Typisch <em>30/30, 30/35, 35/35 mm</em>. Au&szlig;en darf <strong>max 2&ndash;3 mm vorstehen</strong> (Schutz gegen Abbrechen). Normen: DIN 18252 (Ma&szlig;e) + DIN EN 1303 (Sicherheit).</li>
+        <li><strong>Stulpschraube l&ouml;sen:</strong> mit Kreuzschraubendreher die Schraube am Stulp (T&uuml;rkante) herausdrehen.</li>
+        <li><strong>Schl&uuml;ssel halb drehen + Zylinder ziehen:</strong> Schl&uuml;ssel von au&szlig;en stecken, kurz drehen bis die Nase im Geh&auml;use steht, dann Zylinder ziehen.</li>
+        <li><strong>Neuen Elektronik-Zylinder in <em>gleicher</em> Ma&szlig;-Kombination einsetzen</strong> (z.&nbsp;B. DOM Tapkey Pro V2 in 30/35) &mdash; Nase wieder in Mittelstellung drehen, einschieben.</li>
+        <li><strong>Stulpschraube festziehen</strong> + mit beigelegtem Schl&uuml;ssel/App testen.</li>
+        <li><strong>Shelly 1 Mini Gen3 einrichten:</strong> Steckdose oder 12&nbsp;V/24&nbsp;V-Quelle, mit Hub Lock-DRY (NO+COM) verkabeln, in Shelly-App ins WLAN bringen, Endpunkt-URL kopieren.</li>
+        <li><strong>Webhook im Zylinder-App konfigurieren:</strong> bei Unlock-Event &rarr; HTTP-POST an Shelly-URL &rarr; Shelly schaltet 1&nbsp;s NO-COM &rarr; Hub registriert Lock-Open.</li>
+      </ol>
+      <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">Anleitung mit Bildern: <a href="https://www.abus.com/de/Privat/Themenwelten-Highlights/Themenwelt-Tuerzylinder/Tuerzylinder-austauschen-und-pflegen" target="_blank">ABUS-Profilzylinder-Tausch</a> &middot; <a href="https://www.sicher24.de/magazin-profilzylinder-ausmessen.html" target="_blank">sicher24: Zylinder ausmessen</a></p>
+    </div>
+
+    <!-- Anleitung B: Mehrfachverriegelung (Schiene) tauschen -->
+    <div class="hw-card" style="border-left:4px solid var(--green);">
+      <h4 style="margin-top:0;color:var(--green);">B) Mehrfachverriegelung (Schiene) tauschen (Card 1: GU SECURY)</h4>
+      <p style="font-size:0.85rem;color:var(--muted);">Aufwand <strong>2&ndash;3&nbsp;h pro T&uuml;r</strong> &middot; Werkzeug: Schraubendreher, Metalls&auml;ge, Schreiner-Set</p>
+      <ol style="font-size:0.86rem;padding-left:20px;">
+        <li><strong>Bestandsaufnahme:</strong> Hersteller + Typ der alten Verriegelung dokumentieren (Stulpl&auml;nge, Stulpbreite, Hinterdornma&szlig;, Entfernungsma&szlig; PZ). Foto vom Stulp + Riegel-Layout.</li>
+        <li><strong>Drücker + Rosette demontieren:</strong> Schrauben innen + au&szlig;en l&ouml;sen, T&uuml;rklinke abnehmen.</li>
+        <li><strong>Profilzylinder ziehen</strong> (siehe A, Schritt 2&ndash;3).</li>
+        <li><strong>Schlossstulp-Schrauben l&ouml;sen</strong> (Schrauben entlang der T&uuml;rkante, alle Verriegelungspunkte).</li>
+        <li><strong>Verriegelung herausziehen</strong> &mdash; bei Klemmen mit flachem Schraubendreher leicht anheben. Vorsicht bei Verriegelungs-Stangen!</li>
+        <li><strong>Stulp der neuen GU SECURY Automatic auf gleiche L&auml;nge k&uuml;rzen</strong> (Metalls&auml;ge, exakt messen).</li>
+        <li><strong>Neue Verriegelung einschieben</strong> + Stulp-Schrauben anziehen. Falle muss zum Schlie&szlig;blech passen.</li>
+        <li><strong>A-&Ouml;ffner Servo (Anbauset) montieren</strong> &mdash; das ist ein Aufsatz auf das Schloss-Mitte (PZ-Bereich), wird mit Schrauben fixiert. 6&nbsp;m Anschlusskabel inklusive.</li>
+        <li><strong>Zylinder + Beschlag</strong> wieder einsetzen, Test mit Schl&uuml;ssel.</li>
+        <li><strong>Elektrik:</strong> 12&nbsp;V Netzteil &rarr; Hub Lock-DRY (NO+COM) &rarr; A-&Ouml;ffner braun/schwarz/grau verkabeln (siehe ASCII unten).</li>
+      </ol>
+      <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">Anleitung: <a href="https://www.hausjournal.net/haustuerschloss-mehrfachverriegelung-ausbauen" target="_blank">Hausjournal: Mehrfachverriegelung ausbauen</a> &middot; <a href="https://schliess-anlagen.de/mehrfachverriegelung/" target="_blank">schliess-anlagen.de</a> &middot; <a href="https://www.obi.de/magazin/bauen/tueren/haustuerschloss-wechseln" target="_blank">OBI Anleitung + Video</a></p>
+      <p style="font-size:0.82rem;color:var(--orange);margin-top:6px;"><strong>Empfehlung:</strong> wenn nicht handwerklich ge&uuml;bt &mdash; Schreiner oder Schl&uuml;sseldienst beauftragen (typisch 150&ndash;300&nbsp;&euro; Arbeitskosten).</p>
+    </div>
+
+    <!-- Anleitung C: Nuki-Aufsatz montieren -->
+    <div class="hw-card" style="border-left:4px solid var(--blue);">
+      <h4 style="margin-top:0;color:var(--blue);">C) Nuki Smart Lock Pro 5 montieren (Card 2: Aufsatz)</h4>
+      <p style="font-size:0.85rem;color:var(--muted);">Aufwand <strong>5&ndash;10 Min</strong> &middot; Werkzeug: Schraubendreher (oder nur Klebepad), Smartphone</p>
+      <ol style="font-size:0.86rem;padding-left:20px;">
+        <li><strong>Bestandsaufnahme:</strong> Pr&uuml;fen ob der Schl&uuml;ssel im Zylinder steckt &mdash; Nuki dreht den vorhandenen Zylinder von innen. Schl&uuml;ssel mit Not-und-Gefahrenfunktion (Innenseite, drehbar bei Au&szlig;en-Schl&uuml;ssel) empfohlen.</li>
+        <li><strong>Halterung kleben oder schrauben:</strong> Adapter-Platte mit doppelseitigem Klebeband auf die Innenseite des Zylinder-Bereichs setzen (oder mit Stulpschraube fixieren).</li>
+        <li><strong>Nuki Pro 5 aufsetzen:</strong> Schlitz f&uuml;r Schl&uuml;ssel in Nuki einschieben, Nuki Aufsatz mit Drehverschluss am Adapter fixieren.</li>
+        <li><strong>WiFi-Modul aktivieren:</strong> 49&nbsp;&euro; Lizenz online ben&ouml;tigt &mdash; Nuki Pro hat das WiFi-Modul intern.</li>
+        <li><strong>Nuki-App:</strong> Bluetooth-Setup, Nutzer einladen, Apple Home Key in der Wallet-App hinzuf&uuml;gen.</li>
+        <li><strong>Webhook konfigurieren:</strong> Nuki Web-API einrichten (developer.nuki.io) &rarr; Webhook-URL auf eigenen Connector-Server.</li>
+        <li><strong>Open-Source-Connector deployen:</strong> Docker/Node.js-Container von <a href="https://github.com/mrxder/Nuki-UniFi-Access-Connector" target="_blank">mrxder/Nuki-UniFi-Access-Connector</a> laufen lassen. Bridge nimmt Nuki-Webhook entgegen + ruft UniFi Access API auf &rarr; Audit-Log-Eintrag.</li>
+      </ol>
+      <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">Anleitung: <a href="https://support.nuki.io/de/articles/9008290-installation-smart-lock-pro" target="_blank">Nuki Support: Smart Lock Pro Installation</a> &middot; <a href="https://developer.nuki.io/" target="_blank">Nuki Developer-API</a></p>
+    </div>
+
+    <!-- Anleitung D: SimonsVoss SmartRelais 2 (Industrie) -->
+    <div class="hw-card" style="border-left:4px solid var(--orange);">
+      <h4 style="margin-top:0;color:var(--orange);">D) SimonsVoss-Premium-Bridge (Industrie)</h4>
+      <p style="font-size:0.85rem;color:var(--muted);">Aufwand <strong>5 Min Zylinder + 30 Min LSM-Setup</strong> pro Anlage</p>
+      <ol style="font-size:0.86rem;padding-left:20px;">
+        <li><strong>Profilzylinder tauschen</strong> (siehe A, Schritte 1&ndash;5).</li>
+        <li><strong>SimonsVoss SmartRelais 2 (SREL2.G2.W)</strong> mit 12-24&nbsp;V&nbsp;DC versorgen, in einer Unterputz-Dose oder Hutschiene montieren.</li>
+        <li><strong>SmartRelais NO + COM</strong> an UniFi Hub Lock-DRY (NO+COM) verkabeln.</li>
+        <li><strong>SimonsVoss LSM</strong> (Locking System Management) Software installieren, SmartRelais als &bdquo;Reader&ldquo; programmieren.</li>
+        <li><strong>Transponder/SmartTag</strong> programmieren &mdash; Lese-Event triggert SmartRelais &rarr; UniFi Hub.</li>
+        <li><strong>Optional:</strong> Direktvernetzung (WNM-Lan-Adapter ~150&nbsp;&euro;) f&uuml;r Live-Statuszeit.</li>
+      </ol>
+      <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">Hersteller: <a href="https://www.simons-voss.com/de" target="_blank">simons-voss.com</a> &middot; LSM-Doku im offiziellen <a href="https://www.simons-voss.com/de/services-und-support/downloads.html" target="_blank">Download-Bereich</a> &middot; Shop: <a href="https://www.expert-security.de/" target="_blank">expert-security.de</a></p>
+    </div>
+  </div>
+
+  <!-- Master-Vergleichstabelle -->
+  <h3 style="margin-top:28px;">Master-Vergleichstabelle &mdash; alle 5 Wege im Direkt-Check</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Kriterium</th>
+          <th>UniFi Strike <small>(Default)</small></th>
+          <th class="yes" style="background:#e8f5e9;">GU SECURY + A-&Ouml;ffner <small>(Empfehlung)</small></th>
+          <th>Nuki Pro 5 + Webhook <small>(Aufsatz)</small></th>
+          <th>Profilzyl. + Shelly <small>(DIY-Bridge)</small></th>
+          <th>KFV Genius <small>(Premium)</small></th>
+          <th>SimonsVoss SREL2 <small>(Industrie)</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Preis Hardware (1 T&uuml;r)</strong></td><td>80 &euro;</td><td><strong>~570 &euro;</strong></td><td>~301 &euro;</td><td>~315&ndash;515 &euro;</td><td>~1.494 &euro;</td><td>~1.070 &euro;</td></tr>
+        <tr><td>Anschluss am Door Hub</td><td class="yes">Lock Powered 12V</td><td class="yes">Dry-NO/COM nativ</td><td class="warn">Webhook&rarr;UniFi-API</td><td class="yes">Shelly Dry-NO/COM</td><td class="yes">Dry-NO/COM nativ</td><td class="yes">SREL2 Dry-NO/COM</td></tr>
+        <tr><td>Hub-Variante reicht</td><td class="yes">Mini (99 &euro;)</td><td class="yes">Mini (99 &euro;)</td><td class="warn">keiner n&ouml;tig (API)</td><td class="yes">Mini (99 &euro;)</td><td class="warn">Voll (179 &euro;)</td><td class="warn">Voll (179 &euro;)</td></tr>
+        <tr><td>Eingriff in T&uuml;r</td><td class="yes">nur Rahmen</td><td class="warn">Schiene tauschen</td><td class="yes">nur Aufsatz innen</td><td class="yes">nur Zylindertausch</td><td class="no">T&uuml;rblatt-Eingriff</td><td class="yes">nur Zylindertausch</td></tr>
+        <tr><td>Fail-secure (Strom weg = zu)</td><td class="yes">&#10003;</td><td class="yes">&#10003; mech. verriegelt</td><td class="warn">Akku h&auml;lt Status</td><td class="warn">Zyl.-Akku h&auml;lt Status</td><td class="yes">&#10003;</td><td class="warn">Zyl.-Akku h&auml;lt Status</td></tr>
+        <tr><td>RC2+ Einbruchhemmung</td><td class="warn">m&ouml;glich</td><td class="yes">&#10003; nativ</td><td class="no">nein</td><td class="no">nein</td><td class="yes">&#10003; nativ</td><td class="no">nein</td></tr>
+        <tr><td>3-fach-Verriegeln</td><td class="no">nur Falle</td><td class="yes">3 Riegel</td><td class="no">1 Riegel</td><td class="no">1 Riegel</td><td class="yes">3 Riegel + Bolzen</td><td class="no">1 Riegel</td></tr>
+        <tr><td>Apple Home Key / Aliro</td><td class="warn">via Reader</td><td class="warn">via Reader</td><td class="yes">&#10003; nativ</td><td class="warn">je nach Modell</td><td class="warn">via Reader</td><td class="no">SimonsVoss App</td></tr>
+        <tr><td>Lockdown in UniFi</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="part">via Bridge</td><td class="yes">&#10003; via Shelly</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Logs in UniFi Audit-Log</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="part">via Connector</td><td class="part">via Shelly-Event</td><td class="yes">&#10003;</td><td class="no">SimonsVoss-LSM</td></tr>
+        <tr><td>Latenz Lock/Unlock</td><td class="yes">&lt;100 ms</td><td class="yes">&lt;200 ms</td><td class="warn">500-1.500 ms (Cloud)</td><td class="warn">200-800 ms (Cloud)</td><td class="yes">&lt;200 ms</td><td class="yes">&lt;200 ms</td></tr>
+        <tr><td>Installations-Aufwand</td><td class="yes">niedrig</td><td class="warn">2-3 h Schreiner</td><td class="yes">5 Min Aufsatz</td><td class="warn">5-10 Min + Webhook-Config</td><td class="no">Schreiner</td><td class="yes">5 Min Zyl. + LSM-Setup</td></tr>
+        <tr><td>Mietobjekt-tauglich</td><td class="no">Rahmen-Eingriff</td><td class="no">Schiene-Tausch</td><td class="yes">&#10003; voll reversibel</td><td class="warn">Zylinder zur&uuml;cktauschbar</td><td class="no">T&uuml;rblatt</td><td class="warn">Zylinder zur&uuml;cktauschbar</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.82rem;color:var(--muted);margin-top:8px;">Alle Werte EU/DE-Preise brutto (au&szlig;er KFV explizit netto). Hub und Reader nicht enthalten &mdash; vollst&auml;ndige BOM-Boxen siehe unten.</p>
+  </div>
+
+  <!-- Verkabelung GU SECURY am UniFi Door Hub — konkret -->
+  <h3 style="margin-top:28px;">Verkabelung &mdash; GU SECURY Automatic A-&Ouml;ffner am UniFi Door Hub</h3>
+  <div class="card-grid-2">
+    <div>
+      <div class="ascii-box"><pre>
+  GU SECURY + A-&Ouml;ffner SERVO  --(potentialfrei)--  UNIFI DOOR HUB
+  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+  Netzteil 12 V DC (1 A)
+    &#9500;&#9472;&#9472; (+)  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&#8594;  Door Hub  Lock DRY (COM)
+    &#9492;&#9472;&#9472; (&minus;)  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&#8594;  A-&Ouml;ffner  GRAU (GND)
+
+  Door Hub Lock DRY (NO)  &mdash;&mdash;&mdash;&mdash;&mdash;&#8594;  A-&Ouml;ffner  BRAUN  (+12 V Impuls)
+  Door Hub Lock DRY (COM) &mdash;&mdash;&mdash;&mdash;&mdash;&#8594;  Netzteil (+)
+  A-&Ouml;ffner  SCHWARZ                &mdash;&mdash;&#8594;  Steuersignal (Motor)
+
+  &rarr; Hub-Relais schaltet 12&nbsp;V auf den A-&Ouml;ffner-Motor.
+  &rarr; Motor zieht die Fallenriegel &uuml;ber 5&nbsp;s zur&uuml;ck.
+  &rarr; T&uuml;r f&auml;llt zu &#8594; Automatik-Falle verriegelt mechanisch.
+
+  STATUS-R&Uuml;CKMELDUNG (optional):
+  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+  Reed-Sensor T&uuml;rblatt   &mdash;&mdash;&#8594;  Hub DPS (Door Position)
+  GU SECUREconnect 50/200 &mdash;&mdash;&#8594;  Hub REN (Riegel ausgefahren)
+  AUX OUT 12V/0,33A       &mdash;&mdash;&#8594;  Status-LED rot (Riegel zu)
+</pre></div>
+      <p style="font-size:0.85rem;color:var(--muted);margin-top:8px;">
+        Verkabelung dokumentiert in der <a href="https://ubiquiti-networks-forum.de/board/thread/9646-verkabelung-access-hub-mit-gu-secury-automatic-with-a-opener-a-opener-servo/" target="_blank">UniFi-Forum-Diskussion</a>. ekey-Verkabelungspl&auml;ne (PDF) sind 1:1 &uuml;bertragbar &mdash; nur ekey-Controller durch Hub-Dry-Relais ersetzen.
+      </p>
+    </div>
+    <div>
+      <h4>Wichtige Eckdaten zum Hub-Dry-Contact</h4>
+      <div class="warn-box" style="font-size:0.85rem;">
+        Lock-DRY ist <strong>potentialfreier Wechsler</strong> (NO + COM + NC) im UniFi Door Hub:
+        max <strong>30&nbsp;V&nbsp;DC, 1&nbsp;A</strong>. Bei 2 parallelen Schl&ouml;ssern an einem Netzteil k&ouml;nnen 2&nbsp;A &uuml;berschritten werden &#8594; <strong>Koppelrelais</strong> vor das eigentliche Schloss schalten.
+      </div>
+      <h4 style="margin-top:14px;">T&uuml;rkontakt &amp; Status-LED &mdash; was sie liefern</h4>
+      <div class="table-wrap">
+        <table style="font-size:0.83rem;">
+          <thead><tr><th>Funktion</th><th>Ohne</th><th>Mit Reed + LED</th></tr></thead>
+          <tbody>
+            <tr><td>T&uuml;r offen/zu in App</td><td class="no">&#10007;</td><td class="yes">&#10003; Echtzeit</td></tr>
+            <tr><td>Lock-on-Door-Close</td><td class="no">nur Timer</td><td class="yes">&#10003; sofort</td></tr>
+            <tr><td>Alarm: T&uuml;r offen &gt;X Min</td><td class="no">&#10007;</td><td class="yes">&#10003;</td></tr>
+            <tr><td>Alarm: T&uuml;r gewaltsam</td><td class="no">&#10007;</td><td class="yes">&#10003;</td></tr>
+            <tr><td>Riegel-Status (rote LED)</td><td class="no">&#10007;</td><td class="yes">&#10003; SECUREconnect</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 style="margin-top:14px;">Wallet / NFC / Touch-Pass</h4>
+      <p style="font-size:0.85rem;">Funktioniert in allen 4 Wegen identisch &mdash; das geh&ouml;rt zum <strong>Reader</strong>, nicht zum Schloss. G3-Pro oder G6-Entry au&szlig;en, App/Apple-Home-Key/Touch-Pass intern.</p>
+    </div>
+  </div>
+
+  <!-- Gesamtsystem-Preis-Boxen — drei Varianten direkt zur Bestellung -->
+  <h3 style="margin-top:28px;">Gesamtsystem-Preise &mdash; drei Varianten als Bestell-Stueckliste</h3>
+  <p style="font-size:0.88rem;color:var(--muted);">Jede Box listet alle Einzel-Komponenten + Hersteller-Link, sodass die T&uuml;r direkt bestellbar ist. Werte EU/DE-Preise brutto Mai 2026.</p>
+
+  <!-- Variante 1: GU SECURY -->
+  <div style="background:#e8f5e9;border-radius:12px;padding:22px;border:2px solid #66bb6a;margin-top:18px;">
+    <h4 style="margin-top:0;color:var(--green);">Variante A &mdash; GU SECURY Schiene-Tausch (Empfehlung)</h4>
+    <div class="table-wrap" style="margin-top:10px;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%;">Komponente</th>
+            <th>Modell / Quelle</th>
+            <th style="text-align:right;width:14%;">Preis</th>
+            <th style="width:22%;">Link / Shop</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Schloss-Schiene</strong></td><td>GU SECURY Automatic Mehrfachverriegelung (PZ 92/8, Niro)</td><td style="text-align:right;">~341 &euro;</td><td><a href="https://esco.de/815576-0405.S2R" target="_blank">esco.de</a> &middot; <a href="https://webshop.schachermayer.com/cat/de-DE/products/gu/10000_20105_1" target="_blank">Schachermayer</a></td></tr>
+          <tr><td><strong>Motorischer &Ouml;ffner</strong></td><td>GU SECURY Anbauset A-&Ouml;ffner Servo (12 V AC / 12-24 V DC, 1 A)</td><td style="text-align:right;">~229 &euro;</td><td><a href="https://www.haefele.de/de/produkt/a-oeffner-servo-fuer-g-u-secury-automatic/P-01319595/" target="_blank">H&auml;fele</a> &middot; <a href="https://www.beschlag-schloss-schliesser.de/GUK-18153-01-0-0" target="_blank">beschlag-schloss-schliesser.de</a></td></tr>
+          <tr><td>Reader au&szlig;en</td><td>UniFi G3 Reader (NFC / Touch-Pass)</td><td style="text-align:right;">125 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-g3" target="_blank">UI EU Store</a> &middot; <a href="https://www.office-partner.de/ua-g3-n2000020749" target="_blank">Office Partner</a></td></tr>
+          <tr><td>Door Hub</td><td>UniFi Access Hub Mini (1 Dry-Relay, PoE)</td><td style="text-align:right;">99 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-hub-door-mini" target="_blank">UI EU Store</a></td></tr>
+          <tr><td>Exit innen</td><td>UniFi Access Button (Push)</td><td style="text-align:right;">35 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-access-button" target="_blank">UI EU Store</a></td></tr>
+          <tr><td>T&uuml;rkontakt</td><td>Reed-Sensor (DPS-Eingang am Hub)</td><td style="text-align:right;">~8 &euro;</td><td><a href="https://www.reichelt.de/" target="_blank">reichelt.de</a> &middot; Amazon</td></tr>
+          <tr><td>Netzteil</td><td>Mean Well 12 V DC / 2 A Hutschiene</td><td style="text-align:right;">~25 &euro;</td><td><a href="https://www.reichelt.de/" target="_blank">reichelt.de</a></td></tr>
+          <tr><td>Kabel + Klemmen</td><td>2&times;0,75 mm&sup2; Schlosskabel + Cat&nbsp;5</td><td style="text-align:right;">~30 &euro;</td><td>Elektro-Fachhandel</td></tr>
+          <tr style="background:#c8e6c9;font-weight:700;font-size:1.05rem;">
+            <td colspan="2">&Sigma; Variante A &mdash; Komplettsystem pro T&uuml;r (brutto, ohne Einbau)</td>
+            <td style="text-align:right;" colspan="2">~895 &euro;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">Schreiner-Einbau separat: 2&ndash;3&nbsp;h, ~150&ndash;300&nbsp;&euro;.</p>
+  </div>
+
+  <!-- Variante 2: Nuki Pro 5 + Webhook -->
+  <div style="background:#e3f2fd;border-radius:12px;padding:22px;border:2px solid #42a5f5;margin-top:18px;">
+    <h4 style="margin-top:0;color:var(--blue);">Variante B &mdash; Nuki Pro 5 Aufsatz + Webhook-Connector</h4>
+    <div class="table-wrap" style="margin-top:10px;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%;">Komponente</th>
+            <th>Modell / Quelle</th>
+            <th style="text-align:right;width:14%;">Preis</th>
+            <th style="width:22%;">Link / Shop</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Smart Lock Aufsatz</strong></td><td>Nuki Smart Lock Pro 5 (5. Generation) inkl. integriertem WiFi-Modul</td><td style="text-align:right;">~252 &euro;</td><td><a href="https://nuki.io/de-de/produkte/smart-lock-pro-5-gen" target="_blank">nuki.io</a> &middot; Amazon</td></tr>
+          <tr><td><strong>WiFi-Modul-Aktivierung</strong></td><td>Nuki WiFi-Lizenz (einmalig f&uuml;r Web-API + Webhook)</td><td style="text-align:right;">49 &euro;</td><td><a href="https://web.nuki.io/" target="_blank">web.nuki.io</a></td></tr>
+          <tr><td>Reader au&szlig;en</td><td>UniFi G3 Reader (NFC / Touch-Pass)</td><td style="text-align:right;">125 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-g3" target="_blank">UI EU Store</a></td></tr>
+          <tr><td>Door Hub</td><td>UniFi Access Hub Mini (f&uuml;r Reader-Anbindung)</td><td style="text-align:right;">99 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-hub-door-mini" target="_blank">UI EU Store</a></td></tr>
+          <tr><td>Bridge-Server</td><td>Docker-Container auf bestehendem UDM/RPi (Open-Source-Connector)</td><td style="text-align:right;">0 &euro;</td><td><a href="https://github.com/mrxder/Nuki-UniFi-Access-Connector" target="_blank">GitHub mrxder</a></td></tr>
+          <tr><td>Exit innen</td><td>Nuki Pro hat Drehknauf innen (Klinke gen&uuml;gt)</td><td style="text-align:right;">0 &euro;</td><td>inkludiert</td></tr>
+          <tr><td>T&uuml;rkontakt</td><td>Optional Reed-Sensor f&uuml;r DPS am Hub</td><td style="text-align:right;">~8 &euro;</td><td><a href="https://www.reichelt.de/" target="_blank">reichelt.de</a></td></tr>
+          <tr style="background:#bbdefb;font-weight:700;font-size:1.05rem;">
+            <td colspan="2">&Sigma; Variante B &mdash; Komplettsystem pro T&uuml;r (brutto, kein Einbau)</td>
+            <td style="text-align:right;" colspan="2">~533 &euro;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">5&ndash;10 Min DIY-Montage, kein Schreiner. Apple Home Key + Aliro 1.0 nativ.</p>
+  </div>
+
+  <!-- Variante 3: Elektronik-Profilzylinder + Shelly DIY-Bridge -->
+  <div style="background:#f3e5f5;border-radius:12px;padding:22px;border:2px solid #ab47bc;margin-top:18px;">
+    <h4 style="margin-top:0;color:var(--purple);">Variante C &mdash; Elektronik-Profilzylinder + Shelly 1 Mini Gen3 (DIY-Bridge)</h4>
+    <div class="table-wrap" style="margin-top:10px;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30%;">Komponente</th>
+            <th>Modell / Quelle</th>
+            <th style="text-align:right;width:14%;">Preis</th>
+            <th style="width:22%;">Link / Shop</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Profilzylinder</strong></td><td>DOM Tapkey Pro V2 (Doppelzylinder, einseitig lesend) &mdash; Bsp.</td><td style="text-align:right;">~400 &euro;</td><td><a href="https://www.dom-security.com/de/de/produkte/dom-tapkey-pro" target="_blank">dom-security.com</a> &middot; <a href="https://shop.tapkey.com/" target="_blank">shop.tapkey.com</a></td></tr>
+          <tr><td><strong>Trockenkontakt-Bridge</strong></td><td>Shelly 1 Mini Gen3 (WLAN, potentialfrei, 16 A)</td><td style="text-align:right;">~12&ndash;17 &euro;</td><td><a href="https://www.shelly.com/products/shelly-1-mini-gen3" target="_blank">shelly.com</a> &middot; <a href="https://www.amazon.de/Shelly-Smart-Schalter-Relais-Trockenkontakt-Lichtschalter-Hausautomation/dp/B0D8YPW46Y" target="_blank">Amazon</a></td></tr>
+          <tr><td>Reader au&szlig;en</td><td>UniFi G3 Reader (NFC / Touch-Pass)</td><td style="text-align:right;">125 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-g3" target="_blank">UI EU Store</a></td></tr>
+          <tr><td>Door Hub</td><td>UniFi Access Hub Mini (1 Dry-Relay)</td><td style="text-align:right;">99 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-hub-door-mini" target="_blank">UI EU Store</a></td></tr>
+          <tr><td>Exit innen</td><td>UniFi Access Button</td><td style="text-align:right;">35 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-access-button" target="_blank">UI EU Store</a></td></tr>
+          <tr><td>T&uuml;rkontakt</td><td>Reed-Sensor (DPS-Eingang)</td><td style="text-align:right;">~8 &euro;</td><td><a href="https://www.reichelt.de/" target="_blank">reichelt.de</a></td></tr>
+          <tr><td>Netzteil</td><td>Mean Well 12 V DC / 1 A f&uuml;r Shelly</td><td style="text-align:right;">~15 &euro;</td><td><a href="https://www.reichelt.de/" target="_blank">reichelt.de</a></td></tr>
+          <tr><td>Kabel + Klemmen</td><td>Cat&nbsp;5 zum Reader + 2&times;0,75 mm&sup2;</td><td style="text-align:right;">~25 &euro;</td><td>Elektro-Fachhandel</td></tr>
+          <tr style="background:#e1bee7;font-weight:700;font-size:1.05rem;">
+            <td colspan="2">&Sigma; Variante C &mdash; Komplettsystem pro T&uuml;r (brutto, mit DOM Tapkey)</td>
+            <td style="text-align:right;" colspan="2">~723 &euro;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">Mit g&uuml;nstigerem Zylinder (z.&nbsp;B. <strong>ISEO Libra Smart Halbzylinder ~280&nbsp;&euro;</strong>) sinkt die Summe auf ~603&nbsp;&euro;. Mit Tedee PRO Aufsatz statt Zylinder-Tausch: ~632&nbsp;&euro;. Mit Burg-W&auml;chter secuENTRY 7600 (~250&nbsp;&euro;, aber kein Webhook): NICHT m&ouml;glich, Shelly kann nicht angesteuert werden.</p>
+  </div>
+
+  <!-- Vergleichszeile -->
+  <div class="warn-box" style="margin-top:18px;">
+    <strong>Im Vergleich Standard-Strike-T&uuml;r:</strong> ~330&nbsp;&euro; Komplettsystem (80&nbsp;&euro; Strike + 125&nbsp;&euro; Reader + 99&nbsp;&euro; Hub Mini + 8&nbsp;&euro; Reed + 18&nbsp;&euro; Kleinkram). Mehrpreis je Variante: <strong>A&nbsp;+565&nbsp;&euro; &middot; B&nbsp;+203&nbsp;&euro; &middot; C&nbsp;+393&nbsp;&euro;</strong> pro T&uuml;r.
+  </div>
+
+  <!-- Magnet-Innentür-Hinweis -->
+  <div class="warn-box" style="margin-top:18px;">
+    <strong>Innent&uuml;r-Sonderfall:</strong> F&uuml;r reine B&uuml;rot&uuml;ren (IT1) ist <strong>Magnetschloss (~60&nbsp;&euro;)</strong> oder <strong>Strike Lock (80&nbsp;&euro;)</strong> &uuml;blich &mdash; Motorschloss-Aufwand lohnt sich dort nicht.
+    Magnet ist Fail-Safe (Strom weg = T&uuml;r offen) &mdash; f&uuml;r Au&szlig;ent&uuml;ren <em>verboten</em>, siehe <a href="#locks">Schl&ouml;sser-Sektion</a>.
+  </div>
+
+  <!-- Empfehlungs-Box pro Tür -->
+  <div class="rec-box" style="margin-top:18px;padding:18px;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 100%);border:2px solid #a5d6a7;border-radius:12px;">
+    <h4 style="color:var(--green);margin-top:0;">Empfehlung pro T&uuml;r (Halle)</h4>
+    <ul style="padding-left:20px;font-size:0.9rem;margin-top:8px;">
+      <li><strong>HT Haupteingang Nord</strong>: GU SECURY Automatic + A-&Ouml;ffner Servo (~570&nbsp;&euro;) &mdash; echtes 3-fach-Verriegeln, Wechself&auml;lle Sommer/Winter durch Motor abgenommen.</li>
+      <li><strong>AT1 / AT2 / AT3 Nebent&uuml;ren</strong>: <em>Wahl</em> &mdash; Strike Lock (80&nbsp;&euro;) wenn nur Falle reicht, GU SECURY (~570&nbsp;&euro;) wenn ebenfalls verriegelnd.</li>
+      <li><strong>AT4 / AT5 Lager / Maschinenraum</strong>: Strike Lock (80&nbsp;&euro;) &mdash; Kosten-Nutzen f&uuml;r Motorschloss unklar.</li>
+      <li><strong>IT1 Innent&uuml;r B&uuml;ro</strong>: <em>Wahl</em> &mdash; Magnetschloss (60&nbsp;&euro;) als Fail-Safe-L&ouml;sung; Strike Lock (80&nbsp;&euro;) als Standard; oder <strong>Nuki Pro 5 (~301&nbsp;&euro;)</strong> wenn Apple Home Key gew&uuml;nscht.</li>
+      <li><strong>Mietobjekt-Szenario</strong>: Card 2 (Nuki Pro 5 + Webhook) oder Card 3 (Profilzyl. + Shelly Bridge) &mdash; reversibel ohne T&uuml;rblatt-Eingriff.</li>
+      <li><strong>Tore T1 / T2</strong>: weiter &uuml;ber Gate Hub (Antrieb vorhanden) &mdash; keine Schloss-Wahl n&ouml;tig.</li>
+    </ul>
+    <p style="font-size:0.85rem;margin-top:10px;color:var(--muted);">Diese Sektion wirkt sich direkt auf den <a href="#konfigurator">Konfigurator</a> aus &mdash; dort pro T&uuml;r einzeln einstellbar.</p>
+  </div>
+
+</section>
+
+<!-- ===== SEK 14: VERKABELUNG ===== -->
+<section id="verkabelung">
+  <h2>Verkabelung &mdash; Door Hub, Gate Hub, Access Ultra</h2>
+  <h3>Door Hub — vollständige Außentür</h3>
+  <div class="ascii-box"><pre>
+  ┌─────────────────────────────────────────────────────────────────┐
+  │                         DOOR HUB                                │
+  │                                                                 │
+  │  [ETH/PoE] ────────────────────── PoE-Switch (Strom + Daten)  │
+  │                                                                 │
+  │  [READER]  ────── Cat5e/6 ──────  G3-Pro / G6 Entry Reader     │
+  │                                   (Wiegand oder OSDP)          │
+  │                                                                 │
+  │  [AUX1] NO ────────────────────── Schloss (+)                  │
+  │  [AUX1] COM ───────────────────── Schloss (-) / Netzteil       │
+  │                                                                 │
+  │  [AUX2] NO ────────────────────── Türdrücker / Klingel (+)     │
+  │  [AUX2] COM ───────────────────── Netzteil (-)                 │
+  │                                                                 │
+  │  [DOOR SENSOR] ────────────────── Türkontakt (Reed-Sensor)     │
+  │                                                                 │
+  │  [REX] ────────────────────────── Grüner Taster innen (Exit)  │
+  └─────────────────────────────────────────────────────────────────┘
+  Alle Signalkabel: 2×0,75mm² (Schloss) / Cat5 (Reader)
+  Schloss-Spannung: 12V oder 24V DC (separates Netzteil oder Hub-intern)</pre></div>
+
+  <h3>Gate Hub — Tor</h3>
+  <div class="ascii-box"><pre>
+  ┌────────────────────────────────────────────────────────────────┐
+  │                        GATE HUB                                │
+  │                                                                │
+  │  [ETH/PoE] ─────────────────────  PoE-Switch                  │
+  │                                                                │
+  │  [READER]  ─────── Cat5e/6 ─────  G3 Reader (am Tor-Pfosten)  │
+  │                                                                │
+  │  [RELAY] COM ───────────────────  Steuerplatine Torantrieb     │
+  │  [RELAY] NO  ───────────────────  Steuerplatine (OPEN-Eingang) │
+  │           1 Sekunde Schließer-Impuls → Tor öffnet              │
+  │                                                                │
+  │  Optional:                                                     │
+  │  [LPR CAM] ─────── PoE ─────────  UVC-AI-LPR Kamera           │
+  └────────────────────────────────────────────────────────────────┘</pre></div>
+
+  <h3>Access Ultra — Innentür</h3>
+  <div class="ascii-box"><pre>
+  ┌────────────────────────────────────────────────────────────────┐
+  │                      ACCESS ULTRA                              │
+  │                (Reader + Hub kombiniert)                       │
+  │                                                                │
+  │  [ETH/PoE] ─────────────────────  PoE-Switch                  │
+  │                                                                │
+  │  [RELAY] NO ────────────────────  Schloss (+)                  │
+  │  [RELAY] COM ───────────────────  Netzteil (-)                 │
+  │                                                                │
+  │  [REX/BUTTON] ──────────────────  Grüner Taster innen         │
+  └────────────────────────────────────────────────────────────────┘
+  Kein externer Reader nötig — Reader ist integriert!</pre></div>
+
+  <div class="warn-box"><strong>Kabelplanung:</strong> Cat5e/Cat6 von Switch zu jedem Door Hub (max 100m). Vom Hub kurze Schleife zum Reader (meist &lt;3m). Schloss-Kabel (2×0,75mm²) von Hub zum Schloss. Alle Kabel im Kabelkanal oder Leerrohr verlegen.</div>
+</section>
+
+<!-- ===== SEK 15: DRÜCKER & REX ===== -->
+<section id="rex">
+  <h2>Drücker &amp; REX &mdash; Tür von innen öffnen</h2>
+  <div class="card-grid-2">
+    <div>
+      <div class="ascii-box"><pre>
+  Normaler Betrieb (Drücken von innen):
+  ──────────────────────────────────────
+  Person drückt Türklinke
+       │
+  Falle federt ein (mechanisch)
+       │
+  Tür öffnet — KEIN Strom nötig
+
+  REX (Request to Exit) Taster:
+  ─────────────────────────────
+  Person drückt grünen Taster
+       │
+  REX-Signal an Door Hub
+       │
+  Hub aktiviert AUX1 (Schloss öffnet 2s)
+       │
+  Türklinke drücken → Tür offen
+  (sinnvoll wenn Schloss nach innen verriegelt)</pre></div>
+    </div>
+    <div>
+      <h4>Wann braucht man REX?</h4>
+      <p style="font-size:0.85rem;margin-bottom:12px;">Bei Fail-secure Schlössern sind Türen auch von innen verriegelt. Damit man von innen jederzeit raus kann (Fluchtwegpflicht!), gibt es den grünen REX-Taster. Alternativ: mechanischer Panikdrücker oder Türbeschlag der die Falle trotzdem frei gibt.</p>
+      <div class="table-wrap">
+        <table style="font-size:0.83rem;">
+          <thead><tr><th>Taster-Typ</th><th>Preis</th><th>Besonderheit</th></tr></thead>
+          <tbody>
+            <tr><td>Einfacher Taster (Aufputz)</td><td>~5–15€</td><td>Standard grün, NO-Kontakt</td></tr>
+            <tr><td>Access Button (Unifi)</td><td>35€</td><td>Unifi-Design, LED-Status</td></tr>
+            <tr><td>Bewegungsmelder REX</td><td>~30–60€</td><td>Hands-free Öffnung bei Annäherung</td></tr>
+            <tr><td>Panikstange / Panic Bar (Unifi)</td><td>359€</td><td>Fluchttür-Sicherung, zertifiziert</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEK 16: KONFIGURATOR ===== -->
+<section id="konfigurator">
+  <h2>Interaktiver Preis-Konfigurator</h2>
+  <div class="info-box">Wählen Sie für jede Tür und jedes Tor die gewünschte Hardware. Die Gesamtkosten werden automatisch berechnet. Alle Preise <strong>Netto EU-Store, Mai 2026</strong>.</div>
+
+  <!-- TÜREN -->
+  <div class="konfig-section">
+    <h3>Außentüren (bis 5)</h3>
+    <div class="info-box" style="font-size:0.84rem;margin-bottom:12px;">Pro Tür: Reader außen + Hub + Exit-Option innen + <strong>Schloss-Wahl</strong> (6 Optionen — Strike / Bolt / GU SECURY / Nuki Pro / Profilzyl.+Shelly / KFV Genius, Details siehe <a href="#schloss-wahl">Schloss-Wahl-Sektion</a>) + Türkontakt. Klingel wird zentral kalkuliert (unten).</div>
+    <div id="doors-container"></div>
+  </div>
+
+  <!-- TORE -->
+  <div class="konfig-section">
+    <h3>Tore (bis 2)</h3>
+    <div id="gates-container"></div>
+  </div>
+
+  <!-- KLINGEL & INTERCOM -->
+  <div class="konfig-section">
+    <h3>Klingel &amp; Intercom</h3>
+    <div class="info-box" style="font-size:0.84rem;margin-bottom:12px;">Gilt zentral für das gesamte System. Klingel/Intercom steht nur bei Readern mit Two-Way Audio zur Verfügung (G3-Pro, G6 Entry, G6 Pro Entry). Tablet-Preis = Halter; eigenes Tablet kommt hinzu.</div>
+    <div class="konfig-door-card active" id="bell-card">
+      <div class="door-header">
+        <span class="door-title">Innen-Empfang &amp; Klingelanlage</span>
+        <span class="door-cost" id="bell-cost">0 €</span>
+      </div>
+      <div class="konfig-row">
+        <div>
+          <label>Innen-Station / Empfang</label>
+          <select id="bell-indoor" onchange="recalc()">
+            <option value="0">App only (iOS/Android) — 0 €</option>
+            <option value="50">Tablet-Station (eig. Tablet + Wandhalter ~50 €)</option>
+            <option value="325">G3-Pro als feste Indoor-Station — 325 €</option>
+          </select>
+        </div>
+        <div>
+          <label>Physische Klingel (Bell)</label>
+          <select id="bell-sound" onchange="recalc()">
+            <option value="0">App-Benachrichtigung — 0 €</option>
+            <option value="15">Relay-Klingel (an Hub AUX2) — ~15 €</option>
+            <option value="89">IP-Gong / Netzwerkklingel (SIP) — ~89 €</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INNENTÜR -->
+  <div class="konfig-section">
+    <h3>Innentür (Büro)</h3>
+    <div class="konfig-door-card" id="interior-card">
+      <div class="door-header">
+        <label class="konfig-toggle">
+          <input type="checkbox" id="interior-enabled" onchange="recalc()">
+          <span class="door-title">Innentür aktiv</span>
+        </label>
+        <span class="door-cost" id="interior-cost">0 €</span>
+      </div>
+      <div class="konfig-row" id="interior-options" style="display:none;">
+        <div>
+          <label>Reader / Sensor (Innentür)</label>
+          <select id="interior-reader" onchange="recalc()">
+            <option value="ultra">Access Ultra (All-in-One Reader+Hub) — 90 €</option>
+            <option value="g3mini">G3 Reader + Hub Mini — 224 €</option>
+            <option value="button">Nur Push-Button (kein Kartenleser) — 35 €</option>
+            <option value="pir">PIR Bewegungsmelder (Hands-free) — 45 €</option>
+          </select>
+        </div>
+        <div>
+          <label>Schloss / Verriegelung <a href="#schloss-wahl" style="font-size:0.7rem;font-weight:normal;color:var(--blue);text-transform:none;letter-spacing:0;">(Details ↗)</a></label>
+          <select id="interior-lock" onchange="applyInteriorLockConstraints();recalc()">
+            <option value="none" selected>— Keine (nur Reader-Log)</option>
+            <option value="strike">UniFi Strike Lock — 80 €</option>
+            <option value="bolt">UniFi Bolt Lock — 89 €</option>
+            <option value="magnet">Magnetschloss (Fail-Safe) — ~60 €</option>
+            <option value="nuki">Nuki Pro 5 + Webhook — ~301 €</option>
+          </select>
+        </div>
+        <div id="interior-lock-warn" style="display:none;grid-column:1/-1;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOTAL — weiße Karte mit Auflistung -->
+  <div class="total-white-box" id="total-box">
+    <div class="total-header">
+      <h3>Aktuelle Konfiguration</h3>
+      <div class="total-numbers">
+        <div class="total-netto-label">Gesamt Netto</div>
+        <div class="total-netto" id="total-amount">0 €</div>
+      </div>
+    </div>
+    <div id="bom-content"><p class="total-empty">Keine Positionen ausgewählt &mdash; bitte Türen/Tore oben aktivieren.</p></div>
+    <div class="total-footer">
+      <span class="total-mwst">inkl. 19% MwSt.</span>
+      <span class="total-brutto-val" id="total-brutto">0 €</span>
+    </div>
+    <div style="font-size:0.75rem;color:var(--muted);margin-top:8px;">Ohne Installation &middot; Preise EU-Store Mai 2026 &middot; Alle Preise Netto</div>
+  </div>
+</section>
+
+</main>
+
+<!-- LIGHTBOX -->
+<div id="lb-overlay" onclick="closeLB()">
+  <span id="lb-close" onclick="closeLB()">&#x2715;</span>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<script>
+// ===== PREISE =====
+const P = {
+  reader:   { g3: 125, g3pro: 325, g6entry: 225, g6proentry: 340 },
+  hub:      { mini: 99, full: 179 },
+  gateHub:  250,
+  lpr:      449,
+  exit:     { none: 0, taster: 10, button: 35, pir: 45, radar: 60, ir: 60, g3: 125 },
+  sensor:   { none: 0, reed: 8, reedtamper: 15 },
+  int_rdr:  { ultra: 90, g3mini: 224, button: 35, pir: 45 },
+  bell_stn: { v0: 0, v50: 50, v325: 325 },
+  bell_snd: { v0: 0, v15: 15, v89: 89 },
+  // Schloss-Wahl (siehe #schloss-wahl). Brutto-Anker EU/DE Mai 2026.
+  // motor    = GU SECURY Automatic + A-Öffner Servo (Empfehlung Schiene)
+  // motorkfv = KFV Genius AS 2600 SLCA (Premium RC2+)
+  // nuki     = Nuki Smart Lock Pro 5 + WiFi + Open-Source-Connector
+  // motorzyl = Elektronik-Profilzylinder + Shelly 1 Mini Gen3 (DIY-Bridge)
+  lock:     { strike: 80, bolt: 89, motor: 570, motorkfv: 1494, nuki: 301, motorzyl: 415 },
+  lock_int: { none: 0, strike: 80, bolt: 89, magnet: 60, nuki: 301 }
+};
+
+const DOOR_LABELS = ['Tür 1', 'Tür 2', 'Tür 3', 'Tür 4', 'Tür 5'];
+const GATE_LABELS = ['Tor 1', 'Tor 2'];
+
+const RN = { g3: 'G3 Reader', g3pro: 'G3-Pro', g6entry: 'G6 Entry', g6proentry: 'G6 Pro Entry' };
+const HN = { mini: 'Hub Mini', full: 'Door Hub' };
+const EN = { none: '—', taster: 'Drücker', button: 'Access Button', pir: 'PIR-Sensor', radar: 'Radar/Geste', ir: 'IR-Lichtschranke', g3: 'G3 Reader innen' };
+const IRN = { ultra: 'Access Ultra', g3mini: 'G3+Hub Mini', button: 'Push-Button', pir: 'PIR-Sensor' };
+const LN = {
+  strike: 'UniFi Strike 80€',
+  bolt: 'UniFi Bolt 89€',
+  motor: 'GU SECURY + A-Öffner ~570€',
+  motorkfv: 'KFV Genius AS 2600 ~1.494€',
+  nuki: 'Nuki Pro + Webhook ~301€',
+  motorzyl: 'Profilzyl. + Shelly DIY-Bridge ~415€'
+};
+const LN_INT = {
+  none: '— (keine Verriegelung)',
+  strike: 'UniFi Strike 80€',
+  bolt: 'UniFi Bolt 89€',
+  magnet: 'Magnetschloss 60€',
+  nuki: 'Nuki Pro + Webhook ~301€'
+};
+
+function buildDoors() {
+  const c = document.getElementById('doors-container');
+  DOOR_LABELS.forEach((label, i) => {
+    c.innerHTML += `
+    <div class="konfig-door-card" id="door${i}-card">
+      <div class="door-header">
+        <label class="konfig-toggle">
+          <input type="checkbox" id="door${i}-en" ${i < 3 ? 'checked' : ''} onchange="toggleDoor(${i});recalc()">
+          <span class="door-title">${label}</span>
+        </label>
+        <span class="door-cost" id="door${i}-cost">0 €</span>
+      </div>
+      <div class="konfig-row" id="door${i}-opts">
+        <div>
+          <label>Reader (Außen)</label>
+          <select id="door${i}-reader" onchange="recalc()">
+            <option value="g3">G3 Reader — 125 €</option>
+            <option value="g3pro" ${i===0?'selected':''}>G3-Pro (Intercom) — 325 €</option>
+            <option value="g6entry">G6 Entry — 225 €</option>
+            <option value="g6proentry">G6 Pro Entry — 340 €</option>
+          </select>
+        </div>
+        <div>
+          <label>Door Hub</label>
+          <select id="door${i}-hub" onchange="recalc()">
+            <option value="mini">Hub Mini — 99 €</option>
+            <option value="full" ${i===0?'selected':''}>Door Hub (2× Relay) — 179 €</option>
+          </select>
+        </div>
+        <div>
+          <label>Exit-Option innen (Türöffner von innen)</label>
+          <select id="door${i}-exit" onchange="recalc()">
+            <option value="none">Nur Türklinke (mechanisch, 0 €)</option>
+            <option value="taster">Einfacher Drücker (Taster grün, ~10 €)</option>
+            <option value="button">UniFi Access Button — 35 €</option>
+            <option value="pir">PIR Bewegungsmelder (Hands-free, ~45 €)</option>
+            <option value="radar">Radar / Geste-Sensor (Handwelle, ~60 €)</option>
+            <option value="ir">IR-Lichtschranke (Lichtvorhang, ~60 €)</option>
+            <option value="g3">G3 Reader innen (bidirektional) — 125 €</option>
+          </select>
+        </div>
+        <div>
+          <label>Schloss / Verriegelung <a href="#schloss-wahl" style="font-size:0.7rem;font-weight:normal;color:var(--blue);text-transform:none;letter-spacing:0;">(Details ↗)</a></label>
+          <select id="door${i}-lock" onchange="applyLockConstraints(${i});recalc()">
+            <option value="strike" selected>UniFi Strike Lock — 80 €</option>
+            <option value="bolt">UniFi Bolt Lock — 89 €</option>
+            <option value="motor">GU SECURY + A-Öffner Servo (Empfehlung) — ~570 €</option>
+            <option value="nuki">Nuki Pro 5 + Webhook (Aufsatz) — ~301 €</option>
+            <option value="motorzyl">Profilzyl. + Shelly DIY-Bridge (Zylindertausch) — ~415 €</option>
+            <option value="motorkfv">KFV Genius AS 2600 SLCA (Premium, RC2+) — ~1.494 €</option>
+          </select>
+        </div>
+        <div>
+          <label>Türkontakt / Door Sensor</label>
+          <select id="door${i}-sensor" onchange="recalc()">
+            <option value="none">Kein Türkontakt — 0 €</option>
+            <option value="reed" selected>Reed-Kontakt (Offen/Zu-Status) — ~8 €</option>
+            <option value="reedtamper">Reed + Tamper-Schutz — ~15 €</option>
+          </select>
+        </div>
+        <div id="door${i}-lock-warn" style="display:none;grid-column:1/-1;"></div>
+      </div>
+    </div>`;
+  });
+  DOOR_LABELS.forEach((_, i) => toggleDoor(i));
+}
+
+function buildGates() {
+  const c = document.getElementById('gates-container');
+  GATE_LABELS.forEach((label, i) => {
+    c.innerHTML += `
+    <div class="konfig-door-card" id="gate${i}-card">
+      <div class="door-header">
+        <label class="konfig-toggle">
+          <input type="checkbox" id="gate${i}-en" checked onchange="toggleGate(${i});recalc()">
+          <span class="door-title">${label} (Gate Hub 250€ + Reader)</span>
+        </label>
+        <span class="door-cost" id="gate${i}-cost">0 €</span>
+      </div>
+      <div class="konfig-row" id="gate${i}-opts">
+        <div>
+          <label>Reader am Tor</label>
+          <select id="gate${i}-reader" onchange="recalc()">
+            <option value="g3">G3 Reader — 125 €</option>
+            <option value="g3pro">G3-Pro (Intercom) — 325 €</option>
+            <option value="g6entry">G6 Entry (5MP, Intercom) — 225 €</option>
+            <option value="g6proentry">G6 Pro Entry (12MP + Display) — 340 €</option>
+          </select>
+        </div>
+        <div>
+          <label>LPR-Kamera</label>
+          <select id="gate${i}-lpr" onchange="recalc()">
+            <option value="0">Kein LPR — 0€</option>
+            <option value="449">UVC-AI-LPR — 449€</option>
+          </select>
+        </div>
+      </div>
+    </div>`;
+  });
+  GATE_LABELS.forEach((_, i) => toggleGate(i));
+}
+
+function toggleDoor(i) {
+  const en = document.getElementById(`door${i}-en`).checked;
+  const card = document.getElementById(`door${i}-card`);
+  const opts = document.getElementById(`door${i}-opts`);
+  card.classList.toggle('active', en);
+  opts.style.display = en ? 'grid' : 'none';
+}
+function toggleGate(i) {
+  const en = document.getElementById(`gate${i}-en`).checked;
+  const card = document.getElementById(`gate${i}-card`);
+  const opts = document.getElementById(`gate${i}-opts`);
+  card.classList.toggle('active', en);
+  opts.style.display = en ? 'grid' : 'none';
+}
+
+function applyLockConstraints(i) {
+  const lk = document.getElementById(`door${i}-lock`).value;
+  const hubSel = document.getElementById(`door${i}-hub`);
+  const readerSel = document.getElementById(`door${i}-reader`);
+  const exitSel = document.getElementById(`door${i}-exit`);
+  const sensorSel = document.getElementById(`door${i}-sensor`);
+  const warnDiv = document.getElementById(`door${i}-lock-warn`);
+
+  [hubSel, readerSel, exitSel, sensorSel].forEach(s => s.disabled = false);
+
+  let warnHTML = '';
+  let warnClass = '';
+
+  if (lk === 'motor') {
+    warnHTML = '<strong>GU SECURY Automatic + A-Öffner Servo</strong> — Dry-NO/COM am Hub. Hub Mini reicht (1 Relay genügt). Empfohlen: eigenes 12 V/2 A Netzteil + Reed-Sensor (~8 €) für Status-LED.';
+    warnClass = 'info-box';
+  } else if (lk === 'motorkfv') {
+    if (hubSel.value === 'mini') {
+      warnHTML = '<strong>KFV Genius (Premium):</strong> Hub Mini funktioniert, aber für Status-LED + Riegel-Rückmelder ist Door Hub voll (179 €) sinnvoller (2 Relays).';
+      warnClass = 'warn-box';
+    } else {
+      warnHTML = '<strong>KFV Genius AS 2600 SLCA</strong> — Netzteil inklusive (Komplettpaket). Direkter Anschluss am Hub Dry-NO/COM. RC2+ nativ, schwenkbarer Bolzen-Riegel.';
+      warnClass = 'info-box';
+    }
+  } else if (lk === 'nuki') {
+    warnHTML = '<strong>Nuki Pro 5 + Webhook + Open-Source-Connector:</strong> Aufsatz innen, kein Zylindertausch. Apple Home Key nativ. Bridge per Software-Connector (Docker-Container) → UniFi-API. Logs zusätzlich in Nuki-Cloud — DSGVO prüfen.';
+    warnClass = 'info-box';
+  } else if (lk === 'motorzyl') {
+    warnHTML = '<strong>DIY-Bridge: Elektronik-Profilzylinder + Shelly 1 Mini Gen3 (~12-17 €):</strong> Zylindertausch (5-10 Min) + WLAN-Relais mit potentialfreiem Trockenkontakt. Webhook von Zylinder-App → Shelly → Hub Dry-NO/COM. Empfehlung für Mietobjekte. Konfigurations-Aufwand: 1-2 h Einrichtung.';
+    warnClass = 'info-box';
+  }
+
+  if (warnHTML) {
+    warnDiv.innerHTML = warnHTML;
+    warnDiv.className = warnClass;
+    warnDiv.style.cssText = 'grid-column:1/-1;margin-top:6px;font-size:0.8rem;padding:8px 12px;display:block;';
+  } else {
+    warnDiv.innerHTML = '';
+    warnDiv.className = '';
+    warnDiv.style.cssText = 'display:none;grid-column:1/-1;';
+  }
+}
+
+function applyInteriorLockConstraints() {
+  const lk = document.getElementById('interior-lock').value;
+  const warnDiv = document.getElementById('interior-lock-warn');
+  let warnHTML = '';
+  let warnClass = '';
+
+  if (lk === 'magnet') {
+    warnHTML = '<strong>Magnetschloss = Fail-Safe</strong> (Strom weg → offen). Für Bürotür unkritisch und ~20 € günstiger als Strike. NICHT für Außentüren — siehe <a href="#locks">Schlösser-Warnung</a>.';
+    warnClass = 'warn-box';
+  } else if (lk === 'nuki') {
+    warnHTML = '<strong>Nuki Pro 5 + Webhook + Open-Source-Connector</strong> — Aufsatz innen, Apple Home Key nativ. Reader-Wahl oben dient als Wallet/NFC-Lesepunkt. Bridge via Software-Connector (Docker) zur UniFi-API. Logs landen zusätzlich in Nuki-Cloud.';
+    warnClass = 'info-box';
+  }
+
+  if (warnHTML) {
+    warnDiv.innerHTML = warnHTML;
+    warnDiv.className = warnClass;
+    warnDiv.style.cssText = 'grid-column:1/-1;margin-top:6px;font-size:0.8rem;padding:8px 12px;display:block;';
+  } else {
+    warnDiv.innerHTML = '';
+    warnDiv.className = '';
+    warnDiv.style.cssText = 'display:none;grid-column:1/-1;';
+  }
+}
+
+document.getElementById('interior-enabled').addEventListener('change', function() {
+  document.getElementById('interior-options').style.display = this.checked ? 'grid' : 'none';
+  document.getElementById('interior-card').classList.toggle('active', this.checked);
+  recalc();
+});
+
+const INT_PRICES = { ultra: 90, g3mini: 224, button: 35, pir: 45 };
+
+function recalc() {
+  let total = 0;
+  const bom = [];
+
+  // Doors
+  DOOR_LABELS.forEach((label, i) => {
+    const en = document.getElementById(`door${i}-en`).checked;
+    const costEl = document.getElementById(`door${i}-cost`);
+    if (!en) { costEl.textContent = '0 €'; return; }
+    const r   = document.getElementById(`door${i}-reader`).value;
+    const h   = document.getElementById(`door${i}-hub`).value;
+    const ex  = document.getElementById(`door${i}-exit`).value;
+    const sen = document.getElementById(`door${i}-sensor`).value;
+    const lk  = document.getElementById(`door${i}-lock`).value;
+    const senPrice = P.sensor[sen] || 0;
+    const lkPrice = P.lock[lk] || 0;
+    const sub = P.reader[r] + P.hub[h] + (P.exit[ex] || 0) + senPrice + lkPrice;
+    const senLabel = sen === 'reed' ? ' · Reed-Sensor' : sen === 'reedtamper' ? ' · Reed+Tamper' : '';
+    const detail = `${RN[r]} · ${HN[h]} · Exit: ${EN[ex]}${senLabel} · Schloss: ${LN[lk]}`;
+    costEl.textContent = sub.toLocaleString('de-DE') + ' €';
+    total += sub;
+    bom.push({ name: label, detail, amount: sub });
+  });
+
+  // Gates
+  GATE_LABELS.forEach((label, i) => {
+    const en = document.getElementById(`gate${i}-en`).checked;
+    const costEl = document.getElementById(`gate${i}-cost`);
+    if (!en) { costEl.textContent = '0 €'; return; }
+    const r   = document.getElementById(`gate${i}-reader`).value;
+    const lpr = parseInt(document.getElementById(`gate${i}-lpr`).value);
+    const sub = P.gateHub + P.reader[r] + lpr;
+    costEl.textContent = sub.toLocaleString('de-DE') + ' €';
+    total += sub;
+    bom.push({ name: label, detail: `Gate Hub · ${RN[r]}${lpr ? ' · LPR-Kamera' : ''}`, amount: sub });
+  });
+
+  // Klingel & Intercom
+  const bellStn = parseInt(document.getElementById('bell-indoor').value) || 0;
+  const bellSnd = parseInt(document.getElementById('bell-sound').value) || 0;
+  const bellTotal = bellStn + bellSnd;
+  document.getElementById('bell-cost').textContent = bellTotal > 0 ? bellTotal.toLocaleString('de-DE') + ' €' : '0 €';
+  if (bellTotal > 0) {
+    const stLbl = bellStn === 325 ? 'G3-Pro Indoor' : bellStn === 50 ? 'Tablet-Station' : 'App';
+    const snLbl = bellSnd === 89 ? 'IP-Gong' : bellSnd === 15 ? 'Relay-Bell' : 'App-Notif.';
+    bom.push({ name: 'Klingel/Intercom', detail: `Station: ${stLbl} · Klingel: ${snLbl}`, amount: bellTotal });
+    total += bellTotal;
+  }
+
+  // Interior
+  const intEn = document.getElementById('interior-enabled').checked;
+  const intCostEl = document.getElementById('interior-cost');
+  if (intEn) {
+    const rdr = document.getElementById('interior-reader').value;
+    const intLk = document.getElementById('interior-lock').value;
+    const lkPrice = P.lock_int[intLk] || 0;
+    const sub = (INT_PRICES[rdr] || 90) + lkPrice;
+    const detail = `${IRN[rdr]} · Schloss: ${LN_INT[intLk]}`;
+    intCostEl.textContent = sub.toLocaleString('de-DE') + ' €';
+    total += sub;
+    bom.push({ name: 'Innentür', detail, amount: sub });
+  } else {
+    intCostEl.textContent = '0 €';
+  }
+
+  // Update totals
+  document.getElementById('total-amount').textContent = total.toLocaleString('de-DE') + ' €';
+  document.getElementById('total-brutto').textContent = Math.round(total * 1.19).toLocaleString('de-DE') + ' €';
+
+  // Render BOM rows
+  const bomDiv = document.getElementById('bom-content');
+  if (bom.length === 0) {
+    bomDiv.innerHTML = '<p class="total-empty">Keine Positionen ausgewählt &mdash; bitte Türen/Tore oben aktivieren.</p>';
+  } else {
+    bomDiv.innerHTML = bom.map(r =>
+      `<div class="bom-row">
+        <div>
+          <div class="bom-name">${r.name}</div>
+          <div class="bom-detail">${r.detail}</div>
+        </div>
+        <div class="bom-price">${r.amount.toLocaleString('de-DE')} €</div>
+      </div>`
+    ).join('');
+  }
+}
+
+// Lightbox
+function openLB(img) {
+  document.getElementById('lb-img').src = img.src;
+  document.getElementById('lb-img').alt = img.alt;
+  document.getElementById('lb-overlay').classList.add('active');
+}
+function closeLB() { document.getElementById('lb-overlay').classList.remove('active'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
+
+// Init
+buildDoors();
+buildGates();
+DOOR_LABELS.forEach((_, i) => applyLockConstraints(i));
+applyInteriorLockConstraints();
+recalc();
+</script>
+</body>
+</html>

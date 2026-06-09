@@ -1,0 +1,6 @@
+[Unit]
+Description=Portfolio TLS-Zertifikats-Check
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/portfolio-cert-check.sh

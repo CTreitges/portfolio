@@ -1,0 +1,3312 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schließsystem — Gewerbehalle 1.100 m²</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --border: #d1d9e0;
+      --text: #1a252f;
+      --muted: #6b7a8d;
+      --accent-blue: #1565c0;
+      --accent-green: #2e7d32;
+      --accent-purple: #6a1b9a;
+      --accent-brown: #795548;
+      --accent-orange: #e65100;
+      --header-from: #1a252f;
+      --header-to: #2c3e50;
+      --tier-budget: #43a047;
+      --tier-smb: #1e88e5;
+      --tier-mid: #8e24aa;
+      --tier-ent: #e53935;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, var(--header-from) 0%, var(--header-to) 100%);
+      color: #fff; padding: 48px 40px 36px; position: relative; overflow: hidden;
+    }
+    header::after { content: ''; position: absolute; right: -80px; top: -80px; width: 340px; height: 340px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+    header h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.5px; }
+    header .subtitle { color: #90a4ae; margin-top: 6px; font-size: 1rem; }
+    header .meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+    header .meta-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #b0bec5; }
+    header .meta-item span { background: rgba(255,255,255,0.1); border-radius: 4px; padding: 2px 8px; color: #e0e0e0; font-weight: 500; }
+
+    /* ===== NAV ===== */
+    nav {
+      background: #fff; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100; overflow-x: auto;
+    }
+    nav ul { display: flex; list-style: none; padding: 0 32px; gap: 0; white-space: nowrap; }
+    nav ul li a {
+      display: block; padding: 14px 14px; font-size: 0.82rem; font-weight: 600;
+      color: var(--muted); text-decoration: none; border-bottom: 3px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    nav ul li a:hover { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+
+    /* ===== LAYOUT ===== */
+    main { max-width: 1280px; margin: 0 auto; padding: 40px 32px; }
+    section { margin-bottom: 56px; scroll-margin-top: 70px; }
+    h2 { font-size: 1.55rem; font-weight: 700; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+    h3 { font-size: 1.15rem; font-weight: 600; margin: 20px 0 10px; color: var(--text); }
+    h4 { font-size: 1rem; font-weight: 600; margin: 14px 0 6px; }
+    p { margin-bottom: 12px; }
+
+    /* section accent bars */
+    .sec-wallet h2 { border-bottom-color: var(--accent-blue); }
+    .sec-tueroeffner h2 { border-bottom-color: var(--accent-brown); }
+    .sec-empfehlung h2 { border-bottom-color: var(--accent-green); }
+
+    /* ===== CARDS ===== */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; }
+    .card + .card { margin-top: 16px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+
+    /* ===== CHIP BADGES ===== */
+    .chip { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+    .chip-green { background: #e8f5e9; color: var(--accent-green); }
+    .chip-blue { background: #e3f2fd; color: var(--accent-blue); }
+    .chip-purple { background: #f3e5f5; color: var(--accent-purple); }
+    .chip-red { background: #ffebee; color: #c62828; }
+    .chip-brown { background: #efebe9; color: var(--accent-brown); }
+    .chip-orange { background: #fff3e0; color: var(--accent-orange); }
+
+    .tier-chip { font-size: 0.8rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 12px; }
+    .tier-1 { background: #e8f5e9; color: var(--tier-budget); }
+    .tier-2 { background: #e3f2fd; color: #1565c0; }
+    .tier-3 { background: #ede7f6; color: #6a1b9a; }
+    .tier-4 { background: #ffebee; color: #c62828; }
+
+    /* ===== TABLES ===== */
+    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; background: var(--card); font-size: 0.88rem; }
+    thead th {
+      background: var(--header-to); color: #fff; padding: 12px 14px;
+      text-align: left; font-weight: 600; position: sticky; top: 0;
+      white-space: nowrap;
+    }
+    tbody tr:nth-child(even) td { background: #f8fafc; }
+    tbody tr:hover td { background: #eef4fb; }
+    tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tbody td:first-child { font-weight: 600; }
+    .yes { color: #2e7d32; font-weight: 700; }
+    .no { color: #c62828; font-weight: 700; }
+    .warn { color: #e65100; font-weight: 700; }
+    .soon { color: #1565c0; font-style: italic; }
+
+    /* ===== ASCII DIAGRAM ===== */
+    .ascii-box { background: #1a252f; color: #a8d8a8; border-radius: 10px; padding: 28px 32px; font-family: 'Courier New', monospace; font-size: 0.82rem; line-height: 1.7; overflow-x: auto; }
+    .ascii-note { background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 16px; font-size: 0.9rem; }
+
+    /* ===== WALLET SECTION ===== */
+    .wallet-highlight {
+      background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+      border: 2px solid #90caf9; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+    }
+    .wallet-highlight h3 { color: var(--accent-blue); margin-top: 0; }
+    .aliro-badge { display: inline-flex; align-items: center; gap: 6px; background: #1565c0; color: #fff; border-radius: 6px; padding: 4px 12px; font-size: 0.82rem; font-weight: 700; margin-bottom: 12px; }
+
+    /* ===== ALT COMPARISON CARDS ===== */
+    .alt-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .alt-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .alt-card .sys-name { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .alt-card .sys-desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 12px; }
+    .alt-card .point { font-size: 0.85rem; margin-bottom: 6px; display: flex; gap: 6px; }
+    .alt-card .point .icon { flex-shrink: 0; }
+    .alt-card .price-cmp { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.83rem; }
+
+    /* ===== TUROEFFNER SECTION ===== */
+    .opener-card {
+      background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent-brown);
+      border-radius: 0 10px 10px 0; padding: 20px; margin-bottom: 14px;
+    }
+    .opener-card h4 { color: var(--accent-brown); margin-top: 0; margin-bottom: 8px; }
+    .opener-card .opener-meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .opener-card .opener-meta span { font-size: 0.8rem; background: #efebe9; color: var(--accent-brown); border-radius: 4px; padding: 2px 8px; font-weight: 600; }
+    .compat-row { font-size: 0.85rem; margin-top: 8px; }
+
+    /* ===== PRICE SECTION ===== */
+    .price-tier { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 20px; }
+    .price-tier .price-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .price-tier .total { font-size: 1.4rem; font-weight: 800; }
+    .price-lines { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .price-lines tr td { padding: 6px 10px; }
+    .price-lines tr td:last-child { text-align: right; font-weight: 600; white-space: nowrap; }
+    .price-lines .subtotal td { border-top: 1px dashed var(--border); }
+    .price-lines .total-row td { border-top: 2px solid var(--border); font-weight: 800; font-size: 1rem; }
+    .price-note { font-size: 0.82rem; color: var(--muted); margin-top: 8px; font-style: italic; }
+
+    /* ===== MINDMAP ===== */
+    #markmap-container { width: 100%; height: 720px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; }
+    #markmap { width: 100%; height: 100%; }
+
+    /* ===== EMPFEHLUNG ===== */
+    .rec-box { background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%); border: 2px solid #a5d6a7; border-radius: 12px; padding: 28px; }
+    .rec-box h3 { color: var(--accent-green); margin-top: 0; }
+    .rec-steps { counter-reset: step; list-style: none; margin-top: 12px; }
+    .rec-steps li { display: flex; gap: 14px; margin-bottom: 14px; }
+    .rec-steps li::before { counter-increment: step; content: counter(step); background: var(--accent-green); color: #fff; border-radius: 50%; min-width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+
+    /* ===== INFO BOXES ===== */
+    .info-box { background: #e3f2fd; border-left: 4px solid var(--accent-blue); border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 16px; font-size: 0.9rem; }
+    .warn-box { background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 16px; font-size: 0.9rem; }
+    .danger-box { background: #ffebee; border-left: 4px solid #ef5350; border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 16px; font-size: 0.9rem; }
+
+    /* ===== UNIFI HARDWARE CARDS ===== */
+    .hw-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .hw-card .hw-name { font-size: 1rem; font-weight: 700; font-family: 'Courier New', monospace; margin-bottom: 4px; }
+    .hw-card .hw-price { font-size: 1.1rem; font-weight: 800; color: var(--accent-blue); }
+    .hw-card .hw-desc { font-size: 0.85rem; color: var(--muted); margin: 6px 0; }
+    .hw-card .hw-specs { font-size: 0.82rem; margin: 10px 0; padding-left: 16px; }
+    .hw-card .hw-specs li { padding: 3px 0; }
+    .hw-card .hw-link { display: inline-block; margin-top: 10px; font-size: 0.8rem; color: var(--accent-blue); text-decoration: none; }
+    .hw-card .hw-link:hover { text-decoration: underline; }
+    .hw-category { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin: 24px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+    .gen-badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+    .gen-new { background: #e8f5e9; color: #2e7d32; }
+    .gen-old { background: #fafafa; color: #888; }
+
+    /* ===== VARIANTEN ===== */
+    .variant-tier { border-left: 4px solid; border-radius: 0 10px 10px 0; background: var(--card); padding: 20px 24px; margin-bottom: 16px; }
+    .variant-tier.t1 { border-color: var(--tier-budget); }
+    .variant-tier.t2 { border-color: #1e88e5; }
+    .variant-tier.t3 { border-color: var(--tier-mid); }
+    .variant-tier.t4 { border-color: var(--tier-ent); }
+    .variant-tier .tier-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+    .variant-tier .tier-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+    .feature-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .feature-list .feat { font-size: 0.82rem; background: #f4f6f8; border-radius: 4px; padding: 3px 8px; }
+
+    /* ===== PRODUKT-BILDER ===== */
+    .hw-card .hw-img { width: 100%; max-height: 160px; object-fit: contain; margin: 0 auto 14px; display: block; background: #f4f6f8; border-radius: 8px; padding: 10px; cursor: zoom-in; transition: opacity 0.15s; }
+    .hw-card .hw-img:hover { opacity: 0.85; }
+
+    /* ===== LIGHTBOX ===== */
+    #lb-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.82); z-index:9999; align-items:center; justify-content:center; cursor:zoom-out; }
+    #lb-overlay.active { display:flex; }
+    #lb-overlay img { max-width:88vw; max-height:88vh; object-fit:contain; border-radius:12px; box-shadow:0 8px 48px rgba(0,0,0,0.6); background:#fff; padding:16px; pointer-events:none; }
+    #lb-close { position:fixed; top:20px; right:28px; color:#fff; font-size:2.2rem; font-weight:300; cursor:pointer; line-height:1; opacity:0.8; z-index:10000; }
+    #lb-close:hover { opacity:1; }
+    #lb-caption { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); color:#e0e0e0; font-size:0.9rem; background:rgba(0,0,0,0.5); padding:6px 16px; border-radius:20px; }
+
+    @media print {
+      nav { display: none; }
+      header { background: #1a252f !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      body { font-size: 12px; }
+      section { page-break-inside: avoid; }
+    }
+    @media (max-width: 768px) {
+      header { padding: 28px 20px 22px; }
+      header h1 { font-size: 1.5rem; }
+      main { padding: 24px 16px; }
+      .alt-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <h1>Schliessystem &mdash; Gewerbehalle 1.100 m&sup2;</h1>
+  <div class="subtitle">Pitch-Dokument &middot; Systemvergleich &middot; Preisübersicht &middot; Empfehlung</div>
+  <div class="meta">
+    <div class="meta-item">Fläche <span>1.100 m&sup2;</span></div>
+    <div class="meta-item">Zugangspunkte <span>6 gesamt</span></div>
+    <div class="meta-item">Torantriebe <span>bereits vorhanden</span></div>
+    <div class="meta-item">Erstellt <span>Mai 2026</span></div>
+  </div>
+</header>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <ul>
+    <li><a href="#uebersicht">Übersicht</a></li>
+    <li><a href="#wallet">Apple/Google Wallet</a></li>
+    <li><a href="#unifi-hardware">Unifi Hardware</a></li>
+    <li><a href="#methoden">Zutrittsmethoden</a></li>
+    <li><a href="#varianten">Systemvarianten</a></li>
+    <li><a href="#alternativen">Alternativen</a></li>
+    <li><a href="#unifi-vs-dormakaba">Unifi vs Dormakaba</a></li>
+    <li><a href="#tueroeffner">Türöffner</a></li>
+    <li><a href="#rex-druecker">Drücker &amp; REX</a></li>
+    <li><a href="#zylinder">Zylinder-Alternativen</a></li>
+    <li><a href="#preise">Preise</a></li>
+    <li><a href="#mindmap">Mindmap</a></li>
+    <li><a href="#empfehlung">Empfehlung</a></li>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#materialliste">Materialliste</a></li>
+    <li><a href="#poe-switch">PoE &amp; Switch</a></li>
+    <li><a href="#verwaltung">Verwaltung</a></li>
+    <li><a href="#bestellliste">Bestellliste</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ===== SEK 1: ÜBERSICHT ===== -->
+<section id="uebersicht">
+  <h2>Hallen-Übersicht &amp; Zugangspunkte</h2>
+<!-- TL;DR Executive Summary -->
+<div class="rec-box" style="margin-bottom:24px;background:linear-gradient(135deg,#e3f2fd 0%,#e8f5e9 100%);border:2px solid #90caf9;">
+  <h3 style="color:var(--accent-blue);margin-top:0;">Kernfakten auf einen Blick</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px;">
+    <div style="background:#fff;border-radius:8px;padding:14px;">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Empfehlung</div>
+      <div style="font-size:1.05rem;font-weight:700;margin-top:4px;">Unifi Access (Tier 3)</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-top:2px;">SMB lokal · kein Cloud-Zwang</div>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:14px;">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Material gesamt</div>
+      <div style="font-size:1.05rem;font-weight:700;margin-top:4px;">~2.900–3.500 &euro;</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-top:2px;">ohne LPR · inkl. Türöffner</div>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:14px;">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Zugangspunkte</div>
+      <div style="font-size:1.05rem;font-weight:700;margin-top:4px;">6 gesamt</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-top:2px;">3 Türen + 2 Tore + 1 Innentür</div>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:14px;">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Laufende Kosten</div>
+      <div style="font-size:1.05rem;font-weight:700;margin-top:4px;">0 &euro; / Jahr</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-top:2px;">opt. Touch Pass 5 &euro;/U/J</div>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:14px;">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Zugang per</div>
+      <div style="font-size:1.05rem;font-weight:700;margin-top:4px;">Karte · App · Wallet</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-top:2px;">+ LPR-Kennzeichen optional</div>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:14px;">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Verwaltung</div>
+      <div style="font-size:1.05rem;font-weight:700;margin-top:4px;">Unifi Access App</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-top:2px;">lokal · Remote via VPN</div>
+    </div>
+  </div>
+  <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(0,0,0,0.1);font-size:0.9rem;">
+    <strong>Was wo im Dokument:</strong>
+    <span style="color:var(--muted);">Tiers vergleichen → "Systemvarianten" · Komplette Hardware → "Unifi Hardware-Katalog" · Detail-Preise → "Preise" · Was kaufen → "Materialliste" · Wie verbinden → "Installation" · Bestellliste → ganz unten</span>
+  </div>
+</div>
+  <div class="ascii-box">
+<pre>
+  +=====================================================================+
+  |                   GEWERBEHALLE — 1.100 m²                           |
+  |                                                                     |
+  |  ↓ [AT1]    ↓ [T1] Tor      ↓ [HT] Haupttür        ↓ [AT2]      |
+  |  Außentür W (Antrieb vorh.) (Haupteingang Nord)      Außentür O   |
+  +----+----------+----------------------------+----------------------++
+  |    |          |                            |                      ||
+  |    |   LAGERFLÄCHE                         |   BÜRO               ||
+  |    |     (links / West)                    |     (rechts / Ost)   ||
+  |    |          |                            |                      ||
+  |    |          |                            |  ← [IT1] Innentür   ||
+  |    |          |                            |     Büro             ||
+  +----+----------+----------------------------+----------------------++
+               ↑
+          [T2] Tor
+         (Antrieb vorh.)
+         Südwand — direkt unterhalb T1
+
+  +=====================================================================+
+
+  Legende:
+  [AT1]  1× Außentür — Nordwand links            — Reader + Hub + E-Öffner
+  [T1]   1× Tor      — Nordwand (zw. AT1 und HT) — Antrieb VORHANDEN → Hub-Gate + Reader
+  [HT]   1× Haupttür — Nordwand Mitte            — Haupteingang (Tür!) — Reader + Hub + E-Öffner
+  [AT2]  1× Außentür — Nordwand rechts           — Reader + Hub + E-Öffner
+  [T2]   1× Tor      — Südwand (unter T1)        — Antrieb VORHANDEN → Hub-Gate + Reader
+  [IT1]  1× Innentür — Büro rechts               — Trennung Lager / Büro — UA-Ultra oder Digitalzylinder
+</pre>
+  </div>
+  <div class="ascii-note">
+    <strong>Wichtig &mdash; Torantriebe &amp; Layout:</strong> Beide Torantriebe (2 &times; Tor T1/T2) sind bereits installiert und funktionsfähig. <strong>T1 liegt auf der Nordwand zwischen AT1 und HT</strong> — bildet zusammen mit T2 (Südwand, direkt darunter) eine Durchfahrt durch die Halle. Die Haupttür [HT] ist eine normale Tür (kein Tor) und benötigt einen elektrischen Türöffner.
+    Die Bepreisung bezieht sich ausschliesslich auf System-Hardware (Reader, Controller). Türöffner für Türen [AT1/AT2, HT, IT1] und Torantriebe [T1/T2] werden separat kalkuliert.
+  </div>
+
+  <div class="card-grid" style="margin-top:20px;">
+    <div class="card">
+      <div class="chip chip-blue" style="margin-bottom:8px;">1 × Haupttür HT (Nord, Mitte)</div>
+      <h4>Haupttür &mdash; Haupteingang Nordwand</h4>
+      <p>Zentrale Eingangstür (Tür, kein Tor). UA-G3-Pro ideal: Kamera + Intercom + Touch Pass. E-Öffner oder Motorschloss. Premium-Lösung für Besucher- und Mitarbeiterzugang.</p>
+    </div>
+    <div class="card">
+      <div class="chip chip-blue" style="margin-bottom:8px;">2 × Außentür AT1/AT2 (Nord)</div>
+      <h4>Außentüren &mdash; Nordwand links &amp; rechts</h4>
+      <p>Sekundäre Zugänge. UA-G3-Pro (mit Kamera) für AT1 und AT2 empfohlen. Reader + Hub + E-Öffner Fail-secure.</p>
+    </div>
+    <div class="card">
+      <div class="chip chip-brown" style="margin-bottom:8px;">2 × Tor T1/T2 — Antriebe vorh.</div>
+      <h4>Tore &mdash; Fahrzeugdurchfahrt</h4>
+      <p><strong>T1:</strong> Nordwand, zwischen AT1 und HT. <strong>T2:</strong> Südwand, direkt unter T1. Torantriebe bereits installiert &rarr; nur Hub-Gate + Reader nötig. Impulskontakt an bestehende Steuerplatine. Optional: UVC-AI-LPR für automatisches Öffnen per Kennzeichen (z. B. an T1 Nord für einfahrende Fahrzeuge).</p>
+    </div>
+    <div class="card">
+      <div class="chip chip-green" style="margin-bottom:8px;">1 × Innentür IT1 — Büro rechts</div>
+      <h4>Innentür &mdash; Lagerfläche (links) / Büro (rechts)</h4>
+      <p>Trennung Lager &harr; Büro. UA-Ultra (All-in-One, kein separater Hub) oder Digitalzylinder (Nuki/Bold/Evolo, Retrofit ohne Kabel) ideal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEK 2: WALLET ===== -->
+<section id="wallet" class="sec-wallet">
+  <h2>Apple/Google Wallet &amp; Aliro-Standard</h2>
+
+  <div class="wallet-highlight">
+    <div class="aliro-badge">Aliro 1.0 &mdash; Februar 2026</div>
+    <h3>Was ist Aliro?</h3>
+    <p>
+      <strong>Aliro</strong> (Connectivity Standards Alliance, Feb. 2026) ist der neue offene Standard, der Apple Wallet, Google Wallet und Samsung Wallet für Tür- und Zutrittskontrolle vereint.
+      Ähnlich wie Matter für Smart-Home, schafft Aliro Interoperabilität zwischen Herstellern &mdash; ein digitaler Schlüssel funktioniert systemunabhängig.
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px;">
+      <div style="background:#fff;border-radius:8px;padding:12px;">
+        <div style="font-weight:700;margin-bottom:4px;">NFC (Tap-to-Unlock)</div>
+        <div style="font-size:0.85rem;color:var(--muted);">Telefon ans Reader halten &rarr; Tür öffnet sofort</div>
+      </div>
+      <div style="background:#fff;border-radius:8px;padding:12px;">
+        <div style="font-weight:700;margin-bottom:4px;">BLE (Proximity)</div>
+        <div style="font-size:0.85rem;color:var(--muted);">Automatisch öffnen beim Annähern (ca. 1&ndash;3 m)</div>
+      </div>
+      <div style="background:#fff;border-radius:8px;padding:12px;">
+        <div style="font-weight:700;margin-bottom:4px;">UWB+BLE (Hands-free)</div>
+        <div style="font-size:0.85rem;color:var(--muted);">Genaue Positionserkennung, ohne Telefon rausholen</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Zertifizierte Hersteller (Stand 2026)</h3>
+  <div class="card-grid">
+    <div class="card" style="border-left:4px solid #2e7d32;">
+      <div class="chip chip-green" style="margin-bottom:8px;">Aliro-zertifiziert</div>
+      <h4>Nuki &mdash; Empfehlung für Türen</h4>
+      <p>Aliro-zertifiziert. <strong>Apple Home Key</strong> (Wallet) und Samsung Home Key nativ integriert. Keine Subscription, alles einmalig. Keypad 2 Pro NFC unterstützt alle Wallet-Typen.</p>
+    </div>
+    <div class="card" style="border-left:4px solid #2e7d32;">
+      <div class="chip chip-green" style="margin-bottom:8px;">Aliro-zertifiziert</div>
+      <h4>HID Global &mdash; Enterprise</h4>
+      <p>Aliro-zertifiziert. Apple + Google + Samsung Wallet. Im Enterprise-System-Preis enthalten. Keine zusätzliche Subscription.</p>
+    </div>
+    <div class="card" style="border-left:4px solid #2e7d32;">
+      <div class="chip chip-green" style="margin-bottom:8px;">Aliro-zertifiziert</div>
+      <h4>Allegion / Kwikset</h4>
+      <p>Beide Aliro-zertifiziert. ASSA ABLOY ist Mitentwickler des Aliro-Standards &mdash; deren Produkte erhalten Aliro-Zertifizierung fortlaufend.</p>
+    </div>
+    <div class="card" style="border-left:4px solid #e65100;">
+      <div class="chip chip-orange" style="margin-bottom:8px;">Eigener Standard</div>
+      <h4>Unifi &mdash; Touch Pass (nicht Aliro)</h4>
+      <p>Unifi hat ein <strong>eigenes proprietäres System: Touch Pass</strong>. Apple Wallet und Google Wallet funktionieren &mdash; aber per Unifi-eigenem Protokoll, nicht Aliro-kompatibel. Nur auf <strong>UA-G3 und UA-G3-Pro</strong>.</p>
+      <ul style="font-size:0.85rem;margin-top:8px;padding-left:18px;">
+        <li>Einrichtung via Unifi Endpoint App</li>
+        <li>10 kostenlose Passes pro G3-Reader (1 Jahr)</li>
+        <li>Danach: <strong>ca. 5 &euro;/Nutzer/Jahr</strong> laufende Kosten!</li>
+        <li>Express Mode: iPhone entsperren nicht nötig</li>
+        <li>Apple Watch kompatibel</li>
+        <li>Offline-Betrieb (Credential auf Gerät gespeichert)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warn-box" style="margin-top:20px;">
+    <strong>Kosten-Hinweis Touch Pass:</strong> Bei 20 Mitarbeitern fallen nach dem Gratiszeitraum ca. 100 &euro;/Jahr für Touch Pass an. Nuki bietet dasselbe (Aliro, kein Abo) ohne laufende Kosten &mdash; ist aber kein zentrales Zutrittskontrollsystem.
+  </div>
+
+  <h3>Vergleichstabelle &mdash; Wallet-Support nach System</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>System</th>
+          <th>Apple Wallet</th>
+          <th>Google Wallet</th>
+          <th>Samsung Wallet</th>
+          <th>Standard</th>
+          <th>Kosten Extra</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Nuki (Keypad 2 Pro NFC)</td>
+          <td class="yes">&#10003; Aliro</td>
+          <td class="yes">&#10003; Aliro</td>
+          <td class="yes">&#10003;</td>
+          <td>Aliro 1.0</td>
+          <td class="yes">0 &euro; extra</td>
+        </tr>
+        <tr>
+          <td>Bold Pro</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td>Kein Wallet</td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>Unifi UA-G3 / G3-Pro</td>
+          <td class="yes">&#10003; Touch Pass</td>
+          <td class="yes">&#10003; Touch Pass</td>
+          <td class="no">&#10007;</td>
+          <td>Proprietär</td>
+          <td class="warn">~5 &euro;/User/Jahr</td>
+        </tr>
+        <tr>
+          <td>Loxone</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td>Kein Wallet</td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>Paxton Net2</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td>Kein Wallet</td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>ZKTeco</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td>Kein Wallet</td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>2N IP Verso (neuere Gen.)</td>
+          <td class="warn">partiell</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td>Herstellerspezifisch</td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>HID Global (Enterprise)</td>
+          <td class="yes">&#10003; Aliro</td>
+          <td class="yes">&#10003; Aliro</td>
+          <td class="yes">&#10003;</td>
+          <td>Aliro 1.0</td>
+          <td class="yes">Im Systempreis</td>
+        </tr>
+        <tr>
+          <td>ASSA ABLOY</td>
+          <td class="soon">in Arbeit</td>
+          <td class="soon">in Arbeit</td>
+          <td class="soon">in Arbeit</td>
+          <td>Aliro (Mitentwickler)</td>
+          <td>&mdash;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SEK 3: UNIFI HARDWARE ===== -->
+<section id="unifi-hardware">
+  <h2>Unifi Access &mdash; Hardware-Katalog</h2>
+  <div class="info-box">
+    Unifi Access ist das SMB-Zutrittssystem von Ubiquiti. Alle Geräte integrieren sich nativ in den Unifi-Controller (lokal oder Cloud). PoE-Stromversorgung vereinfacht die Verkabelung erheblich.
+  </div>
+
+  <div class="hw-category">READER &mdash; GENERATION 3 (aktuell, empfohlen)</div>
+  <div class="card-grid">
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2Ff20970ca-1951-4ed9-9016-3eea65981a94%2Fbe4c04c1-bf15-4bae-aacd-2bbc9d1a095c.png&q=75&w=400" alt="UA-G3 Reader" loading="lazy">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">UA-G3 Reader <span class="gen-badge gen-new">G3</span></div>
+        <div class="hw-price">~115 &euro;</div>
+      </div>
+      <div class="hw-desc">Kompakter Aussen-Reader mit Touch Pass. Ideal für Innentüren oder weniger kritische Zugänge.</div>
+      <ul class="hw-specs">
+        <li>Abmessungen: 93 &times; 40 &times; 37 mm</li>
+        <li>Schutzklasse: IP55</li>
+        <li>NFC + BLE 4.1</li>
+        <li><strong>Touch Pass (Apple/Google Wallet)</strong></li>
+        <li>KEIN Kamera, KEIN Intercom</li>
+        <li>PoE, max. 5 W</li>
+        <li>10 kostenlose Touch Passes (1 Jahr) inklusive</li>
+      </ul>
+      <div style="font-size:0.82rem;margin-top:8px;"><span class="chip chip-blue">Einsatz</span> Innentüren, Seitentore, Nebenausgänge</div>
+      <a class="hw-link" href="https://store.ui.com/us/en/products/ua-g3" target="_blank">&#8599; Unifi Store &mdash; UA-G3</a>
+    </div>
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F052e61ec-7d2b-4fac-80ed-1d7aa134b409%2Fb9933691-d470-4e58-b3ef-11b9b799887c.png&q=75&w=400" alt="UA-G3-Pro Reader" loading="lazy">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">UA-G3-Pro Reader <span class="gen-badge gen-new">G3</span></div>
+        <div class="hw-price">~225 &euro;</div>
+      </div>
+      <div class="hw-desc">Grosser Aussen-Reader mit Kamera, Intercom und Touch Pass. Beste Unifi-Option für Haupteingänge.</div>
+      <ul class="hw-specs">
+        <li>Abmessungen: 160 &times; 40 &times; 41 mm</li>
+        <li>Schutzklasse: IP55</li>
+        <li>NFC + BLE 4.2</li>
+        <li><strong>Touch Pass (Apple/Google Wallet)</strong></li>
+        <li><strong>Kamera + 2-Wege-Intercom + Klingel</strong></li>
+        <li>PoE, max. 6 W</li>
+      </ul>
+      <div style="font-size:0.82rem;margin-top:8px;"><span class="chip chip-blue">Einsatz</span> AT1, AT2 Aussentüren + HT Haupttür (Nordwand)</div>
+      <a class="hw-link" href="https://store.ui.com/us/en/products/ua-g3-pro" target="_blank">&#8599; Unifi Store &mdash; UA-G3-Pro</a>
+    </div>
+  </div>
+
+  <div class="hw-category">READER &mdash; GENERATION 2 (Vorgänger, kein Touch Pass)</div>
+  <div class="card-grid">
+    <div class="hw-card">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">UA-G2 Reader <span class="gen-badge gen-old">G2</span></div>
+        <div class="hw-price">~100 &euro;</div>
+      </div>
+      <div class="hw-desc">Kompakter NFC+PIN-Display Reader. Robuster (IP65!) als G3, aber ohne Wallet und BLE.</div>
+      <ul class="hw-specs">
+        <li>Schutzklasse: IP65 (robuster als G3!)</li>
+        <li>NFC + PIN-Pad</li>
+        <li>KEIN BLE, KEIN Touch Pass</li>
+        <li>KEIN Kamera</li>
+      </ul>
+      <div class="warn-box" style="padding:8px 12px;font-size:0.82rem;margin-top:10px;">Wird durch G3 abgelöst. Nur wählen wenn IP65 kritisch und Wallet nicht benötigt wird.</div>
+      <a class="hw-link" href="https://store.ui.com/us/en/products/ua-g2" target="_blank">&#8599; Unifi Store &mdash; UA-G2</a>
+    </div>
+    <div class="hw-card">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">UA-G2-Pro Reader <span class="gen-badge gen-old">G2</span></div>
+        <div class="hw-price">~244 &euro;</div>
+      </div>
+      <div class="hw-desc">NFC + PIN + Kamera + 2-Wege-Intercom. IP65. Vorgänger des G3-Pro.</div>
+      <ul class="hw-specs">
+        <li>Schutzklasse: IP65</li>
+        <li>NFC + PIN-Pad + Kamera + Intercom</li>
+        <li>KEIN BLE, KEIN Touch Pass</li>
+      </ul>
+      <div class="warn-box" style="padding:8px 12px;font-size:0.82rem;margin-top:10px;">G3-Pro ist Nachfolger. Nur wählen wenn IP65 zwingend und Wallet nicht benötigt.</div>
+      <a class="hw-link" href="https://store.ui.com/us/en/products/ua-g2-pro" target="_blank">&#8599; Unifi Store &mdash; UA-G2-Pro</a>
+    </div>
+  </div>
+
+  <div class="hw-category">SPECIAL &mdash; ALL-IN-ONE</div>
+  <div class="card-grid">
+    <div class="hw-card" style="border-left:4px solid var(--accent-blue);">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F8c23291f-02aa-460a-a9bb-22cdf8cd3d5f%2F3ce33d93-a02e-4d23-a712-a07557c832b5.png&q=75&w=400" alt="UA-Ultra" loading="lazy">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">UA-Ultra (All-in-One)</div>
+        <div class="hw-price">~145 &euro;</div>
+      </div>
+      <div class="hw-desc">Reader UND Hub in einem Gerät &mdash; kein separater Controller nötig! Ideal für einfache Einzel-Tür-Installationen.</div>
+      <ul class="hw-specs">
+        <li>Reader + Hub in einem Gehäuse</li>
+        <li>NFC + BLE 4.2</li>
+        <li>1 &times; Lock-Terminal (12 V/1 A) integriert</li>
+        <li>Max. 3.000 Nutzer</li>
+        <li>Tamper-Switch</li>
+        <li>Schutzklasse: IP55, PoE+</li>
+        <li>KEIN Kamera, KEIN Intercom</li>
+      </ul>
+      <div style="font-size:0.82rem;margin-top:8px;"><span class="chip chip-blue">Einsatz</span> Innentür IT1 &mdash; spart separaten Hub (~161 &euro;)</div>
+      <a class="hw-link" href="https://store.ui.com/us/en/products/ua-ultra" target="_blank">&#8599; Unifi Store &mdash; UA-Ultra</a>
+    </div>
+  </div>
+
+  <div class="hw-category">HUBS / CONTROLLER</div>
+  <div class="card-grid">
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F90d00ca5-015c-4bc6-b3bd-0d1f8d5bdea3%2Fe22f9d0b-0ce1-452d-b433-170e6a1b3acf.png&q=75&w=400" alt="UA-Hub-Door" loading="lazy">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">UA-Hub-Door (Tür-Controller)</div>
+        <div class="hw-price">~161 &euro;</div>
+      </div>
+      <div class="hw-desc">Steuert 1 Tür: 1 Reader-Input + 1 Lock-Output. Standard für alle Aussentüren.</div>
+      <ul class="hw-specs">
+        <li>1 &times; Reader-Eingang</li>
+        <li>1 &times; Trockenkontakt-Ausgang (E-Öffner, Magnetschloss)</li>
+        <li>REX-Eingang (Request-to-Exit)</li>
+        <li>Türsensor-Eingang</li>
+        <li>PoE++</li>
+      </ul>
+      <a class="hw-link" href="https://ui.com/eu/de/door-access/hubs" target="_blank">&#8599; Unifi EU Store &mdash; Hubs</a>
+    </div>
+    <div class="hw-card">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F5fa9cf68-2fd3-401d-ba24-6809df0f6419%2F6da0f5d0-8280-4c76-8dfa-843a74ba77ce.png&q=75&w=400" alt="UA-Hub-Gate" loading="lazy">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">UA-Hub-Gate (Tor-Controller)</div>
+        <div class="hw-price">~240 &euro;</div>
+      </div>
+      <div class="hw-desc">Speziell für elektrische Tore, Schranken, Garagen. Relais-Ausgang für Impulskontakt-Steuerung.</div>
+      <ul class="hw-specs">
+        <li>Relais-Ausgang (Impulskontakt &rarr; Torsteuerung)</li>
+        <li>LPR-Integration nativ mit UVC-AI-LPR</li>
+        <li>2-Draht-PoE-Extender kompatibel</li>
+        <li>Kompatibel mit bestehenden Torantrieben</li>
+      </ul>
+      <div style="font-size:0.82rem;margin-top:8px;"><span class="chip chip-brown">Tore</span> Direkt mit vorhandenen Antrieben verbindbar</div>
+      <a class="hw-link" href="https://store.ui.com/us/en/products/ua-hub-gate" target="_blank">&#8599; Unifi Store &mdash; UA-Hub-Gate</a>
+    </div>
+  </div>
+
+  <div class="hw-category">SCHLÖSSER &amp; TÜRÖFFNER — Alle Unifi-Varianten</div>
+
+  <div class="info-box" style="margin-bottom:16px;">
+    Alle vier Produkte schließen direkt am <strong>Lock-Terminal des UA-Hub-Door</strong> an (12 V / 1 A, kein separates Netzteil). Die Wahl hängt von Türtyp und Fluchtweg-Anforderung ab.
+  </div>
+
+  <!-- Variante 1: UACC-Lock-Strike-Secure-15mm -->
+  <div class="hw-card" style="margin-bottom:14px;border-left:4px solid var(--accent-green);">
+    <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2F4169e695-52be-466d-af67-4f258887ea6c%2Fc68fdb7a-619f-44c2-af6e-c2e541a98f2a.png&q=75&w=400" alt="UACC-Lock-Strike-Secure-15mm" loading="lazy">
+    <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div class="hw-name">UACC-Lock-Strike-Secure-15mm <span class="gen-badge gen-new">Empfehlung</span></div>
+        <div class="hw-desc">Schmalrahmen-E-Öffner, Fail-secure — Standardlösung für die meisten Türen</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="hw-price">~79 &euro;</div>
+        <div style="font-size:0.78rem;color:var(--muted);">5 &times; = ~395 &euro;</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;">
+      <div>
+        <div style="font-size:0.8rem;font-weight:700;color:#2e7d32;margin-bottom:4px;">VORTEILE</div>
+        <ul class="hw-specs" style="margin:0;">
+          <li>Günstigste Unifi-Lösung (~79 €)</li>
+          <li><strong>Fail-secure</strong> — bleibt zu bei Stromausfall</li>
+          <li>Kein Dauerstrom nötig (nur beim Öffnen)</li>
+          <li>1.200 kg Haltekraft</li>
+          <li>Zink + Edelstahl, bis 1 Mio. Zyklen</li>
+          <li>Kein Einbau in Tür — nur Rahmen</li>
+          <li>Parallelbetrieb mit normalem Schlüssel</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:0.8rem;font-weight:700;color:#c62828;margin-bottom:4px;">NACHTEILE</div>
+        <ul class="hw-specs" style="margin:0;">
+          <li>Stulpbreite mind. 15 mm nötig</li>
+          <li>Normfalz DIN 18251 erforderlich</li>
+          <li>Nicht für Ganzglas-Türen</li>
+          <li>Zargenmaß muss passen (Elektriker prüft)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="compat-row" style="margin-top:8px;">
+      <strong>Maße:</strong> 80 &times; 40 &times; 35 mm &nbsp;|&nbsp; <strong>Spannung:</strong> 12 V DC &nbsp;|&nbsp; <strong>Strom:</strong> 400 mA &nbsp;|&nbsp; <strong>Fail-Mode:</strong> Secure (NO-Klemme)
+    </div>
+    <a class="hw-link" href="https://eu.store.ui.com/eu/en/category/all-door-access/collections/accessories-door-access-electric-locks" target="_blank">&#8599; Unifi EU Store &mdash; Strike Lock</a>
+  </div>
+
+  <!-- Variante 2: UA-Lock-Electric -->
+  <div class="hw-card" style="margin-bottom:14px;border-left:4px solid var(--accent-blue);">
+    <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div class="hw-name">UA-Lock-Electric</div>
+        <div class="hw-desc">Vollformat-E-Öffner, Fail-secure — robustere Variante für häufig genutzte Türen</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="hw-price">~89 &euro;</div>
+        <div style="font-size:0.78rem;color:var(--muted);">5 &times; = ~445 &euro;</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;">
+      <div>
+        <div style="font-size:0.8rem;font-weight:700;color:#2e7d32;margin-bottom:4px;">VORTEILE</div>
+        <ul class="hw-specs" style="margin:0;">
+          <li><strong>Fail-secure</strong> — bleibt zu bei Stromausfall</li>
+          <li>1.200 kg Haltekraft, 1 Mio. Zyklen</li>
+          <li>Etwas größerer Einbauraum → besser für Stahltüren</li>
+          <li>Direkt vom UA-Hub mit 12 V versorgt</li>
+          <li>Kein Dauerstrom nötig</li>
+          <li>Parallelbetrieb mit normalem Schlüssel</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:0.8rem;font-weight:700;color:#c62828;margin-bottom:4px;">NACHTEILE</div>
+        <ul class="hw-specs" style="margin:0;">
+          <li>Teurer als UACC-Schmal-Variante (~10 € mehr)</li>
+          <li>Normfalz DIN 18251 erforderlich</li>
+          <li>Nicht für Ganzglas-Türen</li>
+          <li>Etwas größere Einbautiefe</li>
+        </ul>
+      </div>
+    </div>
+    <div class="compat-row" style="margin-top:8px;">
+      <strong>Maße:</strong> 80 &times; 40 &times; 35 mm &nbsp;|&nbsp; <strong>Spannung:</strong> 12 V DC &nbsp;|&nbsp; <strong>Strom:</strong> 400 mA &nbsp;|&nbsp; <strong>Fail-Mode:</strong> Secure (NO-Klemme)
+    </div>
+    <a class="hw-link" href="https://eu.store.ui.com/eu/en/products/ua-lock-electric" target="_blank">&#8599; Unifi EU Store &mdash; UA-Lock-Electric</a>
+  </div>
+
+  <!-- Variante 3: UA-Lock-Magnetic-270kg -->
+  <div class="hw-card" style="margin-bottom:14px;border-left:4px solid var(--accent-orange);">
+    <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2Fa391617a-790e-4e6a-ab24-c9b63e0e0787%2Fec2f3ef5-bb17-4c05-8f87-f637f10da75f.png&q=75&w=400" alt="UA-Lock-Magnetic-270kg" loading="lazy">
+    <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div class="hw-name">UA-Lock-Magnetic-270kg <span class="gen-badge" style="background:#fff3e0;color:#e65100;">Fail-safe!</span></div>
+        <div class="hw-desc">Magnetschloss 270 kg — für alle Türtypen inkl. Ganzglas, Pflicht für Fluchttüren</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="hw-price">~135 &euro;</div>
+        <div style="font-size:0.78rem;color:var(--muted);">5 &times; = ~675 &euro;</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;">
+      <div>
+        <div style="font-size:0.8rem;font-weight:700;color:#2e7d32;margin-bottom:4px;">VORTEILE</div>
+        <ul class="hw-specs" style="margin:0;">
+          <li>Aufschrauben — <strong>kein Zargeneinbau, kein Fräsen</strong></li>
+          <li>Funktioniert auf <strong>Ganzglas-Türen</strong></li>
+          <li>Keine beweglichen Teile, extremer wartungsarm</li>
+          <li><strong>Fail-safe</strong> — öffnet bei Stromausfall (Pflicht Fluchttür)</li>
+          <li>Für Inswing und Outswing-Türen</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:0.8rem;font-weight:700;color:#c62828;margin-bottom:4px;">NACHTEILE</div>
+        <ul class="hw-specs" style="margin:0;">
+          <li><strong>Dauerstrom nötig</strong> — verbraucht permanent Energie</li>
+          <li><strong>IMMER Fail-safe</strong> — öffnet bei Stromausfall (kein Sicherheitsmodus!)</li>
+          <li>REX-Taster innen zwingend nötig</li>
+          <li>Teurer als E-Öffner (~135 €)</li>
+          <li>Sichtbar an der Tür (oben montiert)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="compat-row" style="margin-top:8px;">
+      <strong>Maße Magnet:</strong> 250 &times; 42,5 &times; 26 mm &nbsp;|&nbsp; <strong>Spannung:</strong> 12/24 V DC &nbsp;|&nbsp; <strong>Fail-Mode:</strong> SAFE (immer, nicht wählbar)
+    </div>
+    <a class="hw-link" href="https://store.ui.com/us/en/products/ua-lock-magnetic" target="_blank">&#8599; Unifi Store &mdash; UA-Lock-Magnetic</a>
+  </div>
+
+  <!-- Variante 4: UA-Lock-Magnetic-540kg -->
+  <div class="hw-card" style="margin-bottom:14px;border-left:4px solid var(--accent-purple);">
+    <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2Fa391617a-790e-4e6a-ab24-c9b63e0e0787%2Fec2f3ef5-bb17-4c05-8f87-f637f10da75f.png&q=75&w=400" alt="UA-Lock-Magnetic-540kg" loading="lazy">
+    <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div class="hw-name">UA-Lock-Magnetic-540kg <span class="gen-badge" style="background:#fff3e0;color:#e65100;">Fail-safe!</span></div>
+        <div class="hw-desc">Magnetschloss 540 kg — für Hochsicherheits-Außentüren und Hauptzugänge</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="hw-price">~200 &euro;</div>
+        <div style="font-size:0.78rem;color:var(--muted);">5 &times; = ~1.000 &euro;</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;">
+      <div>
+        <div style="font-size:0.8rem;font-weight:700;color:#2e7d32;margin-bottom:4px;">VORTEILE</div>
+        <ul class="hw-specs" style="margin:0;">
+          <li><strong>540 kg Haltekraft</strong> — extrem sicher gegen Aufbruch</li>
+          <li>Aufschrauben — kein Zargeneinbau</li>
+          <li>Keine beweglichen Teile</li>
+          <li>Für Inswing und Outswing-Türen</li>
+          <li>Gut für Stahl-Außentüren mit hohem Sicherheitsbedarf</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:0.8rem;font-weight:700;color:#c62828;margin-bottom:4px;">NACHTEILE</div>
+        <ul class="hw-specs" style="margin:0;">
+          <li><strong>Dauerstrom nötig</strong></li>
+          <li><strong>IMMER Fail-safe</strong> — öffnet bei Stromausfall</li>
+          <li><strong>Nicht für Ganzglas-Türen</strong></li>
+          <li>Größeres, bulkigeres Gehäuse (266 &times; 67,5 &times; 40 mm)</li>
+          <li>Teuerste Variante (~200 €)</li>
+          <li>REX-Taster innen zwingend nötig</li>
+        </ul>
+      </div>
+    </div>
+    <div class="compat-row" style="margin-top:8px;">
+      <strong>Maße Magnet:</strong> 266 &times; 67,5 &times; 40 mm &nbsp;|&nbsp; <strong>Spannung:</strong> 12/24 V DC &nbsp;|&nbsp; <strong>Fail-Mode:</strong> SAFE (immer, nicht wählbar)
+    </div>
+    <a class="hw-link" href="https://store.ui.com/us/en/products/ua-lock-magnetic" target="_blank">&#8599; Unifi Store &mdash; UA-Lock-Magnetic</a>
+  </div>
+
+  <!-- Vergleichstabelle -->
+  <h3 style="margin-top:28px;">Schnellvergleich — Alle 4 Varianten</h3>
+  <div class="table-wrap" style="margin-bottom:24px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Produkt</th>
+          <th>Typ</th>
+          <th>Fail-Mode</th>
+          <th>Dauerstrom?</th>
+          <th>Haltekraft</th>
+          <th>Ganzglas?</th>
+          <th>Einbau</th>
+          <th>Preis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>UACC-Strike-15mm</strong></td>
+          <td>E-Öffner</td>
+          <td class="yes">Secure &#10003;</td>
+          <td class="yes">Nein</td>
+          <td>1.200 kg</td>
+          <td class="no">&#10007;</td>
+          <td>Im Rahmen</td>
+          <td>~79 &euro;</td>
+        </tr>
+        <tr>
+          <td><strong>UA-Lock-Electric</strong></td>
+          <td>E-Öffner</td>
+          <td class="yes">Secure &#10003;</td>
+          <td class="yes">Nein</td>
+          <td>1.200 kg</td>
+          <td class="no">&#10007;</td>
+          <td>Im Rahmen</td>
+          <td>~89 &euro;</td>
+        </tr>
+        <tr>
+          <td><strong>UA-Lock-Magnetic-270kg</strong></td>
+          <td>Magnetschloss</td>
+          <td class="warn">Safe !</td>
+          <td class="warn">Ja</td>
+          <td>270 kg</td>
+          <td class="yes">&#10003;</td>
+          <td>Aufschrauben</td>
+          <td>~135 &euro;</td>
+        </tr>
+        <tr>
+          <td><strong>UA-Lock-Magnetic-540kg</strong></td>
+          <td>Magnetschloss</td>
+          <td class="warn">Safe !</td>
+          <td class="warn">Ja</td>
+          <td>540 kg</td>
+          <td class="no">&#10007;</td>
+          <td>Aufschrauben</td>
+          <td>~200 &euro;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 5-Türen Kalkulation -->
+  <h3>Kalkulation für 5 Türen (AT1 / AT2 / HT / IT1 + Reserve)</h3>
+  <div class="warn-box" style="margin-bottom:16px;">
+    Die Halle hat 4 Türen (AT1, AT2, HT, IT1). Die Kalkulation zeigt alle Varianten für <strong>5 Türen</strong> — inkl. 1 Reserve oder falls IT1 ebenfalls mit Unifi-Schloss ausgestattet wird.
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Variante</th>
+          <th>Produkt</th>
+          <th>Preis/Stk.</th>
+          <th>5 &times;</th>
+          <th>Wann wählen?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#e8f5e9;">
+          <td><strong>Option A</strong> <span class="chip chip-green">Empfehlung</span></td>
+          <td>UACC-Lock-Strike-Secure-15mm</td>
+          <td>~79 &euro;</td>
+          <td><strong>~395 &euro;</strong></td>
+          <td>Standardtüren mit Normfalz — günstigste Lösung</td>
+        </tr>
+        <tr>
+          <td><strong>Option B</strong></td>
+          <td>UA-Lock-Electric</td>
+          <td>~89 &euro;</td>
+          <td><strong>~445 &euro;</strong></td>
+          <td>Wie Option A, etwas robuster — Stahltüren</td>
+        </tr>
+        <tr style="background:#fff3e0;">
+          <td><strong>Option C</strong> <span class="chip chip-orange">Fluchttüren</span></td>
+          <td>UA-Lock-Magnetic-270kg</td>
+          <td>~135 &euro;</td>
+          <td><strong>~675 &euro;</strong></td>
+          <td>Fluchttüren (Pflicht!) oder Ganzglastüren</td>
+        </tr>
+        <tr style="background:#fce4ec;">
+          <td><strong>Option D</strong></td>
+          <td>UA-Lock-Magnetic-540kg</td>
+          <td>~200 &euro;</td>
+          <td><strong>~1.000 &euro;</strong></td>
+          <td>Hochsicherheit Außentür, kein Glas</td>
+        </tr>
+        <tr style="background:#e3f2fd;">
+          <td><strong>Option E</strong> <span class="chip chip-blue">Gemischt</span></td>
+          <td>3× Strike-15mm + 1× Magnetic-270kg + 1× Strike-15mm (IT1)</td>
+          <td>—</td>
+          <td><strong>~449 &euro;</strong></td>
+          <td>Realistisch: AT1+AT2+HT Fail-secure, 1 Fluchttür Fail-safe</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="price-note" style="margin-top:8px;">
+    Preise exkl. MwSt., ca.-Werte. Zzgl. Reed-Kontakt-Türsensor ~8 € und REX-Taster ~20 € pro Tür (optional). Bei Magnetschloss ist REX-Taster zwingend nötig.
+  </div>
+
+  <div class="hw-category">KAMERA &mdash; KENNZEICHENERKENNUNG</div>
+  <div class="card-grid">
+    <div class="hw-card" style="border-left:4px solid var(--accent-purple);">
+      <img class="hw-img" src="https://images.svc.ui.com/?u=https%3A%2F%2Fcdn.ecomm.ui.com%2Fproducts%2Fad7cda21-71d0-4d92-a97e-93a0050b15ff%2Fe2a74de7-5e2b-42fa-9c03-541a6acf6620.png&q=75&w=400" alt="UVC-AI-LPR" loading="lazy">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hw-name">UVC-AI-LPR</div>
+        <div class="hw-price">~450 &euro;</div>
+      </div>
+      <div class="hw-desc">4K-Kamera mit nativem KFZ-Kennzeichen-Erkennung (LPR/ANPR). Integriert mit UA-Hub-Gate für automatisches Tor-Öffnen.</div>
+      <ul class="hw-specs">
+        <li>4K Auflösung, 3&times; optischer Zoom</li>
+        <li>Erkennung bis 90 km/h</li>
+        <li>Whitelist / Blacklist-Management</li>
+        <li>Lange IR-Nachtsicht</li>
+        <li>Nativ in Unifi-Controller integriert</li>
+        <li>Automatisches Öffnen bei erkanntem Kennzeichen</li>
+      </ul>
+      <div style="font-size:0.82rem;margin-top:8px;"><span class="chip chip-purple">Empfehlung</span> Tore T1/T2 &mdash; Mitarbeiter-KFZ per Kennzeichen hinterlegen, automatisches Öffnen</div>
+      <a class="hw-link" href="https://eu.store.ui.com/eu/en/products/uvc-ai-lpr" target="_blank">&#8599; Unifi EU Store &mdash; UVC-AI-LPR</a>
+    </div>
+  </div>
+
+  <h3>Vergleich G2 vs. G3 &mdash; Auf einen Blick</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>UA-G2</th>
+          <th>UA-G2-Pro</th>
+          <th>UA-G3</th>
+          <th>UA-G3-Pro</th>
+          <th>UA-Ultra</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Touch Pass (Apple/Google Wallet)</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>BLE (Bluetooth)</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003; 4.1</td>
+          <td class="yes">&#10003; 4.2</td>
+          <td class="yes">&#10003; 4.2</td>
+        </tr>
+        <tr>
+          <td>Kamera + 2-Wege-Intercom</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003;</td>
+          <td class="no">&#10007;</td>
+        </tr>
+        <tr>
+          <td>PIN-Pad</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+        </tr>
+        <tr>
+          <td>IP-Schutzklasse</td>
+          <td><strong>IP65</strong></td>
+          <td><strong>IP65</strong></td>
+          <td>IP55</td>
+          <td>IP55</td>
+          <td>IP55</td>
+        </tr>
+        <tr>
+          <td>Hub integriert</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td>Generation</td>
+          <td>2. Gen</td>
+          <td>2. Gen</td>
+          <td>3. Gen</td>
+          <td>3. Gen</td>
+          <td>Special</td>
+        </tr>
+        <tr>
+          <td>Preis ca.</td>
+          <td>~100 &euro;</td>
+          <td>~244 &euro;</td>
+          <td>~115 &euro;</td>
+          <td>~225 &euro;</td>
+          <td>~145 &euro;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SEK 4: METHODEN ===== -->
+<section id="methoden">
+  <h2>Zutrittsmethoden &mdash; Vergleich</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Methode</th>
+          <th>Komfort</th>
+          <th>Sicherheit</th>
+          <th>Nuki</th>
+          <th>Unifi</th>
+          <th>Loxone</th>
+          <th>Paxton</th>
+          <th>Enterprise</th>
+          <th>Kosten-Hinweis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>RFID/NFC-Karte</td>
+          <td>&#9733;&#9733;&#9733;&#9733;</td>
+          <td>&#9733;&#9733;&#9733;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td>1&ndash;5 &euro;/Karte</td>
+        </tr>
+        <tr>
+          <td>PIN-Code</td>
+          <td>&#9733;&#9733;&#9733;</td>
+          <td>&#9733;&#9733;</td>
+          <td class="yes">&#10003;</td>
+          <td class="warn">nur G2</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td>im Reader enthalten</td>
+        </tr>
+        <tr>
+          <td>Fingerabdruck</td>
+          <td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+          <td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+          <td class="no">&#10007;</td>
+          <td class="warn">Add-on ZKTeco</td>
+          <td class="no">&#10007;</td>
+          <td class="warn">Add-on</td>
+          <td class="yes">&#10003;</td>
+          <td>150&ndash;500 &euro;/Reader extra</td>
+        </tr>
+        <tr>
+          <td>Smartphone App (BLE)</td>
+          <td>&#9733;&#9733;&#9733;&#9733;</td>
+          <td>&#9733;&#9733;&#9733;&#9733;</td>
+          <td class="yes">&#10003; Nuki App</td>
+          <td class="yes">&#10003; Endpoint App</td>
+          <td class="yes">&#10003; Loxone App</td>
+          <td class="yes">&#10003; Net2 App</td>
+          <td class="yes">&#10003;</td>
+          <td>kostenlos in App</td>
+        </tr>
+        <tr>
+          <td><strong>Apple Wallet (Home Key)</strong></td>
+          <td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+          <td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+          <td class="yes">&#10003; Aliro (0&euro;)</td>
+          <td class="yes">&#10003; Touch Pass (5&euro;/J.)</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003; HID Aliro</td>
+          <td>Nuki: 0&euro; | Unifi: ~5&euro;/User/J.</td>
+        </tr>
+        <tr>
+          <td><strong>Google Wallet (Aliro)</strong></td>
+          <td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+          <td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+          <td class="yes">&#10003; Aliro (0&euro;)</td>
+          <td class="yes">&#10003; Touch Pass (5&euro;/J.)</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003; HID Aliro</td>
+          <td>wie Apple Wallet</td>
+        </tr>
+        <tr>
+          <td><strong>Samsung Wallet</strong></td>
+          <td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+          <td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+          <td class="yes">&#10003; Aliro</td>
+          <td class="no">&#10007; kein Samsung</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003; HID Aliro</td>
+          <td>Nuki: 0&euro;</td>
+        </tr>
+        <tr>
+          <td>Kennzeichen-Erkennung (LPR)</td>
+          <td>&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+          <td>&#9733;&#9733;&#9733;&#9733;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003; UVC-AI-LPR</td>
+          <td class="warn">Drittsystem</td>
+          <td class="warn">Drittsystem</td>
+          <td class="warn">Drittsystem</td>
+          <td>450 &euro; Kamera extra</td>
+        </tr>
+        <tr>
+          <td>QR-Code</td>
+          <td>&#9733;&#9733;&#9733;</td>
+          <td>&#9733;&#9733;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003;</td>
+          <td class="no">&#10007;</td>
+          <td class="warn">partiell</td>
+          <td class="yes">&#10003;</td>
+          <td>für Besucher/Lieferanten</td>
+        </tr>
+        <tr>
+          <td>Schlüssel (mechanisch)</td>
+          <td>&#9733;&#9733;</td>
+          <td>&#9733;&#9733;&#9733;</td>
+          <td class="warn">parallel</td>
+          <td class="warn">parallel</td>
+          <td class="warn">parallel</td>
+          <td class="warn">parallel</td>
+          <td class="warn">parallel</td>
+          <td>Notfallschlüssel empfohlen</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SEK 5: VARIANTEN ===== -->
+<section id="varianten">
+  <h2>Systemvarianten (Tier 1&ndash;4)</h2>
+
+  <div class="variant-tier t1">
+    <div class="tier-chip tier-1">Tier 1 &mdash; Budget</div>
+    <div class="tier-title">Nuki &mdash; Retrofit für Türen (Tore separat)</div>
+    <div class="tier-sub">Beste Wahl für Wallet-Komfort ohne laufende Kosten. Tore via separates Relais-Modul oder Home-Assistant-Integration.</div>
+    <div class="feature-list">
+      <span class="feat">Apple/Google Wallet (Aliro, kostenlos)</span>
+      <span class="feat">Nachrüstbar ohne grosse Kabelarbeiten</span>
+      <span class="feat">App-Verwaltung</span>
+      <span class="feat">Kein natives LPR</span>
+      <span class="feat">Tore: Umweg nötig</span>
+      <span class="feat">Kein zentrales Audit-Log</span>
+    </div>
+    <div style="margin-top:12px;font-size:0.9rem;"><strong>Systemkosten Türen:</strong> ~2.300 &euro; | Tore: separat zu klären | Subscription: 0 &euro;/Jahr</div>
+  </div>
+
+  <div class="variant-tier t2">
+    <div class="tier-chip tier-2">Tier 2 &mdash; Consumer+</div>
+    <div class="tier-title">Bold Pro &mdash; App-gesteuert, keine Tore</div>
+    <div class="tier-sub">Gute App-Anbindung, elegantes Design. Kein Wallet-Support, Tore nicht nativ.</div>
+    <div class="feature-list">
+      <span class="feat">Elegantes Design</span>
+      <span class="feat">Gute App</span>
+      <span class="feat">Kein Apple/Google Wallet</span>
+      <span class="feat">Keine Tore nativ</span>
+      <span class="feat">Kein zentrales Audit-Log</span>
+    </div>
+    <div style="margin-top:12px;font-size:0.9rem;"><strong>Systemkosten Türen:</strong> ~2.000&ndash;2.500 &euro; | Subscription: gering</div>
+  </div>
+
+  <div class="variant-tier t3">
+    <div class="tier-chip tier-3">Tier 3 &mdash; SMB Lokal (Empfehlung)</div>
+    <div class="tier-title">Unifi Access &mdash; Vollintegration Türen + Tore + LPR</div>
+    <div class="tier-sub">Einziges System das Türen, Tore (vorhandene Antriebe!), Wallet und Kennzeichenerkennung nativ in einem Controller vereint.</div>
+    <div class="feature-list">
+      <span class="feat">Türen + Tore in einem System</span>
+      <span class="feat">Apple/Google Wallet (Touch Pass)</span>
+      <span class="feat">Vorhandene Torantriebe direkt anschliessbar</span>
+      <span class="feat">Kennzeichen-LPR nativ (UVC-AI-LPR)</span>
+      <span class="feat">Kamera + Intercom (G3-Pro)</span>
+      <span class="feat">Zentrales Audit-Log</span>
+      <span class="feat">Touch Pass: 5 &euro;/User/Jahr (optional)</span>
+      <span class="feat">IP55 statt IP65</span>
+    </div>
+    <div style="margin-top:12px;font-size:0.9rem;"><strong>Systemkosten:</strong> ~3.700 &euro; | Touch Pass 20 User: ~100 &euro;/Jahr optional</div>
+  </div>
+
+  <div class="variant-tier t3" style="border-color:#388e3c;">
+    <div class="tier-chip" style="background:#e8f5e9;color:#2e7d32;">Tier 3b &mdash; Gebäudeautomation</div>
+    <div class="tier-title">Loxone &mdash; Vollintegrierte Gebäudesteuerung</div>
+    <div class="tier-sub">Ideal wenn Heizung, Licht, Beschattung und Zutrittskontrolle aus einem System gesteuert werden sollen.</div>
+    <div class="feature-list">
+      <span class="feat">Gebäudeautomation komplett</span>
+      <span class="feat">Tore via Relais</span>
+      <span class="feat">Lokal, keine Cloud nötig</span>
+      <span class="feat">Kein Wallet</span>
+      <span class="feat">Kein LPR nativ</span>
+      <span class="feat">Teurer Miniserver</span>
+    </div>
+    <div style="margin-top:12px;font-size:0.9rem;"><strong>Systemkosten:</strong> ~3.000&ndash;6.000 &euro; (inkl. Miniserver)</div>
+  </div>
+
+  <div class="variant-tier t4">
+    <div class="tier-chip tier-4">Tier 4 &mdash; Enterprise</div>
+    <div class="tier-title">Salto / SimonsVoss / HID &mdash; Vollbiometrie, Normenkonform</div>
+    <div class="tier-sub">Für Objekte mit Behörden-Anforderungen, Vollbiometrie, komplexe Berechtigungsmodelle. Erheblich teurer.</div>
+    <div class="feature-list">
+      <span class="feat">Vollbiometrie</span>
+      <span class="feat">Normenkonform (EN 50133)</span>
+      <span class="feat">Aliro (HID)</span>
+      <span class="feat">Komplexe Berechtigungshierarchien</span>
+      <span class="feat">~15.000&ndash;25.000 &euro; Gesamtkosten</span>
+      <span class="feat">Wartungsvertrag nötig</span>
+    </div>
+    <div style="margin-top:12px;font-size:0.9rem;"><strong>Systemkosten:</strong> 15.000&ndash;25.000 &euro; + Server + Wartung</div>
+  </div>
+</section>
+
+<!-- ===== SEK 6: ALTERNATIVEN ===== -->
+<section id="alternativen">
+  <h2>Alternativen zu Unifi &mdash; Auf einen Blick</h2>
+
+  <div class="alt-cards">
+    <div class="alt-card">
+      <div class="sys-name">Loxone</div>
+      <div class="sys-desc">Österreichisches Gebäudeautomationssystem. Miniserver als zentrale Steuereinheit für alles.</div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>BESSER:</strong> Gebäudeautomation (Licht, Heizung, Beschattung) komplett integriert</span></div>
+      <div class="point"><span class="icon" style="color:#888;">=</span><span><strong>GLEICH:</strong> Tore via Relais, RFID-Karten, App-Zugang</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>SCHLECHTER:</strong> Kein Apple/Google Wallet, kein LPR nativ, teurer Einstieg (Miniserver ~600 &euro;)</span></div>
+      <div class="price-cmp">
+        <strong>Preis vs. Unifi (~3.700 &euro;):</strong><br>
+        Loxone: ~3.000&ndash;6.000 &euro; (inkl. Miniserver).<br>
+        <span style="color:var(--muted);">Günstiger wenn Gebäudeautomation ohnehin geplant.</span>
+      </div>
+    </div>
+
+    <div class="alt-card">
+      <div class="sys-name">Paxton Net2</div>
+      <div class="sys-desc">Britisches SMB-Zutrittskontrollsystem. Weit verbreitet in UK/DE, gutes Preis-Leistungs-Verhältnis.</div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>BESSER:</strong> IP65-Reader, bewährtes System, günstige Erweiterungsmodule</span></div>
+      <div class="point"><span class="icon" style="color:#888;">=</span><span><strong>GLEICH:</strong> NFC-Karten, App-Zugang, Tore via Relais, Audit-Log</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>SCHLECHTER:</strong> Kein Wallet, kein LPR nativ, älteres UI, keine Intercom-Integration</span></div>
+      <div class="price-cmp">
+        <strong>Preis vs. Unifi (~3.700 &euro;):</strong><br>
+        Paxton: ~2.500&ndash;4.500 &euro; (ähnlich).<br>
+        <span style="color:var(--muted);">Ohne Wallet-Vorteil meist kein Grund für Wechsel.</span>
+      </div>
+    </div>
+
+    <div class="alt-card">
+      <div class="sys-name">ZKTeco</div>
+      <div class="sys-desc">Chinesischer Hersteller, günstigste Biometrie-Option. Fingerabdruck, Gesichtserkennung, Venen-Scanner.</div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>BESSER:</strong> Günstigste Biometrie, Fingerabdruck ab 150 &euro;/Reader</span></div>
+      <div class="point"><span class="icon" style="color:#888;">=</span><span><strong>GLEICH:</strong> NFC-Karten, PIN, Audit-Log</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>SCHLECHTER:</strong> Kein Wallet, veraltetes UI, Datenschutz-Bedenken (CN-Cloud), schwache Intercom</span></div>
+      <div class="price-cmp">
+        <strong>Preis vs. Unifi (~3.700 &euro;):</strong><br>
+        ZKTeco: ~1.500&ndash;2.500 &euro; gesamt.<br>
+        <span style="color:var(--muted);">Als Fingerabdruck-Add-on zu Unifi kombinierbar.</span>
+      </div>
+    </div>
+
+    <div class="alt-card">
+      <div class="sys-name">2N IP Verso</div>
+      <div class="sys-desc">Tschechisches Premium-Intercom mit modularem Aufbau. Fingerabdruck-Modul zusteckbar, SIP-Telefon-Integration.</div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>BESSER:</strong> Premium-Intercom, Fingerabdruck-Modul, SIP-Integration, robuster Aufbau</span></div>
+      <div class="point"><span class="icon" style="color:#888;">=</span><span><strong>GLEICH:</strong> NFC-Karten, App-Zugang, Video-Intercom</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>SCHLECHTER:</strong> Kein vollständiges Zutrittskontrollsystem (nur Reader/Intercom), kein LPR, kein Wallet (ausser neuere Gen.)</span></div>
+      <div class="price-cmp">
+        <strong>Preis vs. Unifi (~3.700 &euro;):</strong><br>
+        2N Verso: 300&ndash;600 &euro;/Tür (Reader only).<br>
+        <span style="color:var(--muted);">Als Haupttor-Intercom ergänzend zu Unifi einsetzbar.</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Systemvergleich &mdash; Alle Kriterien</h3>
+  <div class="table-wrap" style="margin-top:16px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Kriterium</th>
+          <th>Unifi Access</th>
+          <th>Loxone</th>
+          <th>Paxton Net2</th>
+          <th>ZKTeco</th>
+          <th>2N IP Verso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Apple/Google Wallet</td>
+          <td class="yes">&#10003; Touch Pass</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="warn">partiell</td>
+        </tr>
+        <tr>
+          <td>Torantrieb-Integration</td>
+          <td class="yes">&#10003; Hub-Gate nativ</td>
+          <td class="yes">&#10003; Relais</td>
+          <td class="yes">&#10003; Relais</td>
+          <td class="warn">bedingt</td>
+          <td class="no">&#10007; kein AZK</td>
+        </tr>
+        <tr>
+          <td>Kennzeichen-LPR</td>
+          <td class="yes">&#10003; UVC-AI-LPR nativ</td>
+          <td class="warn">Drittsystem</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+        </tr>
+        <tr>
+          <td>Kamera + Intercom</td>
+          <td class="yes">&#10003; G3-Pro</td>
+          <td class="warn">Drittsystem</td>
+          <td class="warn">bedingt</td>
+          <td class="warn">einfach</td>
+          <td class="yes">&#10003; Spezialität</td>
+        </tr>
+        <tr>
+          <td>Fingerabdruck</td>
+          <td class="no">&#10007; nativ</td>
+          <td class="no">&#10007;</td>
+          <td class="warn">Add-on</td>
+          <td class="yes">&#10003; nativ, günstig</td>
+          <td class="yes">&#10003; Modul</td>
+        </tr>
+        <tr>
+          <td>Gebäudeautomation</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003; komplett</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+        </tr>
+        <tr>
+          <td>Lokaler Betrieb (kein Cloud-Zwang)</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td>Audit-Log / Protokoll</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="warn">begrenzt</td>
+        </tr>
+        <tr>
+          <td>IP-Schutzklasse Reader</td>
+          <td>IP55</td>
+          <td>IP55</td>
+          <td>IP65</td>
+          <td>IP65</td>
+          <td>IP54</td>
+        </tr>
+        <tr>
+          <td>Gesamtkosten (diese Halle)</td>
+          <td>~3.700 &euro;</td>
+          <td>~3.000&ndash;6.000 &euro;</td>
+          <td>~2.500&ndash;4.500 &euro;</td>
+          <td>~1.500&ndash;2.500 &euro;</td>
+          <td>Reader only, kein AZK</td>
+        </tr>
+        <tr>
+          <td>Laufende Kosten</td>
+          <td>0 &euro; (TP: 5&euro;/U/J opt.)</td>
+          <td>0 &euro;</td>
+          <td>0 &euro;</td>
+          <td>0 &euro;</td>
+          <td>0 &euro;</td>
+        </tr>
+        <tr>
+          <td>Unifi-Ökosystem-Synergie</td>
+          <td class="yes">&#10003; nativ</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="warn">als Add-on</td>
+          <td class="warn">als Add-on</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SEK 6b: UNIFI vs DORMAKABA EVOLO SMART (1:1 Vergleich) ===== -->
+<section id="unifi-vs-dormakaba">
+  <h2>Unifi Access vs Dormakaba evolo Smart &mdash; 1:1 Vergleich</h2>
+
+  <div class="info-box">
+    <strong>Kontext:</strong> Vergleich der beiden konkreten Optionen für diese Halle. <strong>Unifi Access</strong> ist ein netzwerkbasiertes Zutrittssystem (IP-Reader + lokaler Controller). <strong>Dormakaba evolo Smart</strong> ist ein mechatronisches Zylinder- &amp; Beschlagsystem &mdash; jeder Zylinder ist eine eigenständige, batteriebetriebene Einheit ohne Verkabelung. Beide lösen das gleiche Problem (digitale Zutrittskontrolle) auf grundlegend unterschiedliche Weise. Fokus dieses Vergleichs: <strong>Software, Verwaltung &amp; Zutrittsmethoden</strong>.
+  </div>
+
+  <!-- Architektur-Grundsatz -->
+  <h3>Architektur &mdash; zwei verschiedene Welten</h3>
+  <div class="alt-cards">
+    <div class="alt-card">
+      <div class="sys-name">Unifi Access &mdash; vernetzt</div>
+      <div class="sys-desc">IP-Reader an jeder Tür &rarr; PoE-Kabel zum Switch &rarr; lokaler Controller (UDM/UID). Live-Verbindung, jede Türöffnung wird zentral protokolliert und kann sekundengenau gesteuert werden.</div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Topologie:</strong> Sternförmig, alles am Netzwerk</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Software-Logik:</strong> Im Controller, Reader sind &bdquo;dumm&ldquo;</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Verkabelung:</strong> Cat6/PoE bis zu jeder Tür nötig</span></div>
+    </div>
+
+    <div class="alt-card">
+      <div class="sys-name">Dormakaba evolo Smart &mdash; standalone</div>
+      <div class="sys-desc">Jeder Zylinder ist ein eigener Computer mit Batterie, Funk-Chip und lokalem Berechtigungs-Speicher. Kein Kabel, keine Online-Verbindung. Updates kommen per Programmiergerät oder Bluetooth-App vor Ort.</div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Topologie:</strong> Dezentral, jeder Zylinder autark</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Software-Logik:</strong> Im Zylinder selbst (Whitelist lokal)</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Updates:</strong> Manuell pro Zylinder, kein Live-Push</span></div>
+    </div>
+  </div>
+
+  <!-- Software-Vergleich -->
+  <h3>Software &amp; Verwaltung</h3>
+  <div class="alt-table-wrap">
+    <table class="alt-table">
+      <thead>
+        <tr>
+          <th>Kriterium</th>
+          <th>Unifi Access</th>
+          <th>Dormakaba evolo Smart</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Verwaltungssoftware</strong></td>
+          <td class="yes">Web-UI im UniFi-Controller (Browser, jeder Rechner im LAN)</td>
+          <td class="warn">&bdquo;evolo Smart App&ldquo; auf Smartphone oder PC-Tool &bdquo;evolo Manager&ldquo;</td>
+        </tr>
+        <tr>
+          <td><strong>Cloud / Remote-Zugriff</strong></td>
+          <td class="yes">Optional via unifi.ui.com (kostenlos)</td>
+          <td class="no">Kein Cloud-Zugriff &mdash; Verwaltung nur lokal/per App vor Ort</td>
+        </tr>
+        <tr>
+          <td><strong>Berechtigungen ändern</strong></td>
+          <td class="yes">Sofort, zentral im Web-UI &mdash; gilt in Sekunden</td>
+          <td class="no">Programmierkarte oder App an jeden Zylinder halten</td>
+        </tr>
+        <tr>
+          <td><strong>Karte sperren (Verlust)</strong></td>
+          <td class="yes">1 Klick im UI &mdash; sofort an allen Türen</td>
+          <td class="no">Sperr-Karte an jeden Zylinder halten ODER Karte läuft per Validity ab</td>
+        </tr>
+        <tr>
+          <td><strong>Zeitprofile</strong></td>
+          <td class="yes">Granular pro Nutzer/Gruppe/Tür/Zeitfenster, beliebig viele</td>
+          <td class="warn">Begrenzte Zeitschemata, weniger flexibel</td>
+        </tr>
+        <tr>
+          <td><strong>Rollen / Gruppen</strong></td>
+          <td class="yes">Unbegrenzt, hierarchisch (Admin/Manager/User)</td>
+          <td class="warn">Flach, app-spezifisch</td>
+        </tr>
+        <tr>
+          <td><strong>Audit-Log (wer war wann da)</strong></td>
+          <td class="yes">Live, zentral, exportierbar, unbegrenzt</td>
+          <td class="no">Nur lokal im Zylinder (~2.000 Events), manuell auslesen</td>
+        </tr>
+        <tr>
+          <td><strong>Push-Benachrichtigungen</strong></td>
+          <td class="yes">App-Push bei Zutritt/Alarm/Fehler</td>
+          <td class="no">Nein</td>
+        </tr>
+        <tr>
+          <td><strong>API / Integration</strong></td>
+          <td class="yes">Offizielle Access-API, Webhooks, Home-Assistant-Integration</td>
+          <td class="no">Keine offene API für evolo Smart</td>
+        </tr>
+        <tr>
+          <td><strong>Multi-Admin gleichzeitig</strong></td>
+          <td class="yes">Ja, mit Rollen-Trennung</td>
+          <td class="warn">Ein Master-Code/Karte, sequenziell</td>
+        </tr>
+        <tr>
+          <td><strong>Backup &amp; Restore</strong></td>
+          <td class="yes">Auto-Backup im Controller, Export als Datei</td>
+          <td class="warn">Manuell via PC-Tool, pro Anlage</td>
+        </tr>
+        <tr>
+          <td><strong>Firmware-Updates</strong></td>
+          <td class="yes">Zentral, alle Reader auf einmal, OTA</td>
+          <td class="no">Pro Zylinder via App/Programmiergerät</td>
+        </tr>
+        <tr>
+          <td><strong>Software-Kosten</strong></td>
+          <td class="yes">0&nbsp;&euro; (im Controller enthalten)</td>
+          <td class="yes">0&nbsp;&euro; (App kostenlos, Manager-Tool inkl.)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Zutritt-Vergleich -->
+  <h3>Zutritt &amp; Bedienung</h3>
+  <div class="alt-table-wrap">
+    <table class="alt-table">
+      <thead>
+        <tr>
+          <th>Zutrittsmethode</th>
+          <th>Unifi Access</th>
+          <th>Dormakaba evolo Smart</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Apple/Google Wallet</strong></td>
+          <td class="yes">&#10003; Nativ (HID Origo) &mdash; iPhone an Leser, fertig</td>
+          <td class="no">&#10007; Nicht unterstützt</td>
+        </tr>
+        <tr>
+          <td><strong>Smartphone-App (BLE)</strong></td>
+          <td class="yes">UniFi Access App &mdash; Bluetooth + NFC</td>
+          <td class="yes">evolo Smart App (BLE, Android/iOS)</td>
+        </tr>
+        <tr>
+          <td><strong>NFC-Karte / Schlüsselanhänger</strong></td>
+          <td class="yes">MIFARE DESFire (verschlüsselt)</td>
+          <td class="yes">LEGIC advant / MIFARE DESFire</td>
+        </tr>
+        <tr>
+          <td><strong>PIN-Code</strong></td>
+          <td class="yes">An jedem G3-Pro Reader (Touchscreen)</td>
+          <td class="warn">Nur mit separatem PIN-Beschlag (Aufpreis)</td>
+        </tr>
+        <tr>
+          <td><strong>Biometrie (Fingerabdruck)</strong></td>
+          <td class="warn">Über UA-Hub-FP-Add-on</td>
+          <td class="no">Nicht im evolo-Smart-Portfolio</td>
+        </tr>
+        <tr>
+          <td><strong>Video-Intercom + Türöffnen</strong></td>
+          <td class="yes">G3-Pro hat Kamera + Mikro + Lautsprecher integriert</td>
+          <td class="no">Kein Intercom</td>
+        </tr>
+        <tr>
+          <td><strong>LPR (Fahrzeug-Kennzeichen)</strong></td>
+          <td class="yes">UVC-AI-LPR-Kamera, Plug-and-Play in Access</td>
+          <td class="no">Nicht vorhanden</td>
+        </tr>
+        <tr>
+          <td><strong>Industrie-Tor steuern</strong></td>
+          <td class="yes">UA-Hub-Gate mit Relais (potenzialfrei)</td>
+          <td class="no">Nicht möglich &mdash; nur Zylindertüren</td>
+        </tr>
+        <tr>
+          <td><strong>Notfall-Öffnung remote</strong></td>
+          <td class="yes">Web-UI / App: &bdquo;Tür öffnen&ldquo; aus der Ferne</td>
+          <td class="no">Nicht möglich &mdash; physisch vor Ort nötig</td>
+        </tr>
+        <tr>
+          <td><strong>Zutritt bei Stromausfall</strong></td>
+          <td class="warn">UDM-USV nötig, sonst keine Funktion</td>
+          <td class="yes">Funktioniert weiter (Batterie) &mdash; klarer Vorteil</td>
+        </tr>
+        <tr>
+          <td><strong>Karte / Schlüssel verloren</strong></td>
+          <td class="yes">Zentral sperren, neue Karte ausgeben &mdash; 30 Sek.</td>
+          <td class="warn">Sperr-Karte an alle Zylinder halten ODER Validity abwarten</td>
+        </tr>
+        <tr>
+          <td><strong>Neuer Mitarbeiter (Onboarding)</strong></td>
+          <td class="yes">Im UI anlegen, Wallet-Pass per Mail &mdash; remote möglich</td>
+          <td class="warn">Karte programmieren, an alle relevanten Zylinder halten</td>
+        </tr>
+        <tr>
+          <td><strong>Zeitlich begrenzter Gast</strong></td>
+          <td class="yes">QR-/Wallet-Pass mit Start/Ende, automatisch ungültig</td>
+          <td class="warn">Karte mit Validity programmieren, vorher vor Ort an Zylinder</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Vor-/Nachteile -->
+  <h3>Software- &amp; Access-Vor-/Nachteile</h3>
+  <div class="alt-cards">
+    <div class="alt-card" style="border-left:4px solid #2e7d32;">
+      <div class="sys-name">Vorteile Unifi Access</div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Zentrale Web-Verwaltung</strong> &mdash; alles aus einem Browser-Fenster, von jedem PC im Netz</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Sofortige Änderungen</strong> &mdash; Karte sperren, neuer User, Zeitprofil ändern in Sekunden gültig</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Live-Audit</strong> &mdash; jede Türöffnung in Echtzeit sichtbar, nach Person/Tür/Zeit filterbar</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Apple/Google Wallet</strong> &mdash; Mitarbeiter braucht nur iPhone, kein extra Schlüsselbund</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Remote-Funktionen</strong> &mdash; Tür aus dem Homeoffice öffnen, Push-Benachrichtigungen</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>API + Integration</strong> &mdash; verknüpfbar mit UniFi Protect (Kamera), Home Assistant, eigene Skripte</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Skalierbar</strong> &mdash; vom 1-Tür-Setup bis 500 Türen mit gleicher Software</span></div>
+    </div>
+
+    <div class="alt-card" style="border-left:4px solid #c62828;">
+      <div class="sys-name">Nachteile Unifi Access</div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Netzwerk-abhängig</strong> &mdash; ohne LAN/Switch keine Türöffnung möglich</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Stromausfall</strong> &mdash; USV-Pflicht, sonst stehen alle Türen still</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Verkabelung</strong> &mdash; Cat6 + PoE bis zu jeder Tür, einmalig hoher Installationsaufwand</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>IT-Wissen</strong> &mdash; UniFi-Controller will administriert werden (Updates, Backups)</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Angriffsfläche Netzwerk</strong> &mdash; Reader/Controller müssen abgesichert sein</span></div>
+    </div>
+
+    <div class="alt-card" style="border-left:4px solid #2e7d32;">
+      <div class="sys-name">Vorteile Dormakaba evolo Smart</div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Kabellos</strong> &mdash; keine Verkabelung an der Tür nötig, schnelle Nachrüstung</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Funktioniert bei Stromausfall</strong> &mdash; Batterie hält ~10 Jahre / 200.000 Schaltungen</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Keine Netzwerk-Abhängigkeit</strong> &mdash; Server-Crash betrifft Türen nicht</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Bewährter Standard</strong> &mdash; Versicherungen kennen Dormakaba, weniger Diskussionen</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Mechanischer Notschlüssel</strong> möglich (kombinierte Zylinder)</span></div>
+      <div class="point"><span class="icon" style="color:#2e7d32;">&#10003;</span><span><strong>Datenschutz</strong> &mdash; keine zentrale Datenbank, keine Cloud, keine permanente Erfassung</span></div>
+    </div>
+
+    <div class="alt-card" style="border-left:4px solid #c62828;">
+      <div class="sys-name">Nachteile Dormakaba evolo Smart</div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Verwaltung umständlich</strong> &mdash; jeder Zylinder muss physisch programmiert werden</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Kein zentrales Live-Audit</strong> &mdash; Logs nur pro Zylinder, manuell auslesen</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Kein Apple/Google Wallet</strong> &mdash; Mitarbeiter braucht Karte ODER App</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Kein Video-Intercom, kein LPR, keine Tor-Steuerung</strong> &mdash; nur Türzylinder</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Karte verloren = Aufwand</strong> &mdash; Sperr-Karte an alle Zylinder halten</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Keine API</strong> &mdash; keine Integration in Smart-Home / Alarmanlage / Zeitwirtschaft</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Begrenzte Skalierung</strong> &mdash; ab ~30 Türen wird das App-Handling mühsam</span></div>
+      <div class="point"><span class="icon" style="color:#c62828;">&#10007;</span><span><strong>Batteriewechsel</strong> &mdash; alle 5&ndash;10 Jahre an jedem Zylinder einzeln</span></div>
+    </div>
+  </div>
+
+  <!-- Sparpotenzial -->
+  <h3>Sparpotenzial &mdash; Wo Unifi günstiger ist</h3>
+  <div class="alt-table-wrap">
+    <table class="alt-table">
+      <thead>
+        <tr>
+          <th>Kostenblock</th>
+          <th>Unifi Access</th>
+          <th>Dormakaba evolo Smart</th>
+          <th>Differenz</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Zylinder / Reader-Hardware (7 Türen)</td>
+          <td>~1.400&nbsp;&euro; (UA-G3 / G3-Pro)</td>
+          <td>~3.500&ndash;4.900&nbsp;&euro; (500&ndash;700&nbsp;&euro;/Zylinder)</td>
+          <td class="yes">~2.100&ndash;3.500&nbsp;&euro; Unifi günstiger</td>
+        </tr>
+        <tr>
+          <td>Tor-Anbindung (3 Tore)</td>
+          <td>~450&nbsp;&euro; (UA-Hub-Gate)</td>
+          <td class="no">Nicht möglich &mdash; Zusatzsystem nötig</td>
+          <td class="yes">Unifi liefert das mit</td>
+        </tr>
+        <tr>
+          <td>Video-Intercom Haupteingang</td>
+          <td>0&nbsp;&euro; (in G3-Pro enthalten)</td>
+          <td class="no">Nicht möglich &mdash; 2N-System extra ~1.500&nbsp;&euro;</td>
+          <td class="yes">~1.500&nbsp;&euro; Unifi günstiger</td>
+        </tr>
+        <tr>
+          <td>LPR Haupttor (Kennzeichen)</td>
+          <td>~400&nbsp;&euro; (UVC-AI-LPR)</td>
+          <td class="no">Nicht möglich</td>
+          <td class="yes">Unifi-only-Feature</td>
+        </tr>
+        <tr>
+          <td>Apple/Google Wallet (digitale &bdquo;Karten&ldquo;)</td>
+          <td>0&nbsp;&euro;</td>
+          <td>~5&nbsp;&euro; pro physischer Karte</td>
+          <td class="yes">~50&ndash;100&nbsp;&euro;/Jahr bei 20 MA</td>
+        </tr>
+        <tr>
+          <td>Programmiergerät / Manager-Tool</td>
+          <td>0&nbsp;&euro;</td>
+          <td>~250&ndash;500&nbsp;&euro; einmalig</td>
+          <td class="yes">~250&ndash;500&nbsp;&euro; Unifi günstiger</td>
+        </tr>
+        <tr>
+          <td>Software-Lizenz</td>
+          <td>0&nbsp;&euro;</td>
+          <td>0&nbsp;&euro;</td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>Installation</td>
+          <td>~500&nbsp;&euro; (Verkabelung + Inbetriebnahme)</td>
+          <td>~700&nbsp;&euro; (Zylindertausch + Programmierung)</td>
+          <td class="warn">~200&nbsp;&euro; Unifi günstiger</td>
+        </tr>
+        <tr style="background:#e8f5e9;font-weight:600;">
+          <td>Gesamt-Setup nur Türen</td>
+          <td>~2.300&nbsp;&euro;</td>
+          <td>~4.450&ndash;6.100&nbsp;&euro;</td>
+          <td class="yes">~2.100&ndash;3.800&nbsp;&euro;</td>
+        </tr>
+        <tr style="background:#c8e6c9;font-weight:700;">
+          <td>Gesamt-Setup inkl. Tore, Intercom, LPR</td>
+          <td>~3.700&nbsp;&euro;</td>
+          <td>~6.000&ndash;7.700&nbsp;&euro; <em>(ohne Tore/Intercom/LPR &mdash; das fehlt komplett)</em></td>
+          <td class="yes">~2.300&ndash;4.000&nbsp;&euro; bei deutlich mehr Funktionen</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Fazit -->
+  <div class="rec-box" style="margin-top:24px;">
+    <h3 style="margin-top:0;color:var(--accent-blue);">Fazit Software &amp; Access</h3>
+    <p><strong>Software-Seite:</strong> Unifi spielt in einer anderen Liga &mdash; zentrale Web-Verwaltung, Live-Audit, API, Push, Remote-Öffnen. Bei evolo Smart bleibt die Verwaltung nah am klassischen mechanischen Schließsystem mit Komfort-Layer (App, Karten programmieren statt Schlüssel ausgeben).</p>
+    <p><strong>Access-Seite:</strong> Unifi deckt alles ab (Wallet, NFC, PIN, Intercom, LPR, Tore). evolo Smart deckt nur den Türzylinder ab &mdash; für Tore, Intercom, LPR braucht es Drittanbieter.</p>
+    <p><strong>Wirtschaftlich:</strong> Unifi spart ~2.300&ndash;4.000&nbsp;&euro; bei der Anschaffung und liefert dabei mehr Funktionen. Software-Lizenzen kosten bei beiden nichts.</p>
+    <p style="margin-bottom:0;"><strong>Wann evolo Smart trotzdem sinnvoll:</strong> Wenn keine Verkabelung möglich ist (Mieter-Restriktion, Denkmalschutz), wenn Stromausfall-Sicherheit kritisch ist, oder als <strong>Hybrid-Lösung</strong>: Unifi als Hauptsystem, 1&ndash;2 evolo-Zylinder an Spezialtüren (Tresor, Serverraum) wo Versicherung VdS-zertifizierte Hardware will. Mehrkosten Hybrid: ~800&ndash;1.400&nbsp;&euro; für 2 evolo-Zylinder.</p>
+  </div>
+</section>
+
+<!-- ===== SEK 7: TÜRÖFFNER ===== -->
+<section id="tueroeffner" class="sec-tueroeffner">
+  <h2>Türöffner &mdash; Typen &amp; Kompatibilität</h2>
+  <div class="info-box">
+    <strong>Wichtig:</strong> Die Wahl des Türöffner-Typs ist unabhängig vom Zutrittskontrollsystem &mdash; alle modernen AZK-Systeme steuern den Öffner via Relais-Ausgang (12 V / 24 V DC). Tore brauchen keinen Türöffner &mdash; die vorhandenen Antriebe werden direkt via Impulskontakt angesteuert.
+  </div>
+
+  <div class="opener-card">
+    <h4>Typ 1 &mdash; E-Öffner (Electric Strike)</h4>
+    <div class="opener-meta">
+      <span>40&ndash;150 &euro;</span>
+      <span>12 V DC</span>
+      <span>Fail-secure oder Fail-safe</span>
+    </div>
+    <p>Einfachste und günstigste Option. Ersetzt den mechanischen Türöffner im Rahmen. Bei Stromimpuls öffnet der Riegel kurz. <strong>Fail-secure</strong> = bleibt zu bei Stromausfall (Sicherheitstüren). <strong>Fail-safe</strong> = öffnet bei Stromausfall (Fluchttüren!).</p>
+    <div class="compat-row">
+      <strong>Anschluss:</strong> Relais-Ausgang am Hub/Controller (12 V Schaltkreis)<br>
+      <strong>Kompatibilität:</strong>
+      <span class="yes">Unifi</span> &nbsp;
+      <span class="yes">Loxone</span> &nbsp;
+      <span class="yes">Paxton</span> &nbsp;
+      <span class="yes">Salto</span> &nbsp;
+      <span class="warn">Nuki (via Bridge API / Home Assistant)</span> &nbsp;
+      <span class="warn">Bold</span>
+    </div>
+    <div style="margin-top:8px;font-size:0.85rem;"><strong>Brands:</strong> effeff (ASSA ABLOY) &mdash;
+      <a href="https://www.assaabloy.com/de/de/solutions/topics/tueroeffner" target="_blank" style="color:var(--accent-blue);">assaabloy.com</a>
+    </div>
+  </div>
+
+  <!-- E-Öffner Funktionsweise -->
+  <div class="card" style="margin-bottom:20px;border-left:4px solid var(--accent-brown);">
+    <h3 style="color:var(--accent-brown);margin-top:0;">Wie funktioniert ein E-Öffner? — Schritt für Schritt</h3>
+
+    <div class="info-box" style="margin-bottom:20px;">
+      <strong>Kern-Prinzip:</strong> Der E-Öffner ersetzt nur das Schließblech im <strong>Türrahmen</strong>. Die Tür selbst, ihr Schloss und der Zylinder bleiben vollständig unverändert. Ein kurzer 12-V-Impuls vom UA-Hub gibt den Riegel für ~1–3 Sekunden frei — danach sperrt die Feder den E-Öffner automatisch wieder.
+    </div>
+
+    <!-- Mechanik-Diagramme nebeneinander -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div>
+        <div style="text-align:center;font-weight:700;margin-bottom:8px;color:#c62828;">GESPERRT — kein Strom</div>
+        <div class="ascii-box" style="font-size:0.78rem;line-height:1.8;padding:18px 20px;">
+<pre>  RAHMEN        TÜR
+ ┌────────┐   ┌──────┐
+ │        │   │      │
+ │ ┌────┐ │◀──┤Falle │
+ │ │████│ │   │      │
+ │ │████│ │   │      │
+ │ └────┘ │   └──────┘
+ │E-Öffner│
+ └────────┘
+
+ Falle liegt fest im
+ E-Öffner-Schacht.
+ Tür lässt sich nicht
+ aufdrücken.</pre>
+        </div>
+      </div>
+      <div>
+        <div style="text-align:center;font-weight:700;margin-bottom:8px;color:#2e7d32;">GEÖFFNET — 12V-Impuls</div>
+        <div class="ascii-box" style="font-size:0.78rem;line-height:1.8;padding:18px 20px;">
+<pre>  RAHMEN        TÜR
+ ┌────────┐   ┌──────┐
+ │        │   │      │
+ │ ┌────┐↙│ ←─┤Falle │
+ │ │░░░░│ │   │      │
+ │ │░░░░│ │   │      │
+ │ └────┘ │   └──────┘
+ │E-Öffner│
+ └────────┘
+
+ Schließblech klappt
+ kurz weg — Falle
+ gleitet durch.
+ Tür aufdrücken!</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ablauf-Timeline -->
+    <h4 style="margin-bottom:12px;">Ablauf bei Zugang (NFC / Wallet / App)</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0;margin-bottom:20px;">
+      <div style="background:#e3f2fd;border:1px solid #90caf9;border-right:none;padding:12px;text-align:center;border-radius:8px 0 0 8px;">
+        <div style="font-size:1.4rem;margin-bottom:4px;">📱</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#1565c0;">1. Karte / Wallet</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">Mitarbeiter hält iPhone oder Karte an Reader</div>
+      </div>
+      <div style="background:#e8eaf6;border:1px solid #9fa8da;border-right:none;padding:12px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:4px;">🔍</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#3949ab;">2. Prüfung</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">UA-Hub prüft Berechtigung + Zeitfenster (~100 ms)</div>
+      </div>
+      <div style="background:#e8f5e9;border:1px solid #a5d6a7;border-right:none;padding:12px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:4px;">⚡</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#2e7d32;">3. Relais schließt</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">12 V fließen zum E-Öffner für ~1–3 Sek.</div>
+      </div>
+      <div style="background:#fff3e0;border:1px solid #ffcc80;border-right:none;padding:12px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:4px;">🚪</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#e65100;">4. Tür öffnen</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">E-Öffner gibt nach — Tür aufdrücken</div>
+      </div>
+      <div style="background:#fce4ec;border:1px solid #f48fb1;padding:12px;text-align:center;border-radius:0 8px 8px 0;">
+        <div style="font-size:1.4rem;margin-bottom:4px;">🔒</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#c62828;">5. Auto-Sperrung</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">Relais öffnet — E-Öffner federt zurück, Tür wieder gesperrt</div>
+      </div>
+    </div>
+
+    <!-- Verkabelung -->
+    <h4 style="margin-bottom:10px;">Verkabelung — UA-Hub-Door ↔ E-Öffner</h4>
+    <div class="ascii-box" style="font-size:0.8rem;line-height:1.9;margin-bottom:16px;">
+<pre>
+  PoE-Switch ──── CAT6 ────▶  UA-Hub-Door
+                              ┌──────────────────────────┐
+  (Strom + Netzwerk           │  12V ──────────────────┐ │
+   in einem Kabel)            │  COM ────────────┐     │ │
+                              │  NO  ──────┐     │     │ │
+                              └───────────┼─────┼─────┼─┘
+                                          │     │     │
+                                     2-Draht-Kabel (~15m max.)
+                                          │     │     │
+                              ┌───────────┼─────┼─────┼──────┐
+                              │  E-Öffner │     │     │      │
+                              │           └─────┘     │      │
+                              │  (NO+COM = Fail-secure)│      │
+                              │  (NC+COM = Fail-safe)  │      │
+                              │                        │      │
+                              │  Stromversorgung: ─────┘      │
+                              │  12 V / 400 mA (UA-Lock)      │
+                              └───────────────────────────────┘
+                                   Im Türrahmen eingebaut
+
+  NO  = Normally Open   → kein Strom im Ruhezustand → FAIL-SECURE (sicherer)
+  NC  = Normally Closed → Strom im Ruhezustand      → FAIL-SAFE (Fluchttüren!)
+  COM = Common (Rückleiter)</pre>
+    </div>
+
+    <!-- Unifi-spezifische Einstellungen -->
+    <h4 style="margin-bottom:10px;">Einstellungen im Unifi Access Controller</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Einstellung</th><th>Funktion</th><th>Typischer Wert</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Öffnungszeit (Unlock Duration)</td><td>Wie lange Relais zieht / E-Öffner offen ist</td><td>1–3 Sekunden</td></tr>
+          <tr><td>Türsensor (Door Sensor)</td><td>Reed-Kontakt meldet ob Tür wirklich auf/zu ist</td><td>Empfohlen: aktiv</td></tr>
+          <tr><td>Held-Open-Alarm</td><td>Alarm wenn Tür länger als X Sek. offen bleibt</td><td>30–60 Sekunden</td></tr>
+          <tr><td>Forced-Open-Alarm</td><td>Alarm bei Öffnung ohne Berechtigung</td><td>Aktiv</td></tr>
+          <tr><td>Fail-Mode</td><td>Durch Klemmenauswahl (NO/NC) festgelegt, nicht per Software</td><td>NO = Fail-secure</td></tr>
+          <tr><td>REX (Request to Exit)</td><td>Knopf innen öffnet E-Öffner ohne Reader-Scan</td><td>Optional</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Unifi eigene Produkte -->
+    <h4 style="margin-top:16px;margin-bottom:10px;">Unifi-eigene E-Öffner-Produkte</h4>
+    <div class="card-grid">
+      <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:14px;">
+        <div style="font-family:'Courier New',monospace;font-weight:700;">UA-Lock-Electric</div>
+        <div style="font-size:0.85rem;color:var(--muted);margin:4px 0;">Standard E-Öffner, 12 V, Fail-secure</div>
+        <div style="font-size:0.85rem;"><strong>1.200 kg</strong> Haltekraft &middot; 400 mA &middot; Alu/Stahl/Holzrahmen &middot; ~89 €</div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:14px;">
+        <div style="font-family:'Courier New',monospace;font-weight:700;">UACC-Lock-Strike-Secure-15mm</div>
+        <div style="font-size:0.85rem;color:var(--muted);margin:4px 0;">Schmalrahmen-Version, Fail-secure, 15mm Stulp</div>
+        <div style="font-size:0.85rem;">Für schmale Zargen &middot; direkt kompatibel mit UA-Hub &middot; ~60–80 €</div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:14px;">
+        <div style="font-family:'Courier New',monospace;font-weight:700;">UA-Lock-Magnetic</div>
+        <div style="font-size:0.85rem;color:var(--muted);margin:4px 0;">Magnetschloss, Fail-safe — für Fluchttüren</div>
+        <div style="font-size:0.85rem;"><strong>270 kg</strong> Haltekraft &middot; keine beweglichen Teile &middot; ~135 €</div>
+      </div>
+    </div>
+
+    <div class="warn-box" style="margin-top:16px;">
+      <strong>Vor dem Kauf prüfen:</strong> Stulpbreite der Zarge (mindestens 18 mm für Standard-E-Öffner), Normfalz vorhanden? Fallenhöhe passend? Der Elektrofachbetrieb misst das vor Bestellung aus.
+    </div>
+  </div>
+
+  <div class="opener-card">
+    <h4>Typ 2 &mdash; Magnetschloss (Magnetic Lock)</h4>
+    <div class="opener-meta">
+      <span>100&ndash;400 &euro;</span>
+      <span>12 V / 24 V DC</span>
+      <span>IMMER Fail-safe</span>
+    </div>
+    <p>Hält die Tür durch Magnetkraft (270 kg bis 600 kg Haltekraft). Keine beweglichen Teile &mdash; extrem wartungsarm. <strong>Immer Fail-safe</strong> (öffnet bei Stromausfall) &mdash; daher <strong>Pflicht für Fluchttüren!</strong> gemäss EN 179 / EN 1125.</p>
+    <div class="compat-row">
+      <strong>Kompatibilität:</strong>
+      <span class="yes">Unifi</span> &nbsp;
+      <span class="yes">Loxone</span> &nbsp;
+      <span class="yes">Paxton</span> &nbsp;
+      <span class="yes">Salto</span> &nbsp;
+      <span class="warn">Nuki</span> &nbsp;
+      <span class="warn">Bold</span>
+    </div>
+    <div style="margin-top:8px;font-size:0.85rem;"><strong>Brands:</strong> ASSA ABLOY, Fermax &mdash;
+      <a href="https://dach.assaabloy.com/de/de/produktkatalog/" target="_blank" style="color:var(--accent-blue);">dach.assaabloy.com</a>
+    </div>
+  </div>
+
+  <div class="opener-card">
+    <h4>Typ 3 &mdash; Motorschloss (Motorized Lock)</h4>
+    <div class="opener-meta">
+      <span>300&ndash;800 &euro;</span>
+      <span>12 V / 24 V DC</span>
+      <span>Selbstverriegelnd</span>
+    </div>
+    <p>Motorisierter Riegel &mdash; verriegelt sich selbst beim Türschliessen. Höchste Sicherheit, da kein Eindrücken möglich. Komplexere Verdrahtung (Türöffner + Taster + Endschalter).</p>
+    <div class="compat-row">
+      <strong>Kompatibilität:</strong>
+      <span class="yes">Unifi</span> &nbsp;
+      <span class="yes">Loxone</span> &nbsp;
+      <span class="yes">Paxton</span> &nbsp;
+      <span class="yes">Salto</span> &nbsp;
+      <span class="no">Nuki nein</span> &nbsp;
+      <span class="no">Bold nein</span>
+    </div>
+    <div style="margin-top:8px;font-size:0.85rem;"><strong>Brands:</strong> effeff 509E, Winkhaus, dormakaba &mdash;
+      <a href="https://www.dormakaba.com/de-de/angebot/produkte/tuertechnik" target="_blank" style="color:var(--accent-blue);">dormakaba.com</a>
+    </div>
+  </div>
+
+  <div class="opener-card">
+    <h4>Typ 4 &mdash; Digitalzylinder (Smart Cylinder)</h4>
+    <div class="opener-meta">
+      <span>150&ndash;600 &euro;</span>
+      <span>Batterie (6&ndash;18 Monate)</span>
+      <span>Kabellos / Retrofit</span>
+    </div>
+    <p>Das Smart Lock <em>ist</em> der Zylinder &mdash; tauscht den bestehenden Profilzylinder 1:1 aus. Kein Controller, kein Kabel, kein Hub nötig. Stärkste Retrofit-Option für bestehende Türen.</p>
+    <div class="compat-row">
+      <strong>Kompatibilität:</strong>
+      <span class="yes">Nuki (= Nuki)</span> &nbsp;
+      <span class="yes">Bold (= Bold)</span> &nbsp;
+      <span class="yes">dormakaba Evolo</span> &nbsp;
+      <span class="no">Unifi nein</span> &nbsp;
+      <span class="no">Loxone nein</span> &nbsp;
+      <span class="yes">Salto XS4</span>
+    </div>
+    <div style="margin-top:8px;font-size:0.85rem;"><strong>Brands:</strong>
+      <a href="https://nuki.io" target="_blank" style="color:var(--accent-blue);">Nuki</a> |
+      <a href="https://boldsmartlock.com" target="_blank" style="color:var(--accent-blue);">Bold</a> |
+      <a href="https://www.dormakaba.com" target="_blank" style="color:var(--accent-blue);">dormakaba Evolo</a>
+    </div>
+  </div>
+
+  <div class="opener-card">
+    <h4>Typ 5 &mdash; Aperio Wireless (ASSA ABLOY)</h4>
+    <div class="opener-meta">
+      <span>300&ndash;700 &euro;</span>
+      <span>Funk (Online-Controller)</span>
+      <span>Kein Kabelzug nötig</span>
+    </div>
+    <p>Funk-basierter Nachrüstsatz für bestehende Türen. Batteriebetrieben, kein Kabelzug. Integriert in klassische AZK-Systeme via Online-Controller &mdash; die Tür wird "online" und ins Gesamtsystem eingebunden.</p>
+    <div class="compat-row">
+      <strong>Kompatibilität:</strong>
+      <span class="yes">Salto</span> &nbsp;
+      <span class="warn">Paxton (partiell)</span> &nbsp;
+      <span class="yes">dormakaba</span> &nbsp;
+      <span class="yes">HID</span> &nbsp;
+      <span class="no">Unifi nein</span> &nbsp;
+      <span class="no">Loxone nein</span>
+    </div>
+    <div style="margin-top:8px;font-size:0.85rem;"><strong>Brands:</strong>
+      <a href="https://www.assaabloy.com/de/de/solutions/topics/zutrittskontrolle/aperio" target="_blank" style="color:var(--accent-blue);">ASSA ABLOY Aperio</a>
+    </div>
+  </div>
+
+  <div class="opener-card">
+    <h4>Typ 6 &mdash; Elektrischer Beschlag (Electronic Fitting)</h4>
+    <div class="opener-meta">
+      <span>400&ndash;900 &euro;</span>
+      <span>NFC-Leser integriert</span>
+      <span>Elegante Komplettlösung</span>
+    </div>
+    <p>NFC-Leser und Drücker in einem eleganten Beschlag vereint. Kein separates Keypad nötig. Für repräsentative Eingänge ideal.</p>
+    <div class="compat-row">
+      <strong>Kompatibilität:</strong>
+      <span class="yes">Salto XS4 Fitting</span> &nbsp;
+      <span class="yes">dormakaba</span> &nbsp;
+      <span class="yes">SimonsVoss</span> &nbsp;
+      <span class="no">Unifi nein</span> &nbsp;
+      <span class="no">Nuki nein</span> &nbsp;
+      <span class="warn">Loxone (Wiegand)</span>
+    </div>
+    <div style="margin-top:8px;font-size:0.85rem;"><strong>Brands:</strong>
+      <a href="https://saltosystems.com/de-de/" target="_blank" style="color:var(--accent-blue);">Salto</a> |
+      <a href="https://www.simons-voss.com/" target="_blank" style="color:var(--accent-blue);">SimonsVoss</a>
+    </div>
+  </div>
+
+  <h3>Kompatibilitäts-Übersicht &mdash; Alle Typen vs. Systeme</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Türöffner-Typ</th>
+          <th>Nuki</th>
+          <th>Bold</th>
+          <th>Unifi</th>
+          <th>Loxone</th>
+          <th>Paxton</th>
+          <th>Salto/Enterprise</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>E-Öffner (12V Relais)</td>
+          <td class="warn">Umweg</td>
+          <td class="warn">Umweg</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td>Magnetschloss</td>
+          <td class="warn">Umweg</td>
+          <td class="warn">Umweg</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td>Motorschloss</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+          <td class="yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td>Digitalzylinder</td>
+          <td class="yes">= Nuki</td>
+          <td class="yes">= Bold</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="yes">XS4</td>
+        </tr>
+        <tr>
+          <td>Aperio Wireless</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="warn">partiell</td>
+          <td class="yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td>Elektrischer Beschlag</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="no">&#10007;</td>
+          <td class="warn">Wiegand</td>
+          <td class="warn">bedingt</td>
+          <td class="yes">&#10003;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Türöffner-Empfehlung nach Türtyp (diese Halle)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Türtyp</th>
+          <th>Empfehlung</th>
+          <th>Begründung</th>
+          <th>Preis ca.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Aussentür &mdash; Standard</td>
+          <td>E-Öffner Fail-secure</td>
+          <td>Bleibt geschlossen bei Stromausfall &mdash; sicher</td>
+          <td>60&ndash;120 &euro;</td>
+        </tr>
+        <tr>
+          <td>Aussentür &mdash; Fluchtweg</td>
+          <td>Magnetschloss Fail-safe</td>
+          <td>Pflicht für Fluchttüren (öffnet bei Alarm)</td>
+          <td>150&ndash;300 &euro;</td>
+        </tr>
+        <tr>
+          <td>Haupttür HT (Nordwand, Haupteingang)</td>
+          <td>E-Öffner Fail-secure oder Motorschloss</td>
+          <td>Normale Tür (kein Tor) &mdash; elektrischer Türöffner nötig</td>
+          <td>80&ndash;300 &euro;</td>
+        </tr>
+        <tr>
+          <td>Tore T1 + T2 (Antriebe vorhanden)</td>
+          <td style="color:var(--accent-green);font-weight:700;">Kein Türöffner nötig</td>
+          <td>Relais-Impulskontakt an bestehende Torsteuerung &mdash; 0 &euro;</td>
+          <td style="color:var(--accent-green);font-weight:700;">0 &euro;</td>
+        </tr>
+        <tr>
+          <td>Innentür</td>
+          <td>E-Öffner oder Digitalzylinder</td>
+          <td>E-Öffner: wenn kabelgebunden möglich; Zylinder: Retrofit</td>
+          <td>60&ndash;150 &euro;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SEK 8: REX / DRÜCKER ===== -->
+<section id="rex-druecker">
+  <h2>Bestehende Drücker &amp; REX-Taster am Unifi Hub</h2>
+
+  <div class="info-box">
+    <strong>REX = Request to Exit</strong> — jeder UA-Hub-Door hat einen dedizierten REX-Eingang. Jeder handelsübliche Momentkontakt-Taster (Klingeltaster, Drücktaster, PIR-Sensor) funktioniert direkt. <strong>Bereits vorhandene Taster können kostenlos weitergenutzt werden</strong> — es werden nur 2 Drähte vom Taster zum Hub benötigt.
+  </div>
+
+  <h3>Funktionsweise &mdash; Schritt für Schritt</h3>
+
+  <div class="card" style="margin-bottom:20px;border-left:4px solid var(--accent-brown);">
+    <h3 style="color:var(--accent-brown);margin-top:0;">Wie funktioniert ein REX-Drücker?</h3>
+
+    <div class="warn-box" style="margin-bottom:20px;">
+      <strong>Wichtig:</strong> Der REX-Drücker öffnet die Tür <strong>ohne</strong> Reader-Scan — er ist für die Innenseite gedacht (vertrauenswürdige Zone). Im Unifi Audit-Log erscheint der Öffnungsvorgang als <em>"REX-Exit"</em>-Eintrag.
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div>
+        <div style="text-align:center;font-weight:700;margin-bottom:8px;color:#c62828;">RUHE — Taster nicht gedrückt</div>
+        <div class="ascii-box" style="font-size:0.78rem;line-height:1.9;padding:18px 20px;">
+<pre>  INNEN          UA-Hub-Door
+ ┌────────┐      ┌──────────┐
+ │Drücker │      │          │
+ │  [ ]   │      │ REX+  ○  │
+ │        │      │ GND   ○  │
+ └────────┘      │          │
+                 │ Relais   │
+                 │  offen   │
+                 └──────────┘
+
+ Taster offen →
+ kein Signal →
+ Relais offen →
+ Tür gesperrt</pre>
+        </div>
+      </div>
+      <div>
+        <div style="text-align:center;font-weight:700;margin-bottom:8px;color:#2e7d32;">GEDRÜCKT — Tür öffnet</div>
+        <div class="ascii-box" style="font-size:0.78rem;line-height:1.9;padding:18px 20px;">
+<pre>  INNEN          UA-Hub-Door
+ ┌────────┐      ┌──────────┐
+ │Drücker │      │          │
+ │  [●]───┼──────▶ REX+  ●  │
+ │        │──────▶ GND   ●  │
+ └────────┘      │          │
+                 │ Relais   │
+                 │ schließt │
+                 └──────────┘
+
+ Taster schließt →
+ REX-Signal →
+ Relais zieht →
+ E-Öffner gibt nach</pre>
+        </div>
+      </div>
+    </div>
+
+    <h4 style="margin-bottom:12px;">Ablauf bei Türöffnung via Drücker (innen)</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0;margin-bottom:20px;">
+      <div style="background:#e8f5e9;border:1px solid #a5d6a7;border-right:none;padding:12px;text-align:center;border-radius:8px 0 0 8px;">
+        <div style="font-size:1.4rem;margin-bottom:4px;">👆</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#2e7d32;">1. Drücken</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">Person drückt Taster innen</div>
+      </div>
+      <div style="background:#e8eaf6;border:1px solid #9fa8da;border-right:none;padding:12px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:4px;">⚡</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#3949ab;">2. Kontakt</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">Kurzschluss REX+ ↔ GND am Hub (~50ms)</div>
+      </div>
+      <div style="background:#e3f2fd;border:1px solid #90caf9;border-right:none;padding:12px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:4px;">🔓</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#1565c0;">3. Hub reagiert</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">REX-Signal erkannt → Relais schließt</div>
+      </div>
+      <div style="background:#fff3e0;border:1px solid #ffcc80;border-right:none;padding:12px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:4px;">🚪</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#e65100;">4. Tür öffnet</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">E-Öffner gibt nach für 1–3 Sek.</div>
+      </div>
+      <div style="background:#fce4ec;border:1px solid #f48fb1;padding:12px;text-align:center;border-radius:0 8px 8px 0;">
+        <div style="font-size:1.4rem;margin-bottom:4px;">📋</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#c62828;">5. Log-Eintrag</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">"REX-Exit" im Audit-Log</div>
+      </div>
+    </div>
+
+    <h4 style="margin-bottom:10px;">Verkabelung — Drücker ↔ UA-Hub-Door</h4>
+    <div class="ascii-box" style="font-size:0.8rem;line-height:1.9;margin-bottom:16px;">
+<pre>
+  PoE-Switch ──── CAT6 ────▶  UA-Hub-Door
+                              ┌──────────────────────────────┐
+                              │  ...                         │
+                              │  REX  ────────┐              │
+                              │  GND  ────────┼──┐           │
+                              └──────────────┼──┼───────────-┘
+                                             │  │
+                                        2-Draht-Kabel
+                                        (max. ~100m,
+                                        Standard 0.75mm²)
+                                             │  │
+                              ┌──────────────┼──┼────────────┐
+                              │  Drücker /   │  │            │
+                              │  Taster      └──┘            │
+                              │  (Momentkontakt, trocken)    │
+                              └───────────────────────────────┘
+
+  Taster = Potentialfreier Momentkontakt (kein eigener Strom!)
+  REX-Typ: NO (Normally Open) = Standard
+  Bei Betätigung: Kurzschluss REX ↔ GND → Hub öffnet</pre>
+    </div>
+
+    <h4 style="margin-bottom:10px;">Einstellungen im Unifi Access Controller</h4>
+    <div class="table-wrap" style="margin-bottom:16px;">
+      <table>
+        <thead>
+          <tr><th>Einstellung</th><th>Funktion</th><th>Wert</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>REX Typ</td><td>NO oder NC Kontakt am Taster</td><td>NO (Standard, Schließer)</td></tr>
+          <tr><td>REX Öffnungszeit</td><td>Wie lange E-Öffner nach REX-Signal offen bleibt</td><td>1–3 Sek. (wie Reader)</td></tr>
+          <tr><td>REX Log</td><td>Soll REX-Öffnung im Audit-Log erscheinen?</td><td>Ja — als "REX-Exit"</td></tr>
+          <tr><td>REX Sensor-Typ</td><td>Taster (momentary) oder PIR (level-triggered)</td><td>Je nach Hardware</td></tr>
+          <tr><td>Türsensor</td><td>Reed-Kontakt prüft ob Tür wirklich öffnet</td><td>Optional, empfohlen</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Taster-Typen &amp; Produkte</h3>
+  <div class="card-grid">
+    <div class="card" style="border-left:4px solid var(--accent-green);">
+      <div class="chip chip-green" style="margin-bottom:8px;">Einfachste Variante</div>
+      <h4>Vorhandener Klingel-/Drücktaster</h4>
+      <ul class="hw-specs">
+        <li>Jeder Momentkontakt-Taster (Schließer, NO)</li>
+        <li>Klingeltaster, Lichtschalter-Taster, Türgong-Knopf</li>
+        <li>2 Drähte direkt an REX + GND am Hub</li>
+        <li><strong>Preis: 0 € (bereits vorhanden)</strong></li>
+        <li>Achtung: kein eigener Strom im Taster nötig</li>
+      </ul>
+      <div class="ascii-note" style="font-size:0.83rem;margin-top:10px;">Wenn ein Klingeltaster an der Tür bereits existiert — einfach ummklemmen auf REX-Eingang des Hubs.</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--accent-blue);">
+      <div class="chip chip-blue" style="margin-bottom:8px;">Standard</div>
+      <h4>Design-Drücktaster (Aufputz / Unterputz)</h4>
+      <ul class="hw-specs">
+        <li>Jung 506 E, Gira, Busch-Jäger — passend zu Schalterserien</li>
+        <li>Aufputz (ohne Stemmen) oder Unterputz (in UP-Dose)</li>
+        <li>Momentkontakt NO, 2 Klemmen</li>
+        <li>Optional: mit LED-Beleuchtung (braucht 12V vom Hub AUX)</li>
+        <li><strong>Preis: ~8–25 €</strong></li>
+      </ul>
+      <div class="ascii-note" style="font-size:0.83rem;margin-top:10px;">Kann direkt in vorhandene Schalterdosen eingebaut werden — gleiche Verkabelung wie normaler Schalter.</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--accent-purple);">
+      <div class="chip chip-purple" style="margin-bottom:8px;">Komfort</div>
+      <h4>Berührungs-/Touch-Taster</h4>
+      <ul class="hw-specs">
+        <li>Nur antippen reicht — kein Drücken nötig</li>
+        <li>Kapazitiver Sensor, Edelstahl oder Glas</li>
+        <li>Gleichstrombetrieb (12 V vom Hub-AUX-Ausgang)</li>
+        <li>Zeitverzögerung einstellbar</li>
+        <li><strong>Preis: ~20–60 €</strong></li>
+      </ul>
+      <div class="ascii-note" style="font-size:0.83rem;margin-top:10px;">Für repräsentative Eingänge — elegante, vandalismussichere Alternative zum Drücktaster.</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--accent-orange);">
+      <div class="chip chip-orange" style="margin-bottom:8px;">Automatisch / Hands-free</div>
+      <h4>PIR-Bewegungsmelder</h4>
+      <ul class="hw-specs">
+        <li>Erkennt Annähern → öffnet automatisch (kein Drücken)</li>
+        <li>Für barrierefreie Zugänge oder Lagerbereiche</li>
+        <li>Relaisausgang NO, 12 V Versorgung vom Hub</li>
+        <li>Erfassungsbereich: ~1–3 m, einstellbar</li>
+        <li><strong>Preis: ~20–60 €</strong></li>
+      </ul>
+      <div class="ascii-note" style="font-size:0.83rem;margin-top:10px;">Achtung: öffnet bei jeder Bewegung — nur für Innenbereiche mit definiertem Zugangsbereich.</div>
+    </div>
+  </div>
+
+  <h3>Anschluss-Übersicht — Terminal-Belegung UA-Hub-Door</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Terminal</th><th>Funktion</th><th>Drücker-Anschluss</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>REX</strong></td><td>Request-to-Exit Eingang</td><td>Klemme 1 des Tasters</td></tr>
+        <tr><td><strong>GND</strong></td><td>Masse / Bezugspotential</td><td>Klemme 2 des Tasters</td></tr>
+        <tr><td><strong>AUX 12V</strong></td><td>12V Hilfsversorgung (1A)</td><td>Für beleuchteten Taster / PIR / Touch</td></tr>
+        <tr><td><strong>DOOR</strong></td><td>Türsensor-Eingang (Reed)</td><td>Türsensor (optional, separat)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box" style="margin-top:16px;">
+    <strong>Kabeltyp:</strong> Standard-Klingelkabel 2× 0,75 mm² oder YR 2× 0,8 mm². Maximale Leitungslänge: ~100 m. Kein Abschirmung nötig. <strong>Potentialfreier Kontakt</strong> — der Taster führt keine eigene Spannung, nur das Signal des Hub-internen Pull-up-Widerstands.
+  </div>
+
+  <h3>Kosten — Drücker pro Tür</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Variante</th><th>Produkt-Beispiel</th><th>Preis</th><th>Kabel extra</th></tr>
+      </thead>
+      <tbody>
+        <tr style="background:#e8f5e9;"><td><strong>Vorhanden (0 €)</strong></td><td>Bestehender Klingeltaster</td><td class="yes"><strong>0 €</strong></td><td>0 € (schon verlegt)</td></tr>
+        <tr><td><strong>Standard-Drücker</strong></td><td>Jung 506 E / Gira 0126xx</td><td>~8–15 €</td><td>~5–15 € Klingeldraht</td></tr>
+        <tr><td><strong>Design-Touch-Taster</strong></td><td>Bosch / HID / Fermax</td><td>~30–60 €</td><td>~5–15 €</td></tr>
+        <tr><td><strong>PIR-Sensor</strong></td><td>Optex RX-40PI / Bosch DS150i</td><td>~25–50 €</td><td>~5–15 €</td></tr>
+        <tr class="total-row"><td colspan="2"><strong>Typisch pro Tür (Standard-Drücker)</strong></td><td><strong>~10–25 €</strong></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SEK 9: ZYLINDER ===== -->
+<section id="zylinder">
+  <h2>Zylinder-Alternativen zu Motorschlössern</h2>
+
+  <div class="danger-box">
+    <strong>Wichtige Klarstellung — E-Öffner ≠ Motorschloss:</strong><br>
+    Ein <strong>E-Öffner (Electric Strike)</strong> ist <em>kein</em> Motorschloss. Er ersetzt nur das Schließblech im <strong>Türrahmen</strong> — die Tür selbst, ihr Schloss und der Zylinder bleiben vollständig unverändert. Der Riegel des mechanischen Schlosses liegt im E-Öffner auf; bei Stromimpuls gibt der E-Öffner kurz nach, die Tür kann aufgedrückt werden. <strong>Kein Einbau in die Tür nötig.</strong> Dies ist die Standard-Lösung für alle Unifi-Türen und funktioniert bei praktisch jeder Türkonstruktion (Holz, Stahl, Alu-Rahmen).
+  </div>
+
+  <div class="info-box">
+    Falls wirklich <strong>kein E-Öffner</strong> im Rahmen möglich ist (z. B. Ganzglas-Türen, nicht normierte Profilsysteme, Brandschutztüren mit speziellem Beschlag), gibt es 4 Wege um Unifi trotzdem zu nutzen:
+  </div>
+
+  <h3>Weg 1 — E-Öffner im Rahmen (Standard)</h3>
+  <div class="opener-card" style="border-color:var(--accent-green);">
+    <h4 style="color:var(--accent-green);">Electric Strike — Rahmen-Einbau, keine Türmodifikation</h4>
+    <div class="opener-meta">
+      <span>60–150 €</span>
+      <span>12 V DC vom UA-Hub</span>
+      <span>Fail-secure oder Fail-safe</span>
+      <span style="background:#e8f5e9;color:#2e7d32;">Direkt Unifi-kompatibel</span>
+    </div>
+    <p>Der Schließkasten im <strong>Rahmen</strong> wird durch einen elektrischen E-Öffner ersetzt. Das bestehende Türschloss bleibt. Der UA-Hub-Door liefert 12 V / 1 A direkt — kein separates Netzteil nötig. Fail-secure = bleibt zu bei Stromausfall (Sicherheitstüren). Fail-safe = öffnet bei Stromausfall (Fluchttüren).</p>
+    <div class="compat-row">
+      <strong>Marken:</strong> effeff (ASSA ABLOY) 118E, Fermax, Ritto, Geze — Normfalz- und Sturzeinbau. Vor Kauf: Zargenmaß und Fallenhöhe prüfen (Elektrofachbetrieb).
+    </div>
+    <div class="warn-box" style="padding:10px 14px;margin-top:10px;font-size:0.88rem;">
+      <strong>Einzige Einschränkung:</strong> Türrahmen muss einen E-Öffner aufnehmen können (Stulpbreite ≥ 18 mm, Normfalz DIN 18251). Bei Sonder-Profilzylindern oder Ganzglas-Türen → Weg 3 oder 4.
+    </div>
+  </div>
+
+  <h3>Weg 2 — UA-Retrofit-Hub + Wiegand/OSDP-Leser (Bestandssysteme)</h3>
+  <div class="opener-card">
+    <h4>Unifi Retrofit Hub — für bestehende Wiegand-Leser oder OSDP</h4>
+    <div class="opener-meta">
+      <span>UA-RETROFIT-HUB-2: ~120–160 €</span>
+      <span>DC-Stromversorgung (12/24 V)</span>
+      <span>2 Türen pro Hub</span>
+    </div>
+    <p>Der <strong>UA-Retrofit-Hub-2</strong> ist Unifis Lösung für bestehende Installationen mit vorhandenen Wiegand-Lesern. Er bindet drittherstellerspezifische Wiegand-Reader in den Unifi-Controller ein — inklusive Nutzer-Verwaltung, Zeitpläne und Audit-Log. Der Hub steuert weiterhin den Türöffner über seinen Relais-Ausgang.</p>
+    <ul class="hw-specs">
+      <li>2× Wiegand-Reader-Eingänge (Data 0 / Data 1 / GND)</li>
+      <li>Oder: 1× OSDP-Eingang (nur Unifi Retrofit Reader — nicht Dritt-OSDP!)</li>
+      <li>Relais-Ausgang für E-Öffner / Magnetschloss (wie normaler Hub-Door)</li>
+      <li>Verwaltung vollständig über Unifi Access Controller</li>
+    </ul>
+    <div class="compat-row">
+      <strong>Einsatz:</strong> Wenn bereits Wiegand-Leser vorhanden oder als Brücke zu Wiegand-fähigen Schlössern (Schlage AD-Series, HID). <strong>Hinweis:</strong> Drittherstellerspezifische OSDP-Leser werden NICHT unterstützt — nur Wiegand.
+    </div>
+  </div>
+
+  <h3>Weg 3 — Wireless Smart-Zylinder (Hybrid-Betrieb, kein Kabelzug)</h3>
+  <div class="warn-box">
+    <strong>Wichtig:</strong> Wireless Smart-Zylinder lassen sich <em>nicht nativ</em> in Unifi Access einbinden. Sie laufen als <strong>eigenständiges Parallelsystem</strong>. Vorteil: kein Kabelzug in die Tür, Retrofit. Nachteil: zwei getrennte Apps/Systeme, kein gemeinsames Audit-Log.
+  </div>
+
+  <div class="card-grid">
+    <div class="card" style="border-left:4px solid var(--accent-blue);">
+      <div class="chip chip-blue" style="margin-bottom:8px;">Option A</div>
+      <h4>ASSA ABLOY Aperio Wireless Zylinder</h4>
+      <ul class="hw-specs">
+        <li>Funk-Zylinder (868 MHz), ersetzt Profilzylinder 1:1</li>
+        <li>Online über <strong>Aperio Hub</strong> (Wiegand / RS-485 / IP)</li>
+        <li>Bis zu 16 Zylinder an einem IP-Hub</li>
+        <li>Preis Zylinder: ~300–500 €, Hub: ~200–400 €</li>
+        <li>Integriert in 100+ ACS — Unifi ist <span class="warn">NICHT zertifiziert</span></li>
+        <li>Wiegand-Hub-Umweg: technisch möglich, aber nicht offiziell unterstützt</li>
+      </ul>
+      <div class="ascii-note" style="font-size:0.83rem;margin-top:10px;">Nur wenn Aperio ohnehin wegen weiterer Türen (Büros etc.) im Einsatz. Als Unifi-Erweiterung zu komplex.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent-green);">
+      <div class="chip chip-green" style="margin-bottom:8px;">Option B — Einfachste Retrofit-Lösung</div>
+      <h4>Nuki Smart Lock Ultra + Bridge</h4>
+      <ul class="hw-specs">
+        <li>BLE + Aliro (Apple/Google Wallet <strong>kostenlos</strong>)</li>
+        <li>Kein Kabelzug, Batterie (~6 Monate)</li>
+        <li>Nur Innenanwendung (kein IP65)</li>
+        <li>Preis: ~199 € Smart Lock + ~69 € Bridge</li>
+        <li>Unifi-Anbindung: <span class="warn">nicht nativ</span> — via Home Assistant API möglich</li>
+        <li>Audit-Log nur in Nuki-App</li>
+      </ul>
+      <div class="ascii-note" style="font-size:0.83rem;margin-top:10px;"><strong>Ideal für:</strong> Innentür IT1 (Büro) — kein Kabelzug, Wallet-Komfort kostenlos.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent-purple);">
+      <div class="chip chip-purple" style="margin-bottom:8px;">Option C</div>
+      <h4>dormakaba Evolo Smart / cylera</h4>
+      <ul class="hw-specs">
+        <li>BLE Profilzylinder, Retrofit ohne Kabelzug</li>
+        <li>cylera: BLE + NFC-Karte</li>
+        <li>Preis: ~250–400 €/Zylinder</li>
+        <li>Unifi-Anbindung: <span class="warn">nicht nativ</span> — Standalone</li>
+      </ul>
+      <div class="ascii-note" style="font-size:0.83rem;margin-top:10px;">Hochwertigere Mechanik als Nuki, robuster für gewerblichen Einsatz.</div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent-brown);">
+      <div class="chip chip-brown" style="margin-bottom:8px;">Option D</div>
+      <h4>SimonsVoss MobileKey / 3060 Zylinder</h4>
+      <ul class="hw-specs">
+        <li>Funk-Zylinder (868 MHz + BLE), Transponder + App</li>
+        <li>Bis 20 Türen / 100 Nutzer (MobileKey)</li>
+        <li>Preis Zylinder: ~200–350 €</li>
+        <li>Unifi-Anbindung: <span class="warn">nicht nativ</span> — Standalone</li>
+      </ul>
+      <div class="ascii-note" style="font-size:0.83rem;margin-top:10px;">Made in Germany, sehr robuste Zylinder, bewährt in Gewerbe.</div>
+    </div>
+  </div>
+
+  <h3>Weg 4 — Magnetschloss (Fail-safe, kein Einbau in Tür)</h3>
+  <div class="opener-card" style="border-color:#1565c0;">
+    <h4>Magnetic Lock — Montage am Türblatt / Zarge, kein Türeinbau</h4>
+    <div class="opener-meta">
+      <span>100–400 €</span>
+      <span>12 V / 24 V DC</span>
+      <span>IMMER Fail-safe</span>
+      <span style="background:#e3f2fd;color:#1565c0;">Direkt Unifi-kompatibel</span>
+    </div>
+    <p>Das Magnetschloss wird <strong>oben an Türblatt und Rahmen</strong> aufgeschraubt — kein Einbau in die Tür nötig, keine Zargenmodifikation. Hält durch Magnetkraft (270–600 kg). Keine beweglichen Teile. <strong>Immer Fail-safe</strong> — öffnet bei Stromausfall, daher Pflicht für Fluchttüren.</p>
+    <div class="compat-row">
+      Magnetschloss ist die einfachste nachträgliche Lösung — gilt für Glas-, Stahl- und Holztüren gleichermaßen. REX-Taster (Knopf innen) oder PIR-Sensor für automatisches Öffnen von innen.
+    </div>
+  </div>
+
+  <h3>Vergleich der 4 Wege</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Weg</th><th>Lösung</th><th>Unifi-nativ?</th><th>Kabelzug in Tür?</th><th>Preis ca.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>E-Öffner im Rahmen</td><td class="yes">&#10003; 100%</td><td class="yes">Nein (nur Rahmen)</td><td>60–150 €</td></tr>
+        <tr><td><strong>2</strong></td><td>UA-Retrofit-Hub + Wiegand</td><td class="yes">&#10003; nativ</td><td class="warn">Leser-Kabel nötig</td><td>120–160 € Hub extra</td></tr>
+        <tr><td><strong>3a</strong></td><td>Nuki / dormakaba (wireless)</td><td class="no">&#10007; Standalone</td><td class="yes">Nein (Batterie)</td><td>200–500 € /Tür</td></tr>
+        <tr><td><strong>3b</strong></td><td>ASSA ABLOY Aperio</td><td class="no">&#10007; nicht zertifiziert</td><td class="yes">Nein (Funk)</td><td>500–900 € /Tür</td></tr>
+        <tr><td><strong>4</strong></td><td>Magnetschloss (aufschrauben)</td><td class="yes">&#10003; 100%</td><td class="yes">Nein (Oberfläche)</td><td>100–400 €</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SEK 10: PREISE ===== -->
+
+<section id="preise">
+  <h2>Preisübersicht &mdash; System-Hardware</h2>
+  <div class="warn-box">
+    <strong>Bepreist wird ausschliesslich System-Hardware</strong> (Reader, Controller, Subscription).
+    Türöffner (E-Öffner, Magnetschloss) und Torantriebe sind nicht enthalten, da Antriebe bereits vorhanden und Türöffner gesondert zu planen sind.
+  </div>
+
+  <div class="price-tier" style="border-left:4px solid var(--tier-budget);">
+    <div class="price-header">
+      <div class="tier-chip tier-1">Tier 1 &mdash; Budget</div>
+      <div class="total">~1.550 &euro;</div>
+      <div style="font-size:0.85rem;color:var(--muted);">Türen only &mdash; Tore via Umweg (Shelly/HA)</div>
+    </div>
+    <table class="price-lines">
+      <tr><td colspan="2" style="color:var(--muted);font-size:0.82rem;padding-top:10px;font-weight:600;">2 × Außentür + 1 × Haupttür</td></tr>
+      <tr><td>3 &times; Nuki Smart Lock Ultra (199 &euro;) + Keypad 2 NFC (179 &euro;)</td><td>1.134 &euro;</td></tr>
+      <tr><td colspan="2" style="color:var(--muted);font-size:0.82rem;padding-top:10px;font-weight:600;">1 × Innentür</td></tr>
+      <tr><td>1 &times; Nuki Smart Lock 4.0 (150 &euro;) + Keypad 2 (100 &euro;)</td><td>250 &euro;</td></tr>
+      <tr><td colspan="2" style="color:var(--muted);font-size:0.82rem;padding-top:10px;font-weight:600;">Infrastruktur</td></tr>
+      <tr><td>2 &times; Nuki Bridge (Remote-Zugang &amp; Apple Wallet)</td><td>160 &euro;</td></tr>
+      <tr class="total-row"><td>Gesamt System-Hardware (Türen ohne Tore)</td><td>~1.550 &euro;</td></tr>
+    </table>
+    <div class="price-note">
+      Subscription: 0 &euro;/Jahr. Apple/Google Wallet (Aliro) kostenlos inklusive.<br>
+      Tore T1/T2: Nuki nicht nativ — Umweg via Shelly-Relais (~50&euro;/Tor) möglich, aber kein echtes Zugangskontrollsystem.<br>
+      Türöffner (E-Öffner): 3 &times; ~80 &euro; = ~240 &euro; (separat, nicht oben enthalten).
+    </div>
+  </div>
+
+  <div class="price-tier" style="border-left:4px solid var(--tier-mid);">
+    <div class="price-header">
+      <div class="tier-chip tier-3">Tier 3 &mdash; Unifi Access &#11088; Empfehlung</div>
+      <div class="total">~2.013 &euro;</div>
+      <div style="font-size:0.85rem;color:var(--muted);">Alle 6 Zugangspunkte &mdash; Türen + Tore + Wallet + optional LPR</div>
+    </div>
+    <table class="price-lines">
+      <tr><td colspan="2" style="color:var(--muted);font-size:0.82rem;padding-top:10px;font-weight:600;">2 × Außentür (Nord)</td></tr>
+      <tr><td>2 &times; UA-G3-Pro Reader (~225 &euro;)</td><td>450 &euro;</td></tr>
+      <tr><td>2 &times; UA-Hub-Door Controller (~161 &euro;)</td><td>322 &euro;</td></tr>
+      <tr class="subtotal"><td>Zwischensumme Außentüren</td><td>772 &euro;</td></tr>
+
+      <tr><td colspan="2" style="color:var(--muted);font-size:0.82rem;padding-top:10px;font-weight:600;">1 × Haupttür (Süd, Haupteingang — Tür, kein Tor)</td></tr>
+      <tr><td>1 &times; UA-G3-Pro Reader (~225 &euro;)</td><td>225 &euro;</td></tr>
+      <tr><td>1 &times; UA-Hub-Door Controller (~161 &euro;)</td><td>161 &euro;</td></tr>
+      <tr class="subtotal"><td>Zwischensumme Haupttür</td><td>386 &euro;</td></tr>
+
+      <tr><td colspan="2" style="color:var(--muted);font-size:0.82rem;padding-top:10px;font-weight:600;">1 × Innentür Büro (rechts)</td></tr>
+      <tr><td>1 &times; UA-Ultra (Reader + Hub in einem, kein separater Hub)</td><td>145 &euro;</td></tr>
+      <tr class="subtotal"><td>Zwischensumme Innentür</td><td>145 &euro;</td></tr>
+
+      <tr><td colspan="2" style="color:var(--muted);font-size:0.82rem;padding-top:10px;font-weight:600;">2 × Tor T1/T2 (Antriebe vorhanden — nur Hub + Reader)</td></tr>
+      <tr><td>2 &times; UA-Hub-Gate (~240 &euro;)</td><td>480 &euro;</td></tr>
+      <tr><td>2 &times; UA-G3 Reader (~115 &euro;)</td><td>230 &euro;</td></tr>
+      <tr class="subtotal"><td>Zwischensumme Tore</td><td>710 &euro;</td></tr>
+
+      <tr class="total-row"><td>Gesamt System-Hardware (alle 6 Punkte)</td><td>~2.013 &euro;</td></tr>
+      <tr><td style="color:var(--accent-blue);">+ Optional: UVC-AI-LPR für Tore (1 Kamera)</td><td style="color:var(--accent-blue);">+450 &euro;</td></tr>
+      <tr class="total-row" style="color:var(--accent-blue);"><td>Gesamt mit LPR-Kamera</td><td>~2.463 &euro;</td></tr>
+    </table>
+    <div class="price-note">
+      Touch Pass (Apple/Google Wallet, optional): ~5 &euro;/Nutzer/Jahr &middot; Beispiel 20 Nutzer = ~100 &euro;/Jahr.<br>
+      Türöffner (E-Öffner): AT1 + AT2 + HT + IT1 = 4 &times; ~80 &euro; = ~320 &euro; (separat geplant).<br>
+      Tore T1/T2: kein Türöffner nötig — Antriebe vorhanden = 0 &euro;.<br>
+    </div>
+  </div>
+
+  <div class="price-tier" style="border-left:4px solid var(--tier-ent);">
+    <div class="price-header">
+      <div class="tier-chip tier-4">Tier 4 &mdash; Enterprise</div>
+      <div class="total">~12.000&ndash;20.000 &euro;</div>
+    </div>
+    <table class="price-lines">
+      <tr><td>Reader/Terminal pro Tür (Salto / SimonsVoss / HID)</td><td>1.000&ndash;2.000 &euro;/Tür</td></tr>
+      <tr><td>6 Zugangspunkte gesamt</td><td>~6.000&ndash;12.000 &euro;</td></tr>
+      <tr><td>Server + Software-Lizenz (SALTO SPACE o.ä.)</td><td>~3.000&ndash;5.000 &euro;</td></tr>
+      <tr><td>Installation + Inbetriebnahme</td><td>~3.000&ndash;5.000 &euro;</td></tr>
+      <tr class="total-row"><td>Gesamt</td><td>~12.000&ndash;20.000 &euro;</td></tr>
+    </table>
+    <div class="price-note">Wartungsvertrag: ~1.500&ndash;3.000 &euro;/Jahr. Vollbiometrie, Normenkonformität (EN 50133), komplexe Berechtigungsmodelle inklusive.</div>
+  </div>
+
+  <h3>Kostenvergleich auf einen Blick</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Tier</th><th>System</th><th>System-Hardware</th><th>Türöffner extra</th><th>Abo/Jahr</th><th>Tore abgedeckt?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="chip chip-green">Tier 1</span></td><td>Nuki</td><td>~1.550 &euro;</td><td>3 &times; ~80 &euro; = ~240 &euro;</td><td>0 &euro;</td><td class="warn">Umweg nötig</td></tr>
+        <tr><td><span class="chip chip-blue">Tier 3</span></td><td>Unifi Access</td><td>~2.000 &euro; (opt. +450 LPR)</td><td>4 &times; ~80 &euro; = ~320 &euro;</td><td>opt. 5 &euro;/U/J</td><td class="yes">&#10003; Gate Hub</td></tr>
+        <tr><td><span class="chip" style="background:#e8f5e9;color:#388e3c;">Tier 3b</span></td><td>Loxone</td><td>~2.500&ndash;4.000 &euro;</td><td>~300&ndash;500 &euro;</td><td>0 &euro;</td><td class="yes">&#10003; Relais</td></tr>
+        <tr><td><span class="chip chip-red">Tier 4</span></td><td>Enterprise (Salto)</td><td>~9.000&ndash;15.000 &euro;</td><td>enthalten</td><td>~1.500&ndash;3.000 &euro;</td><td class="yes">&#10003;</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SEK 11: MINDMAP ===== -->
+<section id="mindmap">
+  <h2>Mindmap &mdash; Systemübersicht</h2>
+  <div id="markmap-container">
+    <iframe src="schliessystem_mindmap.html" style="width:100%;height:100%;border:none;display:block;" title="Mindmap Schließsystem"></iframe>
+  </div>
+</section>
+
+<!-- ===== SEK 12: EMPFEHLUNG ===== -->
+<section id="empfehlung" class="sec-empfehlung">
+  <h2>Empfehlung</h2>
+
+  <div class="rec-box">
+    <h3>Empfehlung: Unifi Access (Tier 3) &mdash; mit optionalem Nuki-Hybrid für Innentür</h3>
+    <p style="margin-bottom:16px;">Unifi Access ist das einzige System in diesem Preissegment, das Türen, bestehende Torantriebe, Wallet-Zugang und Kennzeichenerkennung in einer einzigen Plattform vereint. Für die Innentür kann optional ein Nuki-Digitalzylinder eingesetzt werden (kein Kabelzug, Aliro-Wallet kostenlos).</p>
+    <ol class="rec-steps">
+      <li><strong>5 &times; Aussentür</strong> &mdash; UA-G3-Pro (Kamera + Intercom) + UA-Hub-Door + E-Öffner fail-secure. Touch Pass (Apple/Google Wallet) für alle Mitarbeiter aktivieren.</li>
+      <li><strong>1 &times; Haupttor</strong> &mdash; UA-Hub-Gate + UA-G3-Pro + UVC-AI-LPR Kamera. Firmenfahrzeuge per Kennzeichen hinterlegen &rarr; automatisches Öffnen ohne Tippen.</li>
+      <li><strong>2 &times; Seitentor</strong> &mdash; UA-Hub-Gate + UA-G3. Bestehende Antriebe per Impulskontakt angebunden &mdash; keine neuen Antriebe nötig.</li>
+      <li><strong>1 &times; Innentür</strong> &mdash; UA-Ultra (All-in-One, spart separaten Hub). Alternativ: Nuki Smart Lock Ultra + Keypad 2 Pro NFC (Aliro-Wallet kostenlos, kein Kabelzug).</li>
+      <li><strong>Touch Pass Setup</strong> &mdash; Alle Mitarbeiter via Unifi Endpoint App einrichten. 10 Passes pro G3-Reader kostenlos im ersten Jahr; danach ~5 &euro;/Nutzer/Jahr oder Nuki-Hybrid für Wallet-frei.</li>
+      <li><strong>Notfallschlüssel</strong> &mdash; Mechanischen Schliessplan parallel aufrechterhalten (Notfall bei Stromausfall / Systemausfall).</li>
+    </ol>
+  </div>
+
+  <div class="card-grid" style="margin-top:20px;">
+    <div class="card">
+      <div class="chip chip-green" style="margin-bottom:8px;">Pro Unifi</div>
+      <ul style="padding-left:18px;font-size:0.9rem;">
+        <li>Tore und Türen in einem System</li>
+        <li>Apple/Google Wallet (Touch Pass) nativ</li>
+        <li>Vorhandene Torantriebe direkt nutzbar</li>
+        <li>LPR/Kennzeichen für Haupttor</li>
+        <li>Kamera + Intercom an Aussentüren</li>
+        <li>Zentrales Audit-Log</li>
+        <li>Keine Cloud-Abhängigkeit</li>
+        <li>Unifi-Ecosystem-Synergie (Switch, Kamera)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="chip chip-orange" style="margin-bottom:8px;">Zu beachten</div>
+      <ul style="padding-left:18px;font-size:0.9rem;">
+        <li>Touch Pass: 5 &euro;/User/Jahr nach Gratisphase</li>
+        <li>IP55 (nicht IP65) &mdash; Aussenbereich prüfen</li>
+        <li>Türöffner separat beschaffen (~500&ndash;800 &euro;)</li>
+        <li>Samsung Wallet: nicht unterstützt (kein Aliro)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="chip chip-blue" style="margin-bottom:8px;">Alternativen prüfen wenn...</div>
+      <ul style="padding-left:18px;font-size:0.9rem;">
+        <li><strong>Gebäudeautomation geplant</strong> &rarr; Loxone</li>
+        <li><strong>Budget unter 2.500 &euro;</strong> &rarr; Nuki (Türen only)</li>
+        <li><strong>Fingerabdruck zwingend</strong> &rarr; ZKTeco als Add-on</li>
+        <li><strong>Premium-Intercom</strong> &rarr; 2N IP Verso am Haupttor</li>
+        <li><strong>Behörden/Compliance</strong> &rarr; Enterprise (Salto/HID)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:20px;">
+    <strong>Nächste Schritte:</strong>
+    Standortbegehung (IP55 Aussentür-Eignung prüfen) &rarr; Mitarbeiterzahl festlegen (Touch-Pass-Kosten) &rarr;
+    Torantriebe ausmessen (Klemmenplan für Impulskontakt) &rarr;
+    Unifi-Controller-Hardware prüfen (vorhandener Unifi-Switch mit PoE++ Port für UA-Hub-Gate?).
+  </div>
+
+<h3 style="margin-top:24px;">Risiken &amp; Notfall-Szenarien</h3>
+<div class="card-grid">
+  <div class="card" style="border-left:4px solid #c62828;">
+    <div class="chip chip-red" style="margin-bottom:8px;">Stromausfall</div>
+    <h4>Was passiert bei Stromausfall?</h4>
+    <ul style="padding-left:18px;font-size:0.88rem;">
+      <li><strong>E-Öffner Fail-secure:</strong> Tür bleibt zu → mit Schlüssel öffenbar</li>
+      <li><strong>Magnetschloss Fail-safe:</strong> Tür öffnet automatisch (Fluchttür-Pflicht!)</li>
+      <li><strong>Tore:</strong> Antriebe sind bereits vorhanden — Verhalten je nach Antrieb-Modell</li>
+      <li><strong>UA-Hub:</strong> PoE-Switch braucht USV für Weiterbetrieb</li>
+    </ul>
+  </div>
+  <div class="card" style="border-left:4px solid #e65100;">
+    <div class="chip chip-orange" style="margin-bottom:8px;">Netzwerk-Ausfall</div>
+    <h4>Internet-/Controller-Ausfall</h4>
+    <ul style="padding-left:18px;font-size:0.88rem;">
+      <li><strong>Touch Pass / Wallet:</strong> funktioniert offline (Credential auf Gerät)</li>
+      <li><strong>Lokale Verwaltung:</strong> Controller läuft im LAN — kein Internet nötig</li>
+      <li><strong>Bei Controller-Ausfall:</strong> Reader-zu-Hub-Kommunikation läuft lokal weiter, bekannte Karten funktionieren</li>
+      <li><strong>Remote-Zugang via Cloud:</strong> nur Cloud weg, nicht Türöffnung</li>
+    </ul>
+  </div>
+  <div class="card" style="border-left:4px solid #6a1b9a;">
+    <div class="chip chip-purple" style="margin-bottom:8px;">Hardware-Defekt</div>
+    <h4>Was bei Komponenten-Ausfall?</h4>
+    <ul style="padding-left:18px;font-size:0.88rem;">
+      <li><strong>Reader/Hub defekt:</strong> Mechanischer Schlüssel funktioniert weiter (parallel zum E-Öffner)</li>
+      <li><strong>E-Öffner defekt:</strong> Mechanisches Schloss bleibt funktionsfähig</li>
+      <li><strong>RMA-Zeit:</strong> Unifi typisch 1–3 Wochen — Spare-Hub als Backup sinnvoll</li>
+      <li><strong>Notfallschlüssel:</strong> mechanischen Schließplan parallel pflegen</li>
+    </ul>
+  </div>
+  <div class="card" style="border-left:4px solid #2e7d32;">
+    <div class="chip chip-green" style="margin-bottom:8px;">DSGVO / Datenschutz</div>
+    <h4>Rechtliche Aspekte</h4>
+    <ul style="padding-left:18px;font-size:0.88rem;">
+      <li><strong>Audit-Log:</strong> Personenbezogene Daten — Aufbewahrungsfrist festlegen</li>
+      <li><strong>G3-Pro Kamera-Snapshot:</strong> Betriebsvereinbarung empfohlen</li>
+      <li><strong>LPR-Kennzeichen:</strong> DSFA (Datenschutz-Folgenabschätzung) prüfen, Schild "Videoüberwachung"</li>
+      <li><strong>Mitarbeiter-Aufklärung:</strong> Welche Daten werden wann erfasst</li>
+    </ul>
+  </div>
+  <div class="card" style="border-left:4px solid #1565c0;">
+    <div class="chip chip-blue" style="margin-bottom:8px;">Wartung</div>
+    <h4>Lebensdauer &amp; Updates</h4>
+    <ul style="padding-left:18px;font-size:0.88rem;">
+      <li><strong>E-Öffner:</strong> Bis 1 Mio. Zyklen (~10+ Jahre bei 250 Öffnungen/Tag)</li>
+      <li><strong>Firmware-Updates:</strong> Automatisch über Controller, monatlich</li>
+      <li><strong>Controller-Backup:</strong> regelmäßig sichern (Cloud Key Gen2 hat eingebautes Backup)</li>
+      <li><strong>Touch Pass Re-Sub:</strong> Nach 1 Jahr Gratisphase 5 €/Nutzer/Jahr — Entscheidung 11/12 Monate vorher</li>
+    </ul>
+  </div>
+  <div class="card" style="border-left:4px solid #f9a825;">
+    <div class="chip" style="background:#fff8e1;color:#f9a825;margin-bottom:8px;">Bau / Brandschutz</div>
+    <h4>Bauordnungs-Anforderungen</h4>
+    <ul style="padding-left:18px;font-size:0.88rem;">
+      <li><strong>Fluchttüren:</strong> Magnetschloss Fail-safe Pflicht (EN 179 / EN 1125)</li>
+      <li><strong>Brandschutztüren:</strong> Spezielle E-Öffner mit Zulassung nötig</li>
+      <li><strong>Versicherung:</strong> VdS-konformität bei Einbruchschutz prüfen</li>
+      <li><strong>Sachverständiger:</strong> bei Fluchtwegen zwingend hinzuziehen</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+
+<!-- ===== SEK 13: INSTALLATION ===== -->
+<section id="installation">
+  <h2>Installation &amp; Kabelzug — Anfallende Arbeiten</h2>
+  <div class="info-box">
+    <strong>Übersicht:</strong> Kabelzug und Türöffner-Einbau erfordern einen Elektrofachbetrieb. Reader/Hub montieren ist einfach (Schraubmontage + Kabelanschluss). Inbetriebnahme via Unifi-App ist IT-seitig.
+  </div>
+
+  <h3>Schritt-für-Schritt — Pro Zugangspunkt (Türen AT1 / AT2 / HT)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Arbeit</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>CAT6-Kabel vom PoE-Switch zum Hub-Montageort verlegen (inkl. Leerrohr / Kabelkanal)</td></tr>
+        <tr><td>2</td><td>Unterputz- oder Aufputzdose setzen (für Hub und ggf. REX-Taster innen)</td></tr>
+        <tr><td>3</td><td>UA-Hub-Door an Wand/Zarge montieren, CAT6 anklemmen (PoE-Eingang)</td></tr>
+        <tr><td>4</td><td>UA-G3-Pro Reader außen montieren, Verbindungskabel zum Hub verlegen (Reader ↔ Hub, kurz)</td></tr>
+        <tr><td>5</td><td>E-Öffner in Türzarge einbauen, mit 12 V-Relaisausgang des Hubs verdrahten</td></tr>
+        <tr><td>6</td><td>Reed-Kontakt (Türsensor) an Türzarge setzen, anschließen (Hub-Eingang)</td></tr>
+        <tr><td>7</td><td>REX-Taster innen montieren (optional, für einfaches Öffnen von innen)</td></tr>
+        <tr><td>8</td><td>Gerät im Unifi Controller adoptieren, Tür konfigurieren, Test</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Tore T1 / T2 — Besonderheiten (Antriebe vorhanden)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Arbeit</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>CAT6-Kabel vom Switch zum UA-Hub-Gate verlegen</td></tr>
+        <tr><td>2</td><td>UA-Hub-Gate montieren (wetterfest, nahe Torsteuerung)</td></tr>
+        <tr><td>3</td><td>UA-G3 Reader außen montieren, Verbindungskabel zu Hub</td></tr>
+        <tr><td>4</td><td><strong>Impulskontakt-Kabel</strong> vom Hub-Gate-Relais zur bestehenden Torsteuerplatine verlegen und anschließen (Klemmenplan prüfen!)</td></tr>
+        <tr><td>5</td><td>Funktionstest: Tor-Öffnen via Hub-Gate testen</td></tr>
+        <tr><td>6</td><td>Optional: UVC-AI-LPR Kamera montieren (Ausrichtung auf Kennzeichen), PoE-Kabel</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Innentür IT1 — UA-Ultra (einfachste Variante)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Arbeit</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>CAT6-Kabel vom Switch zum UA-Ultra verlegen (PoE direkt, kein separater Hub)</td></tr>
+        <tr><td>2</td><td>UA-Ultra an Wand neben Tür montieren, CAT6 anschließen</td></tr>
+        <tr><td>3</td><td>E-Öffner einbauen und am Lock-Terminal des UA-Ultra anklemmen (12 V/1 A integriert)</td></tr>
+        <tr><td>4</td><td>Türsensor anschließen, im Controller konfigurieren</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="warn-box" style="margin-top:16px;">
+    <strong>Wichtig — Türzargen:</strong> Vor Beauftragung prüfen, ob die vorhandenen Türzargen (AT1, AT2, HT, IT1) überhaupt einen E-Öffner aufnehmen können (Normfalz, Stulpbreite). Bei Fluchtwegstüren ist ein Magnetschloss (Fail-safe) bauordnungsrechtlich Pflicht — Elektriker/Sachverständigen hinzuziehen.
+  </div>
+</section>
+
+<!-- ===== SEK 14: MATERIALLISTE ===== -->
+<section id="materialliste">
+  <h2>Materialliste — Vollständige Einkaufsliste</h2>
+
+  <div class="hw-category">UNIFI SYSTEM-HARDWARE (bereits in Preisübersicht enthalten)</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Artikel</th><th>Menge</th><th>Einsatz</th><th>Preis ca.</th><th>Gesamt</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>UA-G3-Pro Reader</td><td>3×</td><td>AT1, AT2, HT</td><td>~225 €</td><td>675 €</td></tr>
+        <tr><td>UA-G3 Reader</td><td>2×</td><td>T1, T2 (Tore)</td><td>~115 €</td><td>230 €</td></tr>
+        <tr><td>UA-Hub-Door Controller</td><td>3×</td><td>AT1, AT2, HT</td><td>~161 €</td><td>483 €</td></tr>
+        <tr><td>UA-Hub-Gate Controller</td><td>2×</td><td>T1, T2 (Tore)</td><td>~240 €</td><td>480 €</td></tr>
+        <tr><td>UA-Ultra (All-in-One)</td><td>1×</td><td>IT1 (Innentür)</td><td>~145 €</td><td>145 €</td></tr>
+        <tr><td>UVC-AI-LPR Kamera</td><td>1× (optional)</td><td>Tor T1 oder T2</td><td>~450 €</td><td>450 €</td></tr>
+        <tr class="total-row"><td colspan="4">Summe System-Hardware (ohne LPR / mit LPR)</td><td>2.013 € / 2.463 €</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="hw-category">TÜRÖFFNER &amp; SCHLISSTECHNIK (separat zu beschaffen)</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Artikel</th><th>Menge</th><th>Einsatz</th><th>Preis ca.</th><th>Gesamt</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>E-Öffner Fail-secure 12 V (z. B. effeff)</td><td>3×</td><td>AT1, AT2, HT</td><td>~80–120 €</td><td>~300 €</td></tr>
+        <tr><td>E-Öffner Fail-secure 12 V (Innentür)</td><td>1×</td><td>IT1</td><td>~60–100 €</td><td>~80 €</td></tr>
+        <tr><td style="color:var(--muted);font-style:italic;">Alternativ Fluchtweg: Magnetschloss Fail-safe</td><td>je nach Türtyp</td><td>Fluchttüren</td><td>~150–300 €</td><td>—</td></tr>
+        <tr><td>Reed-Kontakt / Türsensor (aufputz)</td><td>4×</td><td>AT1, AT2, HT, IT1</td><td>~8–15 €</td><td>~40 €</td></tr>
+        <tr><td>REX-Taster (Request-to-Exit) innen</td><td>3–4×</td><td>AT1, AT2, HT, IT1</td><td>~15–30 €</td><td>~60–90 €</td></tr>
+        <tr class="total-row"><td colspan="4">Summe Türöffner / Sensoren (Richtwert)</td><td>~480–510 €</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ascii-note">Tore T1 / T2: <strong>kein Türöffner nötig</strong> — vorhandene Antriebe werden direkt per Impulskontakt vom UA-Hub-Gate gesteuert.</div>
+
+  <div class="hw-category">INSTALLATIONSMATERIAL (Kabel, Kanal, Kleinteile)</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Artikel</th><th>Menge</th><th>Hinweis</th><th>Preis ca.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CAT6-Kabel (Außen-/Mantelleitung, UV-beständig)</td><td>400–800 m</td><td>6 Läufe à 50–120 m je nach Grundriss</td><td>~120–240 €</td></tr>
+        <tr><td>Leerrohr / Kabelkanal (Außenbereich, grau)</td><td>nach Bedarf</td><td>Wo Kabel sichtbar oder witterungsexponiert</td><td>~50–150 €</td></tr>
+        <tr><td>Unterputz-Dosen / Kabeldurchführungen</td><td>6–10×</td><td>Je Hub und Reader (Wand-Einlass)</td><td>~30–50 €</td></tr>
+        <tr><td>Kabelschellen / Befestigungsclips</td><td>Bund</td><td>Für saubere Führung an Wand/Decke</td><td>~20 €</td></tr>
+        <tr><td>Aderendhülsen-Set + Klemmen</td><td>1 Set</td><td>Für saubere Anschlüsse am Hub</td><td>~15 €</td></tr>
+        <tr><td>Kabelmarkierung (Etiketten)</td><td>1 Set</td><td>Für spätere Wartung unerlässlich</td><td>~10 €</td></tr>
+        <tr><td>Silikonabdichtung / Outdoor-Schutz</td><td>1 Tube</td><td>Kabeldurchführungen nach Außen abdichten</td><td>~10 €</td></tr>
+        <tr class="total-row"><td colspan="3">Summe Installationsmaterial (Richtwert)</td><td>~255–485 €</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="hw-category">NETZWERK / SERVER</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Artikel</th><th>Menge</th><th>Hinweis</th><th>Preis ca.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>PoE-Switch (8-Port PoE+, z. B. Unifi USW-Pro-8-PoE)</td><td>1×</td><td>Wenn kein vorhandener Unifi-Switch mit freien PoE-Ports</td><td>~160–220 €</td></tr>
+        <tr><td>Unifi Controller (CloudKey Gen2+)</td><td>1×</td><td>Wenn kein vorhandener Controller (Dream Machine, Server)</td><td>~180 €</td></tr>
+        <tr><td style="color:var(--muted);font-style:italic;">Alternativ: Unifi Access App auf vorhandenem Server / UCG-Max</td><td>—</td><td>Kostenlos, nur Software</td><td>0 €</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:20px;border-left:4px solid var(--accent-green);">
+    <h4>Gesamtkosten-Übersicht (Vollinstallation Richtwert)</h4>
+    <table class="price-lines">
+      <tr><td>Unifi System-Hardware</td><td>~2.013 €</td></tr>
+      <tr><td>+ optional LPR-Kamera</td><td>+450 €</td></tr>
+      <tr><td>Türöffner + Sensoren + REX</td><td>~480 €</td></tr>
+      <tr><td>Installationsmaterial</td><td>~300 €</td></tr>
+      <tr><td>PoE-Switch (falls benötigt)</td><td>~180 €</td></tr>
+      <tr class="total-row"><td><strong>Gesamt Material (ohne LPR)</strong></td><td><strong>~2.973–3.473 €</strong></td></tr>
+      <tr class="total-row" style="color:var(--accent-blue);"><td><strong>Gesamt Material (mit LPR)</strong></td><td><strong>~3.423–3.923 €</strong></td></tr>
+    </table>
+    <div class="price-note">Nur Material- und Hardwarekosten. Exkl. MwSt. Exkl. Mechanik (Türzargen-Umbau falls nötig). Controller nur falls noch nicht vorhanden.</div>
+  </div>
+</section>
+
+<!-- ===== SEK 15: POE SWITCH ===== -->
+<section id="poe-switch">
+  <h2>PoE-Switch &amp; Ports am Server</h2>
+  <div class="info-box">
+    <strong>Wichtigste Regel:</strong> Reader (UA-G3, UA-G3-Pro) hängen am Hub — <strong>nicht direkt am Switch!</strong> Am Switch hängt nur der Hub (1 Port pro Tür/Tor). Hubs mit PoE+ (802.3at) oder PoE++ (802.3bt) versorgen.
+  </div>
+
+  <h3>Welche Geräte brauchen einen Switch-Port?</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Gerät</th>
+          <th>Zugangspunkt</th>
+          <th>PoE-Standard</th>
+          <th>Leistung ca.</th>
+          <th>Ports nötig</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>UA-Hub-Door</td>
+          <td>AT1 (Außentür links)</td>
+          <td><span class="chip chip-blue">PoE++</span></td>
+          <td>~15 W</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>UA-Hub-Door</td>
+          <td>AT2 (Außentür rechts)</td>
+          <td><span class="chip chip-blue">PoE++</span></td>
+          <td>~15 W</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>UA-Hub-Door</td>
+          <td>HT (Haupttür)</td>
+          <td><span class="chip chip-blue">PoE++</span></td>
+          <td>~15 W</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>UA-Hub-Gate</td>
+          <td>T1 (Tor Süd links)</td>
+          <td><span class="chip chip-blue">PoE++</span></td>
+          <td>~15 W</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>UA-Hub-Gate</td>
+          <td>T2 (Tor Süd rechts)</td>
+          <td><span class="chip chip-blue">PoE++</span></td>
+          <td>~15 W</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>UA-Ultra</td>
+          <td>IT1 (Innentür Büro)</td>
+          <td><span class="chip chip-green">PoE+</span></td>
+          <td>~10 W</td>
+          <td>1</td>
+        </tr>
+        <tr style="color:var(--accent-blue);">
+          <td>UVC-AI-LPR</td>
+          <td>Tor T1 oder T2 (optional)</td>
+          <td><span class="chip chip-blue">PoE+</span></td>
+          <td>~15 W</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);font-style:italic;">UA-G3 / G3-Pro Reader</td>
+          <td>—</td>
+          <td style="color:var(--muted);">— (via Hub versorgt)</td>
+          <td style="color:var(--muted);">—</td>
+          <td style="color:var(--accent-green);font-weight:700;">0 !</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="4"><strong>Summe PoE-Ports am Switch</strong></td>
+          <td><strong>6 Ports (+ 1 opt. LPR)</strong></td>
+        </tr>
+        <tr>
+          <td colspan="4">Geschätztes PoE-Budget gesamt</td>
+          <td>~85 W (ohne LPR) / ~100 W (mit LPR)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Switch-Empfehlung</h3>
+  <div class="card-grid">
+    <div class="card" style="border-left:4px solid var(--accent-green);">
+      <div class="chip chip-green" style="margin-bottom:8px;">Empfehlung</div>
+      <h4>Unifi USW-Pro-8-PoE</h4>
+      <ul class="hw-specs">
+        <li>8× GbE PoE+ (802.3at, max. 30 W/Port)</li>
+        <li>2× SFP Uplink</li>
+        <li><strong>126 W gesamt PoE-Budget</strong></li>
+        <li>Nativ im Unifi Controller integriert</li>
+        <li>Preis: ~160–200 €</li>
+      </ul>
+      <div class="ascii-note" style="margin-top:10px;font-size:0.85rem;">
+        <strong>Passend wenn:</strong> Tatsächliche Hub-Leistungsaufnahme &lt;30 W/Port (wahrscheinlich). Reicht für alle 6–7 Geräte bei Puffer. <strong>Wenn vorhandener Unifi-Switch genug PoE+-Ports frei hat → kein neuer Switch nötig!</strong>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent-blue);">
+      <div class="chip chip-blue" style="margin-bottom:8px;">Auf der sicheren Seite</div>
+      <h4>Unifi USW-Enterprise-8-PoE</h4>
+      <ul class="hw-specs">
+        <li>8× 2,5 GbE PoE++ (802.3bt, max. 90 W/Port!)</li>
+        <li>2× 10G SFP+ Uplink</li>
+        <li><strong>400 W gesamt PoE-Budget</strong></li>
+        <li>Preis: ~380–450 €</li>
+      </ul>
+      <div class="ascii-note" style="margin-top:10px;font-size:0.85rem;">
+        Ideal wenn PoE++-Zertifizierung wichtig oder zukünftige Erweiterung geplant (IP-Kameras, AP). Deutlich teurer.
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--muted);">
+      <div class="chip chip-brown" style="margin-bottom:8px;">Spare Lösung</div>
+      <h4>Vorhandener Unifi-Switch prüfen</h4>
+      <ul class="hw-specs">
+        <li>USW-8-PoE (52 W Budget) — <span class="warn">knapp für 6 Hubs!</span></li>
+        <li>USW-24-PoE (95 W Budget) — ausreichend wenn Ports frei</li>
+        <li>USW-Pro-24-PoE (400 W) — ideal</li>
+      </ul>
+      <div class="ascii-note" style="margin-top:10px;font-size:0.85rem;">
+        <strong>Vorher checken:</strong> Wie viele freie PoE+-Ports hat der vorhandene Switch? Reicht das PoE-Budget? → Dann kein neuer Switch nötig.
+      </div>
+    </div>
+  </div>
+
+  <h3>Verkabelungsschema (Logisch)</h3>
+  <div class="ascii-box">
+<pre>
+                  +--------------------------+
+                  |  Unifi PoE-Switch        |
+                  |  (USW-Pro-8-PoE)         |
+                  +---+---+---+---+---+---+--+
+                      |   |   |   |   |   |
+             PoE+/-   |   |   |   |   |   |   (7 Ports belegt)
+                      |   |   |   |   |   |
+         +---+  +---+ |   | +-+-+ +-+-+ +-+-+
+         |HUB|  |HUB| |   | |HUB| |HUB| |ULT|
+         |AT1|  |AT2| |   | | T1| | T2| |IT1|
+         +--++  +-+-+ |   | +---+ +---+ +---+
+            |     |   |   |
+           G3P   G3P  |   LPR (opt.)
+                      |
+                    +-+-+
+                    |HUB|
+                    | HT|
+                    +-+-+
+                      |
+                     G3P
+
+
+  Hub-Door = UA-Hub-Door  (AT1, AT2, HT — Türen)
+  Hub-Gate = UA-Hub-Gate  (T1, T2 — Tore, Impulskontakt an vorh. Antrieb)
+  ULT      = UA-Ultra     (IT1 — Innentür, Hub+Reader in einem)
+  G3P      = UA-G3-Pro    (Reader, hängt am Hub — kein eigener Switch-Port!)
+  LPR      = UVC-AI-LPR  (optional, eigener PoE-Port)
+
+  Uplink: Switch → vorhandenes Netzwerk / Unifi Controller (UCG/CloudKey)
+</pre>
+  </div>
+</section>
+
+<!-- ===== SEK 16: VERWALTUNG ===== -->
+<section id="verwaltung">
+  <h2>Verwaltung — So wird das System betrieben</h2>
+
+  <div class="wallet-highlight">
+    <h3>Zentrale Software: Unifi Access App</h3>
+    <p>Unifi Access ist vollständig in den Unifi Controller integriert. <strong>Keine separate Server-Software nötig</strong> — läuft auf vorhandenem UniFi Dream Machine, Cloud Key Gen2+, UCG-Max oder eigenem Linux-Server. Webinterface + iOS/Android-App vorhanden.</p>
+    <p style="margin-top:8px;"><strong>Zugang:</strong> Lokal via <code>https://&lt;controller-ip&gt;:443</code> → Unifi Access App &nbsp;|&nbsp; Remote via Unifi-Cloud (ui.com) oder eigenem VPN — <em>kein Cloud-Zwang!</em></p>
+  </div>
+
+  <h3>Was lässt sich verwalten?</h3>
+  <div class="card-grid">
+    <div class="card" style="border-left:4px solid var(--accent-blue);">
+      <h4>Nutzer &amp; Berechtigungen</h4>
+      <ul style="padding-left:18px;font-size:0.9rem;">
+        <li>Nutzer anlegen / löschen (Name, E-Mail, Foto)</li>
+        <li>Gruppen erstellen (z. B. Mitarbeiter, Besucher, Reinigung)</li>
+        <li>Genau steuern: wer darf welche Tür zu welcher Zeit</li>
+        <li>Zeitfenster pro Zugangspunkt (Mo–Fr 7–19 Uhr, etc.)</li>
+        <li>Befristete Zugänge (Gastreferenten, Handwerker)</li>
+        <li>Sofortsperrung einzelner Nutzer (1 Klick)</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent-green);">
+      <h4>Türen &amp; Tore</h4>
+      <ul style="padding-left:18px;font-size:0.9rem;">
+        <li>Echtzeit-Status (offen / geschlossen / Alarm)</li>
+        <li>Tür remote öffnen (z. B. für Lieferant via App)</li>
+        <li>Dauerhaft entriegeln (Veranstaltungsmodus)</li>
+        <li>Alarm bei "Tür offen" länger als X Sekunden</li>
+        <li>Alarm bei unbefugtem Öffnungsversuch</li>
+        <li>Tore: Impulsdauer anpassbar (Öffnungszeit)</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent-purple);">
+      <h4>Audit-Log &amp; Reports</h4>
+      <ul style="padding-left:18px;font-size:0.9rem;">
+        <li>Vollständiges Zugangsprotokoll: wer / wann / welche Tür</li>
+        <li>Filterfähig nach Nutzer, Tür, Zeitraum</li>
+        <li>Foto-Snapshot bei Zugang (wenn G3-Pro Kamera aktiv)</li>
+        <li>Export möglich (CSV)</li>
+        <li>Alarm-Ereignisse separat dokumentiert</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--accent-orange);">
+      <h4>Touch Pass / Wallet</h4>
+      <ul style="padding-left:18px;font-size:0.9rem;">
+        <li>Verwaltung der digitalen Schlüssel über <strong>Unifi Endpoint App</strong></li>
+        <li>Pass per E-Mail-Link an Mitarbeiter senden</li>
+        <li>Nutzer fügt Pass in Apple/Google Wallet hinzu</li>
+        <li>Entzug: Pass sofort deaktivierbar (Remote-Revoke)</li>
+        <li>10 Passes/G3-Reader kostenlos (1 Jahr)</li>
+        <li>Danach: ~5 €/Nutzer/Jahr</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Verwaltungs-Aufwand im Betrieb</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Aufgabe</th><th>Aufwand</th><th>Wer</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Neuen Mitarbeiter anlegen + Karte/Wallet einrichten</td><td>~5 Min.</td><td>Büro/IT</td></tr>
+        <tr><td>Mitarbeiter sperren (sofort)</td><td>~1 Min.</td><td>Büro/IT</td></tr>
+        <tr><td>Zugangszeiten ändern</td><td>~3 Min.</td><td>Büro/IT</td></tr>
+        <tr><td>Besucher-QR-Code erstellen (zeitbegrenzt)</td><td>~2 Min.</td><td>Büro</td></tr>
+        <tr><td>Audit-Log prüfen</td><td>~5 Min./Abfrage</td><td>Büro/IT</td></tr>
+        <tr><td>Firmware-Updates (automatisch via Controller)</td><td>~0 Min.</td><td>Automatisch</td></tr>
+        <tr><td>Tür remote öffnen (z. B. für Lieferant)</td><td>~10 Sek.</td><td>Büro / App</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Endnutzer — Öffnen per Smartphone</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Methode</th><th>App nötig?</th><th>Telefon zücken?</th><th>Einrichtungsaufwand</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>RFID/NFC-Karte</td><td class="yes">Nein</td><td>Karte halten</td><td>Admin gibt Karte aus (~1 Min.)</td></tr>
+        <tr><td>Unifi Endpoint App (BLE)</td><td class="warn">Ja (Unifi App)</td><td>Ja (oder automatisch Hands-free)</td><td>Link per E-Mail, App installieren (~3 Min.)</td></tr>
+        <tr><td>Apple Wallet (Touch Pass)</td><td class="yes">Nein (nach Setup)</td><td>Nein — einfach hinhalten</td><td>Pass zu Wallet hinzufügen (~2 Min.)</td></tr>
+        <tr><td>Google Wallet (Touch Pass)</td><td class="yes">Nein (nach Setup)</td><td>Nein — einfach hinhalten</td><td>Pass zu Wallet hinzufügen (~2 Min.)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rec-box" style="margin-top:20px;">
+    <h3>Empfohlener Verwaltungs-Workflow für die Halle</h3>
+    <ol class="rec-steps">
+      <li><strong>Controller läuft lokal</strong> auf vorhandenem Unifi-Gerät (Dream Machine / CloudKey). Remote-Zugang via Unifi-Cloud oder VPN.</li>
+      <li><strong>1 Admin-Account</strong> für Büro-Zugang (Türen öffnen, Logs, Nutzer verwalten). Kein IT-Fachwissen nötig.</li>
+      <li><strong>Alle Mitarbeiter per Apple/Google Wallet</strong> — einmalig 5 Min. Setup. Danach: nur Telefon ans Lesegerät halten.</li>
+      <li><strong>RFID-Karten als Backup</strong> — für Mitarbeiter ohne Smartphone oder als physischer Notfallschlüssel.</li>
+      <li><strong>LPR (wenn installiert)</strong> — Firmenfahrzeuge einmalig per Kennzeichen im Controller hinterlegen. Tor öffnet autoamtisch beim Einfahren.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===== SEK 17: BESTELLLISTE ===== -->
+<section id="bestellliste">
+  <h2>Bestellliste — Drucken &amp; Bestellen</h2>
+  <div class="info-box">
+    Konkrete Einkaufsliste mit Mengen für die <strong>empfohlene Tier-3-Konfiguration</strong> (alle 6 Zugangspunkte). Preise gemäß Unifi EU Store (Stand Mai 2026, exkl. MwSt.). Türöffner-Variante: <strong>Option A</strong> (UACC-Lock-Strike-Secure-15mm, Fail-secure für Standardtüren).
+  </div>
+
+  <h3>Unifi-Hardware (System)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Artikel</th><th>SKU</th><th>Menge</th><th>Einzel</th><th>Summe</th><th>Quelle</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Access G3 Reader Pro</td><td>UA-G3-Pro</td><td>3×</td><td>~225 &euro;</td><td>~675 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-g3-pro" target="_blank">ui.com</a></td></tr>
+        <tr><td>Access G3 Reader</td><td>UA-G3</td><td>2×</td><td>~115 &euro;</td><td>~230 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-g3" target="_blank">ui.com</a></td></tr>
+        <tr><td>Access Hub Door</td><td>UA-Hub-Door</td><td>3×</td><td>~161 &euro;</td><td>~483 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-hub-door" target="_blank">ui.com</a></td></tr>
+        <tr><td>Access Hub Gate</td><td>UA-Hub-Gate</td><td>2×</td><td>~240 &euro;</td><td>~480 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-hub-gate" target="_blank">ui.com</a></td></tr>
+        <tr><td>Access Ultra</td><td>UA-Ultra</td><td>1×</td><td>~145 &euro;</td><td>~145 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/ua-ultra" target="_blank">ui.com</a></td></tr>
+        <tr class="subtotal"><td colspan="4">Zwischensumme Unifi System-Hardware</td><td>~2.013 &euro;</td><td></td></tr>
+        <tr style="color:var(--accent-blue);"><td>Camera AI LPR (optional)</td><td>UVC-AI-LPR</td><td>1×</td><td>~450 &euro;</td><td>~450 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/products/uvc-ai-lpr" target="_blank">ui.com</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Türöffner (Option A — Fail-secure)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Artikel</th><th>SKU</th><th>Menge</th><th>Einzel</th><th>Summe</th><th>Quelle</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Fail-Secure Strike Lock 15mm</td><td>UACC-Lock-Strike-Secure-15mm</td><td>4×</td><td>~79 &euro;</td><td>~316 &euro;</td><td><a href="https://eu.store.ui.com/eu/en/category/all-door-access/collections/accessories-door-access-electric-locks" target="_blank">ui.com</a></td></tr>
+        <tr style="color:var(--muted);font-style:italic;"><td colspan="6">Falls Fluchttür dabei: Variante mit UA-Lock-Magnetic-270kg (~135 €) statt UACC-Strike (siehe Hardware-Katalog)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Netzwerk &amp; Infrastruktur</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Artikel</th><th>SKU</th><th>Menge</th><th>Einzel</th><th>Summe</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>USW Pro 8 PoE Switch (falls nicht vorhanden)</td><td>USW-Pro-8-PoE</td><td>1×</td><td>~180 &euro;</td><td>~180 &euro;</td></tr>
+        <tr><td>Cloud Key Gen2+ (falls Controller fehlt)</td><td>UCK-G2-Plus</td><td>0–1×</td><td>~180 &euro;</td><td>0–180 &euro;</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Drittanbieter / Installation</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Artikel</th><th>Menge</th><th>Preis</th><th>Quelle</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Reed-Kontakt Türsensor</td><td>4×</td><td>~8–15 €/Stk = ~40 €</td><td>jeder Elektrofachhandel</td></tr>
+        <tr><td>REX-Drücker (Jung 506 E o.ä.)</td><td>4×</td><td>~10 €/Stk = ~40 € (oft 0 € wenn vorhanden)</td><td>Elektrofachhandel</td></tr>
+        <tr><td>CAT6-Kabel Außen (UV-fest)</td><td>~400 m</td><td>~150 €</td><td>Reichelt / Voelkner</td></tr>
+        <tr><td>Leerrohr / Kabelkanal</td><td>nach Bedarf</td><td>~50–150 €</td><td>Baumarkt</td></tr>
+        <tr><td>UP-Dosen / Kleinmaterial</td><td>1 Set</td><td>~50–100 €</td><td>Baumarkt</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:20px;border-left:4px solid var(--accent-green);">
+    <h4 style="margin-top:0;">Gesamtsumme (Material, exkl. Installation)</h4>
+    <table class="price-lines">
+      <tr><td>Unifi System-Hardware</td><td>~2.013 &euro;</td></tr>
+      <tr><td>Türöffner (4× UACC-Strike-15mm)</td><td>~316 &euro;</td></tr>
+      <tr><td>Sensoren + REX-Drücker</td><td>~80 &euro;</td></tr>
+      <tr><td>Kabel + Installationsmaterial</td><td>~250–400 &euro;</td></tr>
+      <tr><td>PoE-Switch (falls nötig)</td><td>0–180 &euro;</td></tr>
+      <tr class="total-row"><td><strong>Gesamt (ohne LPR)</strong></td><td><strong>~2.660–2.990 &euro;</strong></td></tr>
+      <tr class="total-row" style="color:var(--accent-blue);"><td><strong>Gesamt (mit LPR-Kamera)</strong></td><td><strong>~3.110–3.440 &euro;</strong></td></tr>
+    </table>
+    <div class="price-note">Alle Preise ca., exkl. MwSt., Stand Mai 2026. Türöffner als Fail-secure-Variante kalkuliert; für Fluchttüren entsprechend Magnetschloss-Variante einsetzen (~135 €/Stk).</div>
+  </div>
+</section>
+
+</main>
+
+<!-- Mindmap via iframe aus schliessystem_mindmap.html — kein eigenes Script nötig -->
+
+<!-- Lightbox -->
+<div id="lb-overlay">
+  <span id="lb-close">&times;</span>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-caption"></div>
+</div>
+
+<script>
+document.querySelectorAll('nav a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    var target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// Lightbox
+var overlay = document.getElementById('lb-overlay');
+var lbImg   = document.getElementById('lb-img');
+var lbCap   = document.getElementById('lb-caption');
+
+document.querySelectorAll('.hw-img').forEach(function(img) {
+  img.addEventListener('click', function() {
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbCap.textContent = img.alt;
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+function closeLb() {
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+  lbImg.src = '';
+}
+
+overlay.addEventListener('click', closeLb);
+document.getElementById('lb-close').addEventListener('click', closeLb);
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLb(); });
+</script>
+
+</body>
+</html>

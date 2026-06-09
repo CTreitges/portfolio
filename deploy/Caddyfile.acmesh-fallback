@@ -1,0 +1,29 @@
+# FALLBACK (Schritt B), falls Caddy IP-Zertifikate nicht selbst ausstellen kann
+# (certmagic lehnte IP-Subjects für Public-CAs teils ab, Issue caddyserver/caddy#7399).
+#
+# acme.sh holt die Zertifikate, Caddy nutzt sie statisch. Renewal stoppt Caddy
+# kurz (~5 s alle ~3 Tage, nachts) — einfach und verlässlich:
+#
+#   1) acme.sh installieren (als root):
+#        curl https://get.acme.sh | sh
+#   2) IP-Zertifikat ausstellen (TLS-ALPN direkt auf 443, Caddy kurz gestoppt):
+#        acme.sh --issue --alpn -d <SERVER_IP> \
+#          --certificate-profile shortlived --server letsencrypt \
+#          --pre-hook  "systemctl stop caddy" \
+#          --post-hook "systemctl start caddy"
+#   3) Installieren mit Reload-Hook:
+#        mkdir -p /etc/portfolio/certs
+#        acme.sh --install-cert -d <SERVER_IP> \
+#          --fullchain-file /etc/portfolio/certs/ip-fullchain.pem \
+#          --key-file       /etc/portfolio/certs/ip-key.pem \
+#          --reloadcmd      "systemctl reload caddy"
+#   4) Renewal: acme.sh-Cron läuft täglich; bei 6-Tage-Certs in
+#      ~/.acme.sh/<SERVER_IP>*/<SERVER_IP>.conf  Le_RenewalDays=3 setzen.
+#   5) Diese Datei nach /etc/caddy/Caddyfile kopieren + systemctl reload caddy.
+
+https://<SERVER_IP> {
+	tls /etc/portfolio/certs/ip-fullchain.pem /etc/portfolio/certs/ip-key.pem
+	encode zstd gzip
+	header X-Robots-Tag "noindex, nofollow, noarchive"
+	reverse_proxy 127.0.0.1:3100
+}

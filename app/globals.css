@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Design-Tokens (Design-Brief §3–§6). Durchgehend dunkel, kein Light-Mode.
+   ─────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* Farbwelt — Dark-Base blau-/violettstichig, kein reines #000 */
+  --color-bg: #0a0b12;
+  --color-surface: #11121c;
+  --color-surface-2: #171826;
+  --color-border: #232539;
+  --color-border-glow: #2f3354;
+  --color-text: #f1f2f7;
+  --color-text-muted: #a3a7bd;
+  /* WCAG-AA: ≥4.5:1 auch auf surface (#11121c). Vorher #6c7191 fiel durch. */
+  --color-text-faint: #8b90b0;
+
+  --color-accent: #22d3ee; /* Electric Cyan */
+  --color-accent-soft: #67e8f9;
+  --color-glow: #8b5cf6; /* Aurora-Violett */
+  --color-glow-soft: #a78bfa;
+
+  --color-success: #34d399;
+  --color-warn: #fbbf24;
+  --color-danger: #f87171;
+
+  /* Typografie */
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  /* Motion */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-shake: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-blink: blink 1.05s step-end infinite;
+
+  @keyframes shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Basis
+   ─────────────────────────────────────────────────────────────────────────── */
+/* Kein natives scroll-behavior:smooth — Lenis ist der einzige Scroll-Owner
+   (sonst konkurrieren CSS-Smooth und Lenis bei Anker-Sprüngen). */
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection {
+  background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+  color: #fff;
+}
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Effekt-Utilities
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Aurora-Hintergrund: weiche, langsam driftende Farb-Blobs */
+.aurora {
+  background:
+    radial-gradient(ellipse 60% 50% at 18% 18%, color-mix(in oklab, var(--color-accent) 16%, transparent), transparent 65%),
+    radial-gradient(ellipse 55% 45% at 82% 72%, color-mix(in oklab, var(--color-glow) 16%, transparent), transparent 65%),
+    radial-gradient(ellipse 45% 40% at 65% 12%, color-mix(in oklab, #3b82f6 10%, transparent), transparent 60%);
+  filter: blur(34px);
+  animation: aurora-drift 24s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift {
+  0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+  100% { transform: translate3d(2%, 2%, 0) scale(1.06); }
+}
+
+/* Feines Grain/Noise-Overlay (SVG-Daten-URI, GPU-billig) */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Spotlight-Border-Karte: radialer Glow folgt der Maus (--mx/--my) */
+.spotlight-card {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  isolation: isolate;
+  transition: border-color 0.3s var(--ease-out-quint);
+}
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in oklab, var(--color-accent) 60%, transparent),
+    transparent 60%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out-quint);
+  z-index: -1;
+}
+.spotlight-card:hover::before,
+.spotlight-card:focus-within::before {
+  opacity: 1;
+}
+
+/* Reveal-Grundzustand (für JS-getriebene whileInView) */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+/* Text-Gradient (Cyan → Violett) */
+.text-gradient {
+  background: linear-gradient(100deg, var(--color-accent-soft), var(--color-glow-soft));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* dünne Glas-Leiste (nur Header + Panels) */
+.glass {
+  background: color-mix(in oklab, var(--color-bg) 72%, transparent);
+  backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Reduced Motion — definierte statische Ersatzzustände
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .aurora { animation: none; }
+  .reveal-init { opacity: 1; transform: none; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
