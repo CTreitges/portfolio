@@ -2,38 +2,26 @@ import type { TimelineEntry } from "./types";
 
 /**
  * Zwei Spuren: "haupt" = Werdegang (Interview Frage 1, real),
- * "ki" = KI-Lernreise (PLATZHALTER-Daten bis Interview D).
+ * "ki" = KI-Lernreise (Interview D, 2026-06-09).
+ * Antichronologisch (neuestes zuerst, deutsche CV-Konvention), lückenlos.
  * Studium bewusst neutral, ohne Abschluss-Aussage (User-Entscheidung).
  */
 export const timeline: TimelineEntry[] = [
-  // ── Hauptspur (real) ──────────────────────────────────────────────
+  // ── Hauptspur (real, neuestes zuerst) ─────────────────────────────
   {
-    period: "2008–2012",
-    title: "Grundschule",
-    org: "Hillesheim",
-    type: "ausbildung",
+    period: "seit 09/2025",
+    title: "Kleingewerbe IT-Dienstleistungen",
+    desc: "Eigene IT-Dienstleistungen — der Schritt in die hauptberufliche Richtung.",
+    tags: ["IT-Dienstleistung"],
+    type: "selbststaendig",
     track: "haupt",
   },
   {
-    period: "2012–2021",
-    title: "Abitur",
-    org: "Gymnasium Gerolstein",
-    type: "ausbildung",
-    track: "haupt",
-  },
-  {
-    period: "2018–2020",
-    title: "Gastronomie (Minijob)",
-    org: "DerTeller Gastronomics",
-    desc: "Erste Station beim späteren Auftraggeber des Lieferschein-Processors.",
-    type: "job",
-    track: "haupt",
-  },
-  {
-    period: "2020–2021",
-    title: "Teilzeit",
-    org: "REWE Stadtkyll",
-    type: "job",
+    period: "seit 2023",
+    title: "Kleingewerbe Musikveranstaltungen",
+    desc: "Veranstaltungs- und PA-Technik — Wurzel von PA-Streaming-Hub und Audio Normalizer.",
+    tags: ["PA-Technik", "Events"],
+    type: "selbststaendig",
     track: "haupt",
   },
   {
@@ -54,51 +42,40 @@ export const timeline: TimelineEntry[] = [
     track: "haupt",
   },
   {
-    period: "seit 2023",
-    title: "Kleingewerbe Musikveranstaltungen",
-    desc: "Veranstaltungs- und PA-Technik — Wurzel von PA-Streaming-Hub und Audio Normalizer.",
-    tags: ["PA-Technik", "Events"],
-    type: "selbststaendig",
+    period: "2020–2021",
+    title: "Teilzeit",
+    org: "REWE Stadtkyll",
+    type: "job",
     track: "haupt",
   },
   {
-    period: "seit 09/2025",
-    title: "Kleingewerbe IT-Dienstleistungen",
-    desc: "Eigene IT-Dienstleistungen — der Schritt in die hauptberufliche Richtung.",
-    tags: ["IT-Dienstleistung"],
-    type: "selbststaendig",
+    period: "2018–2020",
+    title: "Gastronomie (Minijob)",
+    org: "DerTeller Gastronomics",
+    desc: "Erste Station beim späteren Auftraggeber des Lieferschein-Processors.",
+    type: "job",
+    track: "haupt",
+  },
+  {
+    period: "2012–2021",
+    title: "Abitur",
+    org: "Gymnasium Gerolstein",
+    type: "ausbildung",
+    track: "haupt",
+  },
+  {
+    period: "2008–2012",
+    title: "Grundschule",
+    org: "Hillesheim",
+    type: "ausbildung",
     track: "haupt",
   },
 
-  // ── KI-Spur (Interview D, 2026-06-09) ─────────────────────────────
+  // ── KI-Spur (Interview D, 2026-06-09; neuestes zuerst) ────────────
   {
-    period: "2023",
-    title: "Erste KI-Code-Vorschläge",
-    desc: "Copilot-Preview beim Programmieren, parallel Perplexity, Google AI Studio und ChatGPT (GPT-3.5) — der erste Kontakt.",
-    tags: ["Copilot", "ChatGPT"],
-    type: "lernreise",
-    track: "ki",
-  },
-  {
-    period: "2024",
-    title: "KI im Alltag",
-    desc: "Copilot wird fester Bestandteil der Arbeit.",
-    type: "lernreise",
-    track: "ki",
-  },
-  {
-    period: "09/2025",
-    title: "Vollständiger Einstieg — DerTeller-Projekt",
-    desc: "Für den Lieferschein-Processor ganz ins KI-gestützte Entwickeln: JetBrains Junie, gestützt durch Claude Chat.",
-    tags: ["JetBrains Junie", "Claude"],
-    type: "lernreise",
-    track: "ki",
-  },
-  {
-    period: "Anfang 2026",
-    title: "Umstieg auf Claude Code",
-    desc: "Vom Chat zum agentischen Arbeiten direkt im Terminal.",
-    tags: ["Claude Code"],
+    period: "heute",
+    title: "Vollständiges Claude-Code-Setup",
+    desc: "Ein produktives KI-Arbeitssystem über drei Maschinen, mit eigenem VPS als dauerhaftem Knoten.",
     type: "lernreise",
     track: "ki",
   },
@@ -111,9 +88,33 @@ export const timeline: TimelineEntry[] = [
     track: "ki",
   },
   {
-    period: "heute",
-    title: "Vollständiges Claude-Code-Setup",
-    desc: "Ein produktives KI-Arbeitssystem über drei Maschinen, mit eigenem VPS als dauerhaftem Knoten.",
+    period: "Anfang 2026",
+    title: "Umstieg auf Claude Code",
+    desc: "Vom Chat zum agentischen Arbeiten direkt im Terminal.",
+    tags: ["Claude Code"],
+    type: "lernreise",
+    track: "ki",
+  },
+  {
+    period: "09/2025",
+    title: "Vollständiger Einstieg — DerTeller-Projekt",
+    desc: "Für den Lieferschein-Processor ganz ins KI-gestützte Entwickeln: JetBrains Junie, gestützt durch Claude Chat.",
+    tags: ["JetBrains Junie", "Claude"],
+    type: "lernreise",
+    track: "ki",
+  },
+  {
+    period: "2024",
+    title: "KI im Alltag",
+    desc: "Copilot wird fester Bestandteil der Arbeit.",
+    type: "lernreise",
+    track: "ki",
+  },
+  {
+    period: "2023",
+    title: "Erste KI-Code-Vorschläge",
+    desc: "Copilot-Preview beim Programmieren, parallel Perplexity, Google AI Studio und ChatGPT (GPT-3.5) — der erste Kontakt.",
+    tags: ["Copilot", "ChatGPT"],
     type: "lernreise",
     track: "ki",
   },

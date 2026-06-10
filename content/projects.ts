@@ -1,4 +1,4 @@
-import type { Project } from "./types";
+import type { MiniTool, Project } from "./types";
 
 /**
  * Kuratierte Projekte. Lieferschein-Processor ist das Aushängeschild (flagship).
@@ -222,7 +222,7 @@ export const projects: Project[] = [
         "Strikte Validierung schlägt blindes Vertrauen ins Modell: lieber ein leeres Feld zur Nachprüfung als eine falsche Bankverbindung.",
       ],
       screenshotNote:
-        "Im Portfolio nur mit fiktiven Mustern — keine echten Personendaten.",
+        "Wegen der hochsensiblen Daten ohne Screenshots — die Verarbeitung zeige ich gern im Gespräch, mit fiktiven Mustern.",
     },
   },
   {
@@ -295,6 +295,9 @@ export const projects: Project[] = [
     tagline:
       "Mein selbst gebauter KI-Arbeitsplatz: Memory, Hooks, Plan-Modus und Effort-Stufen über drei Maschinen.",
     featured: false,
+    // Karte im Grid ausgeblendet: das Setup hat seine eigene Sektion
+    // („Mein Maschinenraum"), die hierher verlinkt — keine Doppelung.
+    hidden: true,
     status: "produktiv",
     relevance: "Tooling",
     stack: ["Claude Code", "MCP", "PowerShell", "Python", "systemd", "RLM"],
@@ -438,7 +441,8 @@ export const projects: Project[] = [
         "robocopy nimmt einem die robusten Kopier-Details ab — Retry/Wait-Policy schlägt selbstgebaute Schleifen.",
         "Ein Manifest pro Programm macht die Wiederherstellung nachvollziehbar und selektiv.",
       ],
-      screenshotNote: "Registry-Exporte im Portfolio anonymisiert.",
+      screenshotNote:
+        "Ohne Screenshots — das Tool zeige ich gern live, ohne echte Registry-Daten.",
     },
   },
   {
@@ -506,3 +510,23 @@ export const projects: Project[] = [
 
 export const projectsBySlug = new Map(projects.map((p) => [p.slug, p]));
 export const featuredProjects = projects.filter((p) => p.featured);
+
+/**
+ * Kleinere öffentliche Repos ohne eigene Case-Study — kompakter
+ * „Außerdem auf GitHub"-Strip unter dem Projekt-Grid.
+ * Beschreibungen folgen den echten READMEs (nichts erfunden).
+ */
+export const miniTools: MiniTool[] = [
+  {
+    name: "AutoREW",
+    desc: "Automatisiert die PA-Einmessung über die API von Room EQ Wizard: geführte Workflows für Sweeps, SPL- und Time-Alignment, EQ-Optimierung nach Zielkurve — inklusive PDF-Report.",
+    repo: "https://github.com/CTreitges/AutoREW",
+    stack: ["Python", "PyQt6", "REW-API"],
+  },
+  {
+    name: "BackupTool",
+    desc: "Windows-Tray-Tool, das Ordnerpaare im Hintergrund synchronisiert (z. B. OneDrive → NAS) und gelöschte Dateien sicher in einem eigenen Papierkorb aufbewahrt.",
+    repo: "https://github.com/CTreitges/BackupTool",
+    stack: ["Python", "Windows-Service", "System-Tray"],
+  },
+];

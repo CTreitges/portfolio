@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Section from "@/components/ui/Section";
 import Reveal from "@/components/effects/Reveal";
 import CountUp from "@/components/effects/CountUp";
@@ -73,6 +74,18 @@ export default function SetupSection() {
         <div className="mt-6">
           <TerminalShowcase />
         </div>
+      </Reveal>
+
+      {/* Deep-Dive: die ausgeblendete Projektkarte lebt als Case-Study weiter */}
+      <Reveal delay={0.05}>
+        <p className="mt-6 text-sm">
+          <Link
+            href="/projekte/claude-code-setup"
+            className="inline-flex items-center gap-1 text-accent transition-colors hover:text-accent-soft"
+          >
+            Vollständige Case-Study zum Setup →
+          </Link>
+        </p>
       </Reveal>
     </Section>
   );

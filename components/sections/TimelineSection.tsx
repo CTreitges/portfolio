@@ -21,39 +21,44 @@ function Entry({ e }: { e: TimelineEntry }) {
             : "border-border-glow bg-surface"
         }`}
       />
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <span className="font-mono text-xs text-text-faint">
-          {e.placeholder ? "·····" : e.period}
-        </span>
-        <span
-          className={`rounded-full border px-2 py-0.5 font-mono text-[10px] ${
-            isKi
-              ? "border-accent/30 text-accent"
-              : "border-border text-text-faint"
-          }`}
-        >
-          {typeLabel[e.type]}
-        </span>
-      </div>
-      <h3 className="mt-1 font-display text-base font-semibold text-text">
-        {e.title}
-        {e.org && (
-          <span className="font-sans font-normal text-text-muted">
-            {" "}
-            · {e.org}
+      {/* Tabellarisch (DE-CV): Zeitraum als feste Spalte links, Inhalt rechts */}
+      <div className="grid grid-cols-1 gap-x-4 sm:grid-cols-[7.5rem_1fr]">
+        <div className="flex flex-row items-baseline gap-x-3 sm:flex-col sm:gap-y-1.5 sm:pt-0.5">
+          <span className="font-mono text-xs text-text-faint">
+            {e.placeholder ? "·····" : e.period}
           </span>
-        )}
-      </h3>
-      {e.desc && (
-        <p className="mt-1 max-w-xl text-sm leading-relaxed text-text-faint">
-          {e.desc}
-        </p>
-      )}
+          <span
+            className={`w-fit rounded-full border px-2 py-0.5 font-mono text-[10px] ${
+              isKi
+                ? "border-accent/30 text-accent"
+                : "border-border text-text-faint"
+            }`}
+          >
+            {typeLabel[e.type]}
+          </span>
+        </div>
+        <div>
+          <h3 className="mt-1 font-display text-base font-semibold text-text sm:mt-0">
+            {e.title}
+            {e.org && (
+              <span className="font-sans font-normal text-text-muted">
+                {" "}
+                · {e.org}
+              </span>
+            )}
+          </h3>
+          {e.desc && (
+            <p className="mt-1 max-w-xl text-sm leading-relaxed text-text-faint">
+              {e.desc}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
-/** Werdegang in zwei Spuren: Hauptweg + KI-Lernreise (PLATZHALTER-Daten). */
+/** Werdegang in zwei Spuren: Hauptweg + KI-Lernreise, antichronologisch. */
 export default function TimelineSection() {
   const haupt = timeline.filter((e) => e.track === "haupt");
   const ki = timeline.filter((e) => e.track === "ki");
@@ -63,7 +68,7 @@ export default function TimelineSection() {
       id="werdegang"
       eyebrow="// WERDEGANG"
       title="Zwei Spuren, ein Weg"
-      intro="Links der formale Weg, rechts die KI-Lernreise, die parallel dazu Fahrt aufgenommen hat — vom ersten Copilot bis zum heutigen Setup."
+      intro="Links der formale Weg, rechts die KI-Lernreise, die parallel dazu Fahrt aufgenommen hat — jeweils mit dem Aktuellsten zuerst."
     >
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div>

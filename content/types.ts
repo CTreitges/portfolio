@@ -39,6 +39,28 @@ export interface Metric {
   label: string;
 }
 
+/**
+ * Projekt-Screenshot. Liegt als vorab optimierte WebP unter public/projects/
+ * (hinter dem Auth-Gate; bewusst KEIN next/image — der Optimizer-Pfad ist
+ * im proxy-Matcher öffentlich). Feste Maße → CLS 0.
+ */
+export interface ProjectScreenshot {
+  src: string; // "/projects/<slug>/<name>.webp" (max 1600w)
+  thumb?: string; // "/projects/<slug>/<name>-thumb.webp" (800w, 16:10)
+  alt: string;
+  caption?: string;
+  width: number;
+  height: number;
+}
+
+/** Kompakter Repo-Verweis für den „Außerdem auf GitHub"-Strip. */
+export interface MiniTool {
+  name: string;
+  desc: string;
+  repo: string;
+  stack: string[];
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -50,6 +72,10 @@ export interface Project {
   relevance: RelevanceTag;
   /** Repo/Link, optional (private Repos: weglassen) */
   repo?: string;
+  /** Karte im Grid ausblenden; Case-Study-Seite bleibt erreichbar. */
+  hidden?: boolean;
+  /** UI-Screenshots (Dummy-Daten); erstes Element = Karten-Thumb. */
+  screenshots?: ProjectScreenshot[];
   stack: string[];
   /** Kurzbeschreibung für die Karte (2-3 Sätze) */
   summary: string;

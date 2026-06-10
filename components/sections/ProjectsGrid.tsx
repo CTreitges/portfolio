@@ -3,7 +3,7 @@ import Section from "@/components/ui/Section";
 import SpotlightCard from "@/components/effects/SpotlightCard";
 import Reveal from "@/components/effects/Reveal";
 import Chip from "@/components/ui/Chip";
-import { projects } from "@/content/projects";
+import { miniTools, projects } from "@/content/projects";
 import type { Project } from "@/content/types";
 
 // CTA: auf Touch-Geräten (kein Hover) dauerhaft sichtbar, sonst erst bei Hover.
@@ -121,14 +121,14 @@ function ProjectCard({ p, featured }: { p: Project; featured: boolean }) {
 
 export default function ProjectsGrid() {
   const flagship = projects.find((p) => p.flagship);
-  const others = projects.filter((p) => !p.flagship);
+  const others = projects.filter((p) => !p.flagship && !p.hidden);
 
   return (
     <Section
       id="projekte"
       eyebrow="// ARBEITSPROBEN"
       title="Projekte"
-      intro="Acht Projekte — von lokaler KI-Dokumentenverarbeitung über produktive Büro-Automatisierung bis zur deklarativen Infrastruktur. Jede Karte führt zu einer Case-Study mit Architektur und Wirkung."
+      intro="Sieben Projekte — von lokaler KI-Dokumentenverarbeitung über produktive Büro-Automatisierung bis zur deklarativen Infrastruktur. Jede Karte führt zu einer Case-Study mit Architektur und Wirkung."
     >
       {flagship && (
         <Reveal>
@@ -144,6 +144,51 @@ export default function ProjectsGrid() {
           </Reveal>
         ))}
       </div>
+
+      {/* Kleinere öffentliche Repos ohne Case-Study-Anspruch */}
+      <Reveal delay={0.08}>
+        <div className="mt-8 rounded-2xl border border-border bg-surface/50 p-5">
+          <p className="font-mono text-xs uppercase tracking-wider text-text-faint">
+            Außerdem auf GitHub
+          </p>
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {miniTools.map((t) => (
+              <a
+                key={t.name}
+                href={t.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/tool flex h-full items-start justify-between gap-3 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-border-glow"
+              >
+                <div>
+                  <span className="font-display text-sm font-semibold text-text">
+                    {t.name}
+                  </span>
+                  <p className="mt-1 text-xs leading-relaxed text-text-muted">
+                    {t.desc}
+                  </p>
+                  <div className="mt-2.5 flex flex-wrap gap-1.5">
+                    {t.stack.map((s) => (
+                      <span
+                        key={s}
+                        className="rounded-md border border-border px-2 py-0.5 font-mono text-[11px] text-text-faint"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <span
+                  aria-hidden
+                  className="shrink-0 text-text-faint transition-colors group-hover/tool:text-accent"
+                >
+                  ↗
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </Reveal>
     </Section>
   );
 }
