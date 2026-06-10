@@ -672,15 +672,9 @@ export const featuredProjects = projects.filter((p) => p.featured);
  */
 export const miniTools: MiniTool[] = [
   {
-    name: "AutoREW",
-    desc: "Automatisiert die PA-Einmessung über die API von Room EQ Wizard: geführte Workflows für Sweeps, SPL- und Time-Alignment, EQ-Optimierung nach Zielkurve — inklusive PDF-Report.",
-    repo: "https://github.com/CTreitges/AutoREW",
-    stack: ["Python", "PyQt6", "REW-API"],
-  },
-  {
-    name: "BackupTool",
-    desc: "Windows-Tray-Tool, das Ordnerpaare im Hintergrund synchronisiert (z. B. OneDrive → NAS) und gelöschte Dateien sicher in einem eigenen Papierkorb aufbewahrt.",
-    repo: "https://github.com/CTreitges/BackupTool",
-    stack: ["Python", "Windows-Service", "System-Tray"],
+    name: "GazeFactory — Uni-Projekt, vor meiner KI-Zeit",
+    desc: "Blickführung (Gaze Guiding) in einer VR-Atomkraftwerk-Simulation: Das System leitet Probanden Schritt für Schritt durchs Hochfahren des Reaktors und reagiert auf Fehler. Entstanden im 4er-Team im Rahmen eines Informatikprojekts an der Universität Trier — komplett ohne KI-Unterstützung gebaut.",
+    repo: "https://github.com/CTreitges/GazeFactory",
+    stack: ["Unity", "C#", "VR"],
   },
 ];

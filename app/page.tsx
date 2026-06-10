@@ -11,6 +11,7 @@ import SetupSection from "@/components/sections/SetupSection";
 import ResearchSection from "@/components/sections/ResearchSection";
 import LabSection from "@/components/sections/LabSection";
 import TimelineSection from "@/components/sections/TimelineSection";
+import MakingOfSection from "@/components/sections/MakingOfSection";
 import ContactSection from "@/components/sections/ContactSection";
 
 export default function Home() {
@@ -28,6 +29,7 @@ export default function Home() {
         <ResearchSection />
         <LabSection />
         <TimelineSection />
+        <MakingOfSection />
         <ContactSection />
       </main>
       <SiteFooter />

@@ -274,6 +274,15 @@ export const nodes: KnowledgeNode[] = [
     desc: "Modelle und Agenten, die auf dem Handy laufen oder von unterwegs gesteuert werden — KI, die nicht am Schreibtisch klebt.",
   },
   {
+    id: "in-unified",
+    label: "Unified Memory & GPU-Stacks",
+    clusterId: "interests",
+    x: 67,
+    y: 64,
+    level: "satellite",
+    desc: "Warum DGX Spark und Mac Studio für große lokale Modelle spannend sind: gemeinsamer Speicher für CPU und GPU statt harter VRAM-Grenzen — und wann ein klassischer Grafikkarten-Stack trotzdem gewinnt. Hardware-Vergleiche sind bei mir Freizeit.",
+  },
+  {
     id: "in-benchmarks",
     label: "Open-Weight-Modellvergleich",
     clusterId: "interests",

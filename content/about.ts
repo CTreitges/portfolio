@@ -4,16 +4,22 @@
  */
 
 export const about = {
-  // Kurzprofil
+  // Kurzprofil (überarbeitet 2026-06-10 nach User-Vorgabe)
   profile:
-    "Informatik-Hintergrund, in der Eifel verwurzelt, mit einem Hang dazu, Werkzeuge selbst zu bauen statt sie nur zu benutzen. Ich entwickle KI-Lösungen, die im Alltag echte Arbeit abnehmen — am liebsten lokal und datenschutzkonform.",
+    "Informatikstudent an der Universität Trier (Bachelor kurz vor dem Abschluss), in der Eifel verwurzelt — daneben zwei eigene Kleingewerbe: IT-Dienstleistungen sowie Musikveranstaltungen mit PA-Verleih. Seit einem halben Jahr liegt mein Fokus, auch in der Freizeit, fast vollständig auf KI und den Lösungen, die damit möglich werden.",
+
+  profileDrive:
+    "Werkzeuge zu bauen, die anderen das Leben leichter machen, war schon vor der KI-Zeit mein Antrieb — damals noch mit dem klassischen Ziel Softwareentwickler. Klassische Berufserfahrung bringe ich noch nicht mit, dafür ein eigenes Gewerbe, erste Kundenprojekte und Software, die produktiv läuft.",
+
+  profilePersonal:
+    "Ich habe ADHS — und habe gelernt, es für mich arbeiten zu lassen: Der Hyperfokus ist mein Werkzeug, um mich in kurzer Zeit tief in neue Themen einzuarbeiten. Und wenn ich etwas schaffen will, habe ich Biss.",
 
   howIWork:
     "Hands-on und autodidaktisch. Ich baue Dinge, bis sie produktiv laufen — nicht bis sie demobereit sind. Und ich recherchiere gern, bis ich die technisch beste Lösung gefunden habe.",
 
-  // Warum KI — die persönliche Anekdote (Interview B)
+  // Warum KI — die persönliche Anekdote (Interview B, geschärft 2026-06-10)
   whyAI:
-    "Angefangen hat es mit KI-Vorschlägen beim Programmieren im Studium — erst Copilot-Previews, dann zunehmend im Alltag. Für das Lieferschein-Projekt bei DerTeller bin ich schließlich ganz ins KI-gestützte Entwickeln eingestiegen: von JetBrains Junie über Claude Chat bis Claude Code. Dort bin ich geblieben, weil sich damit echte Probleme spürbar schneller lösen lassen.",
+    "Der erste Aha-Moment kam im Studium: Copilot-Previews, die plötzlich brauchbaren Code vorschlugen. Richtig gepackt hat es mich beim Lieferschein-Projekt für DerTeller — als aus der Frage 'Geht das nicht mit KI?' eine Anwendung wurde, die seitdem jede Woche produktiv läuft. Inzwischen entwickle ich fast ausschließlich KI-gestützt, von JetBrains Junie bis Claude Code, und habe mir daraus ein eigenes Arbeitssystem mit Memory, Hooks und Agenten-Workflows gebaut. Geblieben bin ich, weil sich echte Probleme damit spürbar schneller lösen lassen — und weil sich kein anderes Feld so schnell bewegt.",
 
   // Was ich mit KI baue (Interview C) — konkrete Fähigkeiten
   buildCapabilities: [
@@ -44,7 +50,7 @@ export const about = {
     "Teamarbeit",
   ],
 
-  // Abseits des Rechners (Interview C) — menschlich, geerdet
+  // Abseits des Rechners (Interview C, überarbeitet 2026-06-10)
   beyondCode: [
     {
       label: "Pfadfinder",
@@ -55,8 +61,12 @@ export const about = {
       desc: "PA-Anlagen bauen und einmessen, Events organisieren — die nerdige Seite zum Anfassen.",
     },
     {
-      label: "Technik-Tüftelei",
-      desc: "Spiele-Server konfigurieren, früher eigene Mods geschrieben — Neugier, die nie ganz aufgehört hat.",
+      label: "Hardware & Technik",
+      desc: "PCs konfigurieren, Komponenten vergleichen, Technik bis ins Detail recherchieren — vom Gaming-Build bis zu Unified-Memory-Konzepten für lokale KI.",
+    },
+    {
+      label: "Wissensdurst",
+      desc: "Ich will wissen, wie Dinge funktionieren — ob Aktienmärkte oder Rennsport-Technik. Recherche ist für mich Freizeit, kein Aufwand.",
     },
   ],
 

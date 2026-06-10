@@ -8,7 +8,7 @@ import { about } from "@/content/about";
  *  Stärken und „Abseits des Rechners" (geerdet, fürs KMU greifbar). */
 export default function About() {
   return (
-    <Section id="about" eyebrow="// ÜBER MICH" title="Wer dahintersteckt">
+    <Section id="about" eyebrow="// PROFIL" title="Über mich">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {/* Foto-Slot */}
         <Reveal>
@@ -30,8 +30,11 @@ export default function About() {
             <p className="mt-2 text-sm leading-relaxed text-text-muted">
               {about.profile}
             </p>
+            <p className="mt-3 text-sm leading-relaxed text-text-muted">
+              {about.profileDrive}
+            </p>
             <p className="mt-3 text-sm leading-relaxed text-text-faint">
-              {about.howIWork}
+              {about.profilePersonal}
             </p>
           </SpotlightCard>
         </Reveal>
@@ -42,6 +45,9 @@ export default function About() {
             <h3 className="font-display text-lg font-semibold">Warum KI</h3>
             <p className="mt-2 text-sm leading-relaxed text-text-muted">
               {about.whyAI}
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-text-faint">
+              {about.howIWork}
             </p>
           </SpotlightCard>
         </Reveal>
@@ -89,7 +95,7 @@ export default function About() {
             <h3 className="font-display text-lg font-semibold">
               Abseits des Rechners
             </h3>
-            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {about.beyondCode.map((b) => (
                 <div key={b.label} className="rounded-xl border border-border bg-bg/40 p-4">
                   <p className="font-mono text-xs uppercase tracking-wider text-accent">

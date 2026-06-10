@@ -20,38 +20,36 @@ export default function CountUp({
   const reduced = useReducedMotionMounted();
   const [display, setDisplay] = useState(value);
 
-  // Zahl + optionale Suffix/Präfix-Reste extrahieren ("16.000+" → 16000, "+").
-  const numeric = value.match(/^([^\d]*)([\d.]+)(.*)$/);
-
   useEffect(() => {
-    if (!inView || !numeric) {
-      if (!numeric) setDisplay(value);
-      return;
-    }
-    // reduced-motion: kein Hochzählen, sofort der Endwert.
-    if (reduced) {
+    // Regex MUSS im Effect leben: ein match()-Array in den Deps wäre bei
+    // jedem Render ein neues Objekt → Effect-Loop, Animation startet endlos
+    // neu und die Zahlen hängen flackernd bei 0 (Bug 2026-06-10).
+    const numeric = value.match(/^([^\d]*)([\d.]+)(.*)$/);
+    const target = numeric ? parseInt(numeric[2].replace(/\./g, ""), 10) : NaN;
+
+    // Kein Hochzählen möglich/gewünscht → einfach den Endwert zeigen.
+    if (!inView || !numeric || Number.isNaN(target) || reduced) {
       setDisplay(value);
       return;
     }
+
     const prefix = numeric[1];
-    const target = parseInt(numeric[2].replace(/\./g, ""), 10);
     const suffix = numeric[3];
-    if (Number.isNaN(target)) {
-      setDisplay(value);
-      return;
-    }
     let raf = 0;
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / durationMs);
       const eased = 1 - Math.pow(1 - t, 3);
       const cur = Math.round(target * eased);
-      setDisplay(`${prefix}${cur.toLocaleString("de-DE")}${suffix}`);
+      // Am Ende exakt den Originalwert setzen (Formatierung bleibt identisch).
+      setDisplay(
+        t < 1 ? `${prefix}${cur.toLocaleString("de-DE")}${suffix}` : value
+      );
       if (t < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, value, numeric, durationMs, reduced]);
+  }, [inView, value, durationMs, reduced]);
 
   return <span ref={ref}>{display}</span>;
 }

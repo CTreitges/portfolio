@@ -35,6 +35,7 @@ export const site = {
     { id: "research", label: "Recherchen" },
     { id: "lab", label: "Lab" },
     { id: "werdegang", label: "Werdegang" },
+    { id: "making-of", label: "Making-of" },
     { id: "kontakt", label: "Kontakt" },
   ],
 
