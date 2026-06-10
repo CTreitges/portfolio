@@ -44,6 +44,7 @@ function CardThumb({ p }: { p: Project }) {
   if (!shot) return null;
   return (
     <div className="mb-4 overflow-hidden rounded-lg border border-border">
+      {/* eslint-disable-next-line @next/next/no-img-element -- bewusst kein next/image: Optimizer-Pfad läge vor dem Auth-Gate */}
       <img
         src={shot.thumb ?? shot.src}
         alt={shot.alt}

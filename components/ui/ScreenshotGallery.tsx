@@ -34,6 +34,7 @@ export default function ScreenshotGallery({
               aria-label={`${s.alt} — vergrößert ansehen`}
               className="group block w-full cursor-zoom-in overflow-hidden rounded-xl border border-border bg-surface focus-visible:outline-2 focus-visible:outline-accent"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element -- bewusst kein next/image: Optimizer-Pfad läge vor dem Auth-Gate */}
               <img
                 src={s.src}
                 alt={s.alt}
@@ -64,6 +65,7 @@ export default function ScreenshotGallery({
       >
         {active && (
           <figure className="m-0">
+            {/* eslint-disable-next-line @next/next/no-img-element -- bewusst kein next/image: Optimizer-Pfad läge vor dem Auth-Gate */}
             <img
               src={active.src}
               alt={active.alt}
