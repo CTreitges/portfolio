@@ -38,6 +38,25 @@ function MetaBlock({ p, max }: { p: Project; max: number }) {
   );
 }
 
+/** Karten-Thumb (16:10, feste Maße → CLS 0); nutzt das research-thumbs-Muster. */
+function CardThumb({ p }: { p: Project }) {
+  const shot = p.screenshots?.[0];
+  if (!shot) return null;
+  return (
+    <div className="mb-4 overflow-hidden rounded-lg border border-border">
+      <img
+        src={shot.thumb ?? shot.src}
+        alt={shot.alt}
+        loading="lazy"
+        decoding="async"
+        width={800}
+        height={500}
+        className="aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+      />
+    </div>
+  );
+}
+
 function ProjectHead({ p }: { p: Project }) {
   return (
     <div className="flex items-start justify-between gap-3">
@@ -82,6 +101,7 @@ function FlagshipCard({ p }: { p: Project }) {
           )}
         </div>
         <div className="flex flex-col justify-center border-t border-border pt-5 md:border-l md:border-t-0 md:pl-8 md:pt-0">
+          <CardThumb p={p} />
           <MetaBlock p={p} max={7} />
         </div>
       </Link>
@@ -97,6 +117,7 @@ function ProjectCard({ p, featured }: { p: Project; featured: boolean }) {
         className="flex h-full flex-col p-6"
         aria-label={`${p.title} — Case-Study öffnen`}
       >
+        <CardThumb p={p} />
         <ProjectHead p={p} />
         <p className="mt-2 text-sm leading-relaxed text-text-muted">
           {p.tagline}

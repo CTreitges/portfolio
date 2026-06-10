@@ -8,6 +8,7 @@ import FlowDiagram from "@/components/effects/FlowDiagram";
 import CountUp from "@/components/effects/CountUp";
 import Chip from "@/components/ui/Chip";
 import Reveal from "@/components/effects/Reveal";
+import ScreenshotGallery from "@/components/ui/ScreenshotGallery";
 import { projects, projectsBySlug } from "@/content/projects";
 
 export function generateStaticParams() {
@@ -105,6 +106,18 @@ export default async function ProjectPage({
             <p key={i}>{t}</p>
           ))}
         </Block>
+
+        {/* Einblicke (Screenshots mit Dummy-Daten) */}
+        {p.screenshots && p.screenshots.length > 0 && (
+          <section className="mt-12">
+            <h2 className="font-display text-xl font-semibold">Einblicke</h2>
+            <Reveal>
+              <div className="mt-4">
+                <ScreenshotGallery shots={p.screenshots} />
+              </div>
+            </Reveal>
+          </section>
+        )}
 
         {/* Architektur */}
         {cs.architecture && (
