@@ -139,6 +139,24 @@ body {
   transform: translateY(18px);
 }
 
+/* Hero-Entrance als reine CSS-Animation: läuft ab dem First Paint und hängt
+   nicht an der JS-Hydration (LCP!). Stagger über --hero-delay; den
+   reduced-motion-Ersatz liefert der globale Block unten (0.001ms + both). */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-rise {
+  animation: hero-rise 0.7s var(--ease-out-quint) both;
+  animation-delay: var(--hero-delay, 0s);
+}
+
 /* Text-Gradient (Cyan → Violett) */
 .text-gradient {
   background: linear-gradient(100deg, var(--color-accent-soft), var(--color-glow-soft));
@@ -161,6 +179,8 @@ body {
   html { scroll-behavior: auto; }
   .aurora { animation: none; }
   .reveal-init { opacity: 1; transform: none; }
+  /* sofort sichtbar — sonst hielte der animation-delay die Elemente kurz auf opacity 0 */
+  .hero-rise { animation: none; }
   *,
   *::before,
   *::after {

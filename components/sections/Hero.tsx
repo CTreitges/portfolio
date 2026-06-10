@@ -1,59 +1,67 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import AuroraBackdrop from "@/components/effects/AuroraBackdrop";
 import MagneticButton from "@/components/effects/MagneticButton";
 import { site } from "@/content/site";
 
 // Rein clientseitig: 3D-Partikelfeld liegt hinter dem Aurora-Glow.
-// Rendert auf Mobile/reduced-motion nichts → dann greift allein Aurora.
 const HeroBackdrop = dynamic(
   () => import("@/components/effects/HeroBackdrop"),
   { ssr: false }
 );
 
+/* Entrance läuft als CSS-Animation (.hero-rise in globals.css) statt über
+   Motion: sie startet beim First Paint statt nach der Hydration — sonst
+   bleibt die Subline (das LCP-Element) sekundenlang auf opacity 0. */
+const rise = (s: number) => ({ "--hero-delay": `${s}s` }) as React.CSSProperties;
+
 export default function Hero() {
+  // three.js-Chunk nur dort laden, wo er auch rendert (Desktop, volle
+  // Motion): auf Mobile/reduced spart das den kompletten Download.
+  // Hydration-sicher: Server wie erster Client-Render zeigen false.
+  const [showBackdrop, setShowBackdrop] = useState(false);
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 768px)").matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (desktop && !reduced) setShowBackdrop(true);
+  }, []);
+
   return (
     <section
       id="top"
       className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-5 text-center"
     >
       <AuroraBackdrop className="[mask-image:radial-gradient(ellipse_at_center,#000_55%,transparent_85%)]" />
-      <HeroBackdrop />
+      {showBackdrop && <HeroBackdrop />}
 
-      <motion.p
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="mb-5 font-mono text-xs uppercase tracking-[0.25em] text-accent sm:text-sm"
+      <p
+        style={rise(0)}
+        className="hero-rise mb-5 font-mono text-xs uppercase tracking-[0.25em] text-accent sm:text-sm"
       >
         {site.eyebrow}
-      </motion.p>
+      </p>
 
-      <motion.h1
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-        className="font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-7xl"
+      <h1
+        style={rise(0.08)}
+        className="hero-rise font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-7xl"
       >
         {site.name}
-      </motion.h1>
+      </h1>
 
-      <motion.p
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-6 max-w-2xl text-balance text-lg leading-relaxed text-text-muted sm:text-xl"
+      <p
+        style={rise(0.16)}
+        className="hero-rise mt-6 max-w-2xl text-balance text-lg leading-relaxed text-text-muted sm:text-xl"
       >
         {site.heroSubline}
-      </motion.p>
+      </p>
 
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-8 flex flex-wrap items-center justify-center gap-3"
+      <div
+        style={rise(0.24)}
+        className="hero-rise mt-8 flex flex-wrap items-center justify-center gap-3"
       >
         {site.proofChips.map((c) => (
           <div
@@ -66,19 +74,17 @@ export default function Hero() {
             <span className="text-sm text-text-faint">{c.label}</span>
           </div>
         ))}
-      </motion.div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-10 flex flex-wrap items-center justify-center gap-4"
+      <div
+        style={rise(0.32)}
+        className="hero-rise mt-10 flex flex-wrap items-center justify-center gap-4"
       >
         <MagneticButton href="#projekte">Projekte ansehen</MagneticButton>
         <MagneticButton href="#kontakt" variant="ghost">
           Kontakt
         </MagneticButton>
-      </motion.div>
+      </div>
 
       <div
         aria-hidden
