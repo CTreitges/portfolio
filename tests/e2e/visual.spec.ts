@@ -2,6 +2,10 @@ import { test, type Page } from "@playwright/test";
 
 const CODE = "dev-test-code";
 
+// Eigene XFF-IP pro Spec-Datei: das Unlock-Rate-Limit (5/15min) zählt auch
+// erfolgreiche Logins — ohne getrennte IPs blockt der Suite-Lauf sich selbst.
+test.use({ extraHTTPHeaders: { "x-forwarded-for": "203.0.113.50" } });
+
 // emulateMedia setzt prefers-reduced-motion verlässlich (anders als test.use hier):
 // → Lenis aus (natives Scrollen) + Reveal sofort sichtbar → vollständiger Full-Page-Shot.
 async function unlock(page: Page) {

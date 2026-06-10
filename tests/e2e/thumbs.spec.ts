@@ -5,6 +5,9 @@ import { researchDocs } from "../../content/research";
 // Research-Karten. Kein echter Test — ein Generator-Lauf.
 const CODE = "dev-test-code";
 
+// Eigene XFF-IP pro Spec-Datei (Unlock-Rate-Limit zählt auch Erfolge).
+test.use({ extraHTTPHeaders: { "x-forwarded-for": "203.0.113.53" } });
+
 test("generate research thumbnails", async ({ page }) => {
   await page.goto("/unlock");
   await page.locator("#code").fill(CODE);

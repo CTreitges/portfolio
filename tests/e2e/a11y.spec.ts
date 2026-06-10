@@ -3,6 +3,9 @@ import AxeBuilder from "@axe-core/playwright";
 
 const CODE = "dev-test-code";
 
+// Eigene XFF-IP pro Spec-Datei (Unlock-Rate-Limit zählt auch Erfolge).
+test.use({ extraHTTPHeaders: { "x-forwarded-for": "203.0.113.51" } });
+
 async function scan(page: import("@playwright/test").Page, label: string) {
   const results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])

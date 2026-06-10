@@ -2,6 +2,9 @@ import { test, type Page } from "@playwright/test";
 
 const CODE = "dev-test-code";
 
+// Eigene XFF-IP pro Spec-Datei (Unlock-Rate-Limit zählt auch Erfolge).
+test.use({ extraHTTPHeaders: { "x-forwarded-for": "203.0.113.52" } });
+
 async function unlock(page: Page) {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/unlock");
