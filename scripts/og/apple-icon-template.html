@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<!-- Wird nur von scripts/og/capture-og.mjs gerendert (180x180 → app/apple-icon.png).
+     Vollflächig (kein Alpha) — iOS maskiert die Ecken selbst. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 180px; height: 180px; overflow: hidden; }
+  body {
+    position: relative;
+    background: #0a0b12;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ring {
+    position: absolute; inset: 7px;
+    border: 4px solid rgba(34, 211, 238, 0.35);
+    border-radius: 36px;
+  }
+  .ct {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700; font-size: 80px; color: #67e8f9;
+  }
+</style>
+</head>
+<body>
+  <div class="ring"></div>
+  <div class="ct">CT</div>
+</body>
+</html>

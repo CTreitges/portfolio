@@ -32,9 +32,12 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Alles AUSSER: Unlock-Seite + Unlock-API, Next-Build-Assets, Favicons,
-  // robots.txt und das generische OG-Bild (Link-Previews ohne Leak).
+  // Alles AUSSER: Unlock-Seite + Unlock-API, statische Build-Assets, Favicons
+  // (inkl. apple-icon), robots.txt und das generische OG-Bild (Link-Previews
+  // ohne Leak). _next/image bleibt bewusst HINTER dem Gate: der Optimizer
+  // könnte sonst geschützte Bilder (z.B. Projekt-Screenshots) öffentlich
+  // ausliefern — die Site nutzt ihn nicht.
   matcher: [
-    "/((?!unlock|api/unlock|_next/static|_next/image|favicon\\.ico|favicon\\.svg|icon\\.svg|og\\.png|robots\\.txt).*)",
+    "/((?!unlock|api/unlock|_next/static|favicon\\.ico|favicon\\.svg|icon\\.svg|apple-icon|og\\.png|robots\\.txt).*)",
   ],
 };

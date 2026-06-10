@@ -1,5 +1,6 @@
 import SmoothScroll from "@/lib/animation/SmoothScroll";
 import NoiseOverlay from "@/components/effects/NoiseOverlay";
+import ScrollProgress from "@/components/effects/ScrollProgress";
 import SiteHeader from "@/components/layout/SiteHeader";
 import SiteFooter from "@/components/layout/SiteFooter";
 import Hero from "@/components/sections/Hero";
@@ -16,6 +17,7 @@ export default function Home() {
   return (
     <SmoothScroll>
       <NoiseOverlay />
+      <ScrollProgress />
       <SiteHeader />
       <main>
         <Hero />

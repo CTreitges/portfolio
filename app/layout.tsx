@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
@@ -21,8 +21,12 @@ const jetbrainsMono = JetBrains_Mono({
 /**
  * Bewusst generische Metadaten: Die Site ist privat (Code-Gate) —
  * Link-Previews und Crawler bekommen nichts Inhaltliches zu sehen.
+ * og.png ist öffentlich (proxy-Matcher-Ausnahme) und zeigt deshalb
+ * nur Name + Rolle — so wirkt der verschickte Magic-Link hochwertig,
+ * ohne Inhalte zu leaken.
  */
 export const metadata: Metadata = {
+  metadataBase: new URL("https://<SERVER_IP>"),
   title: {
     default: "Portfolio — Zugang per Einladung",
     template: "%s",
@@ -34,6 +38,23 @@ export const metadata: Metadata = {
     noarchive: true,
     googleBot: { index: false, follow: false },
   },
+  openGraph: {
+    title: "Christof Treitges — KI-Entwickler & Innovation Specialist",
+    description: "Privates Bewerbungs-Portfolio — Zugang per Einladung.",
+    type: "website",
+    locale: "de_DE",
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Christof Treitges — KI-Entwickler & Innovation Specialist",
+    description: "Privates Bewerbungs-Portfolio — Zugang per Einladung.",
+    images: ["/og.png"],
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0a0b12",
 };
 
 export default function RootLayout({
