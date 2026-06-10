@@ -35,6 +35,84 @@ export const labConcepts: LabConcept[] = [
     },
   },
   {
+    id: "usecase-benchmarks",
+    title: "Benchmark-System für meine Use-Cases",
+    status: "konzept",
+    statusNote: "Konzept — erste Modellvergleiche laufen bereits manuell",
+    pitch:
+      "Ein eigenes Benchmark-System, das keine generischen Leaderboards nachbetet, sondern meine echten Use-Cases testet: Parsing-Regeln vorschlagen, deutsche Belege extrahieren, Automations-Skripte schreiben. Gemessen wird pro Modell und pro Effort-Stufe — vom schnellen Solo-Lauf bis zum Multi-Agent-Workflow — nach Qualität, Kosten und Latenz. Weil sich die Modell-Landschaft wöchentlich ändert, läuft das System regelmäßig neu und gibt aktiv Feedback: 'Für Aufgabe X lohnt sich jetzt Modell Y.'",
+    kmuAngle:
+      "Modellwahl wird vom Bauchgefühl zum Messwert: Ein KMU sieht schwarz auf weiß, welches Modell für den eigenen Dokumenten-Workflow reicht — und ab wann das günstige lokale Modell den teuren Cloud-Aufruf ersetzt.",
+    flow: {
+      nodes: [
+        { id: "cases", label: "Meine Use-Cases", sub: "Parsing · Extraktion · Skripte", lane: 0 },
+        { id: "harness", label: "Test-Harness", sub: "feste Aufgaben + Soll-Ergebnisse", lane: 1, accent: "cyan" },
+        { id: "models", label: "Modelle × Effort", sub: "lokal · Cloud · Solo bis Workflow", lane: 2 },
+        { id: "score", label: "Bewertung", sub: "Qualität · Kosten · Latenz", lane: 3, accent: "violet" },
+        { id: "report", label: "Laufendes Feedback", sub: "Empfehlung je Aufgabe", lane: 4 },
+      ],
+      edges: [
+        { from: "cases", to: "harness", animated: true },
+        { from: "harness", to: "models", animated: true },
+        { from: "models", to: "score", animated: true },
+        { from: "score", to: "report", animated: true },
+        { from: "report", to: "harness", label: "neue Modelle" },
+      ],
+    },
+  },
+  {
+    id: "model-specialization",
+    title: "Modell-Spezialisierung statt Modell-Gigantismus",
+    status: "konzept",
+    statusNote: "Konzept — Open-Weight-Begeisterung mit konkretem Ziel",
+    pitch:
+      "Open-Weight-Modelle (lokal via Ollama oder über Ollama Cloud) gezielt auf einen Use-Case nachtrainieren, statt für alles das größte Modell zu mieten: ein kleines Modell, das nur deutsche Geschäftsbelege oder das eigene Produktvokabular versteht — dafür schneller, günstiger und komplett on-prem. Die Trainingsdaten entstehen bei mir nebenbei: die 364 kuratierten Regeln des Lieferschein-Processors und die bestätigten Extraktionen aus DocuFlow sind genau die Feedback-Datensätze, die man dafür braucht.",
+    kmuAngle:
+      "Für KMU der realistische Weg zu eigener KI: kein Riesenmodell, sondern ein kleiner Spezialist fürs eigene Vokabular — bezahlbar trainiert, lokal betrieben, mit jedem bestätigten Beleg besser.",
+    flow: {
+      nodes: [
+        { id: "base", label: "Open-Weight-Basis", sub: "Ollama · Ollama Cloud", lane: 0 },
+        { id: "data", label: "Eigene Daten", sub: "364 Regeln · bestätigte Extraktionen", lane: 0 },
+        { id: "tune", label: "Nachtraining", sub: "LoRA / Finetune", lane: 1, accent: "cyan" },
+        { id: "spec", label: "Spezialmodell", sub: "klein · schnell · on-prem", lane: 2, accent: "violet" },
+        { id: "loop", label: "Feedback-Loop", sub: "Accept/Reject als neue Daten", lane: 3 },
+      ],
+      edges: [
+        { from: "base", to: "tune", animated: true },
+        { from: "data", to: "tune", animated: true },
+        { from: "tune", to: "spec", animated: true },
+        { from: "spec", to: "loop", animated: true },
+        { from: "loop", to: "tune", label: "besser werden", animated: true },
+      ],
+    },
+  },
+  {
+    id: "meta-prompting",
+    title: "Meta-Prompting — ein Agent promptet den Agenten",
+    status: "konzept",
+    statusNote: "Konzept — das Hermes-Gateway dafür läuft bereits",
+    pitch:
+      "Hermes führt das Vorgespräch mit mir: Er fragt nach, bis klar ist, was ich wirklich will — und formuliert daraus den präzisen Arbeitsauftrag für eine Claude-Code-Session, deutlich besser als ein schneller Prompt zwischen Tür und Angel. Dazu verwaltet er die Kontingente: Aufträge landen in einer Warteschlange und starten automatisch, sobald das Session-Limit wieder frei ist — auch nachts um drei.",
+    kmuAngle:
+      "Mitarbeitende beschreiben Aufgaben in ihren eigenen Worten; der Meta-Agent übersetzt sie in saubere KI-Arbeitsaufträge und taktet teure Kontingente optimal aus. Niemand braucht eine Prompt-Schulung.",
+    flow: {
+      nodes: [
+        { id: "me", label: "Mensch", sub: "grobe Idee", lane: 0 },
+        { id: "hermes", label: "Hermes", sub: "Interview · Prompt-Optimierung", lane: 1, accent: "cyan" },
+        { id: "queue", label: "Warteschlange", sub: "wartet auf freies Kontingent", lane: 2 },
+        { id: "cc", label: "Claude-Code-Session", sub: "führt aus", lane: 3, accent: "violet" },
+        { id: "out", label: "Ergebnis", lane: 4 },
+      ],
+      edges: [
+        { from: "me", to: "hermes", animated: true },
+        { from: "hermes", to: "me", label: "fragt nach" },
+        { from: "hermes", to: "queue", animated: true },
+        { from: "queue", to: "cc", label: "Limit frei", animated: true },
+        { from: "cc", to: "out", animated: true },
+      ],
+    },
+  },
+  {
     id: "local-orchestration",
     title: "Claude orchestriert lokale KI",
     status: "prototyp",
