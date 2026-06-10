@@ -31,6 +31,55 @@ export const projects: Project[] = [
     currentStatus:
       "Seit September 2025 in wöchentlichem Produktiveinsatz, laufend weiterentwickelt.",
     headlineMetric: { value: "482", label: "automatisierte Tests" },
+    // Alle Aufnahmen mit einer rein synthetischen Dummy-Bedarfsübersicht
+    // (Event "Musterfirma") — keine echten Event-/Kunden-/Gästedaten.
+    screenshots: [
+      {
+        src: "/projects/lieferschein-processor/01-parser-verlauf.webp",
+        thumb: "/projects/lieferschein-processor/01-parser-verlauf-thumb.webp",
+        alt: "Streamlit-Oberfläche des Lieferschein-Processors mit Verlauf-Tab: Tabelle der verarbeiteten PDF-Datei, Zähler erfolgreicher Updates und Download-Schaltflächen.",
+        caption:
+          "Verlauf nach der Verarbeitung einer Bedarfsübersicht: erkannte Metadaten (Event, Wochentag, PAX), erfolgreiche Excel-Updates und Downloads für Excel und Beschriftungen.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/lieferschein-processor/02-fehlererkennung.webp",
+        thumb: "/projects/lieferschein-processor/02-fehlererkennung-thumb.webp",
+        alt: "Ergebnisbereich der App mit roten Fehlermeldungen zu nicht zugeordneten Einträgen einer verarbeiteten Test-PDF.",
+        caption:
+          "Automatische Fehlererkennung: nicht zugeordnete PDF-Positionen und ein Trigger-Treffer ohne passendes Excel-Produkt, einzeln quittierbar.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/lieferschein-processor/03-debug-matching.webp",
+        thumb: "/projects/lieferschein-processor/03-debug-matching-thumb.webp",
+        alt: "Debug-Tabelle mit Zeilenstatus matched/unmatched, Mengen, Größenblöcken und Trigger-Schlüsseln pro PDF-Zeile.",
+        caption:
+          "Debug-Ansicht des Parsers: jede PDF-Zeile mit Menge, Größenblock und Trigger-Zuordnung — 13 von 15 Zeilen gematcht, 2 bewusst unbekannte Positionen.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/lieferschein-processor/04-excel-tabelle.webp",
+        thumb: "/projects/lieferschein-processor/04-excel-tabelle-thumb.webp",
+        alt: "Tabellen-Tab mit Excel-Vorschau: Produktzeilen mit Einheiten und eingetragenen Mengen aus der verarbeiteten Test-PDF.",
+        caption:
+          "Vorschau der aktualisierten Produktionsübersicht direkt in der App: die erkannten Mengen sind in die Excel-Spalte des Events gebucht.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/lieferschein-processor/05-ki-vorschlaege.webp",
+        thumb: "/projects/lieferschein-processor/05-ki-vorschlaege-thumb.webp",
+        alt: "Bereich KI-gestützte Fehlerbehebung mit zwei Regel-Vorschlägen, Zielprodukt-Auswahl und Schaltflächen zum Annehmen oder Erstellen.",
+        caption:
+          "KI-Vorschlags-UI im Regelwerk: Vorschläge für neue Regeln zu unbekannten Positionen, filterbar und per Annehmen/Verwerfen anwendbar.",
+        width: 1600,
+        height: 1000,
+      },
+    ],
     caseStudy: {
       aiCore: true,
       problem: [
@@ -106,6 +155,46 @@ export const projects: Project[] = [
     currentStatus:
       "In aktiver Entwicklung; Frontend auf Svelte 5 + FastAPI migriert, OCR-Pipeline steht.",
     headlineMetric: { value: "3-stufig", label: "OCR-Pipeline" },
+    // Demo-Lauf mit fiktiven Rechnungen (Elektro Mustermann GmbH u.a.),
+    // ungültigen IBANs (DE00…) und neutralen Pfaden.
+    screenshots: [
+      {
+        src: "/projects/docuflow/01-eingang-pruefansicht.webp",
+        thumb: "/projects/docuflow/01-eingang-pruefansicht-thumb.webp",
+        alt: "Dunkle DocuFlow-Oberfläche: Tabelle eingegangener Rechnungs-PDFs mit Status- und Konfidenz-Spalten, darunter Prüf-Panel mit extrahierten Feldern einer fiktiven Beispielrechnung.",
+        caption:
+          "Dokumenten-Eingang mit Prüf-Ansicht: per Template extrahierte Rechnungsfelder (Absender, Betrag, IBAN, Zahlungsziel) mit Konfidenz-Badges, direkt editierbar.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/docuflow/02-regel-editor.webp",
+        thumb: "/projects/docuflow/02-regel-editor-thumb.webp",
+        alt: "Regel-Editor in DocuFlow: aufgeklappte Regel 'Handwerker-Rechnungen' mit Bedingungszeilen, Zielordner-Platzhaltern wie {jahr} und Dateinamens-Bausteinen samt Pfadvorschau.",
+        caption:
+          "Sortier-Regeln im Schema WANN → WOHIN → WIE BENENNEN: Bedingungen, Zielordner mit Platzhaltern und Dateinamens-Bausteine mit Live-Pfadvorschau.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/docuflow/03-dashboard.webp",
+        thumb: "/projects/docuflow/03-dashboard-thumb.webp",
+        alt: "DocuFlow-Dashboard: vier Kennzahl-Karten, Tabelle sortierter Dokumente mit Zielpfaden und ein Aktivitäts-Log mit Einträgen zu Template-Erkennung und Sortierung.",
+        caption:
+          "Dashboard mit Status-Kennzahlen, einsortierten Dokumenten samt Zielpfad und Aktivitäts-Log mit Template-Match-Scores.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/docuflow/04-ocr-debug.webp",
+        thumb: "/projects/docuflow/04-ocr-debug-thumb.webp",
+        alt: "OCR-Debug-Ansicht in DocuFlow: dreistufige Pipeline-Anzeige mit Häkchen für Text-Extraktion und Template-Match sowie Raster der extrahierten Rechnungsfelder.",
+        caption:
+          "Pipeline-Diagnose an einem Beleg: Text-Extraktion → Template-Match (100 %) → OCR-Fallback übersprungen, darunter alle extrahierten Felder mit Konfidenz.",
+        width: 1600,
+        height: 1000,
+      },
+    ],
     caseStudy: {
       aiCore: true,
       problem: [
@@ -371,6 +460,28 @@ export const projects: Project[] = [
       "Entstanden aus Ärger über die Abo-Gebühren vergleichbarer DJ-Software zur Set-Vorbereitung — also habe ich es selbst gebaut.",
     currentStatus: "Stabil (Version 5); modularisiert, Rekordbox-kompatibel.",
     headlineMetric: { value: "50+", label: "automatisierte Tests" },
+    // GUI offscreen gerendert; ausschließlich fiktive Demo-Tracks
+    // (per ffmpeg generierte Sinus-WAVs).
+    screenshots: [
+      {
+        src: "/projects/audio-normalizer/01-hauptfenster-hybrid.webp",
+        thumb: "/projects/audio-normalizer/01-hauptfenster-hybrid-thumb.webp",
+        alt: "Audio Normalizer Hauptfenster: Modus-Auswahl auf Hybrid-Normalizing mit vier Parameterfeldern, Drag-and-drop-Zone und Liste mit drei geladenen WAV-Demo-Tracks.",
+        caption:
+          "Hauptfenster im Hybrid-Modus: Ziel-Peak, Max True Peak, maximale Abweichung und Referenz-LUFS als Batch-Parameter für drei Demo-Tracks.",
+        width: 1560,
+        height: 1760,
+      },
+      {
+        src: "/projects/audio-normalizer/02-loudness-modus.webp",
+        thumb: "/projects/audio-normalizer/02-loudness-modus-thumb.webp",
+        alt: "Audio Normalizer im Loudness-Normalizing-Modus: Eingabefelder für Ziel-Loudness in LUFS und Max True Peak sowie Checkbox zum Überschreiben mit Backup.",
+        caption:
+          "Loudness-Normalisierung nach EBU R128 mit Ziel-LUFS und True-Peak-Limit — inklusive Rekordbox-kompatiblem Überschreiben.",
+        width: 1560,
+        height: 1760,
+      },
+    ],
     caseStudy: {
       aiCore: false,
       problem: [
@@ -397,6 +508,7 @@ export const projects: Project[] = [
         "Testbarkeit beginnt bei der Architektur: eine Qt-freie Engine lässt sich vollständig ohne GUI prüfen.",
         "Domänenwissen (Rekordbox-Eigenheiten) entscheidet über die Praxistauglichkeit mehr als der Algorithmus.",
       ],
+      screenshotNote: "Screenshots mit fiktiven Demo-Tracks.",
     },
   },
   {
@@ -461,6 +573,46 @@ export const projects: Project[] = [
     currentStatus:
       "Grundstein gelegt: Architektur und Backend stehen, aber die Streaming-Dienst-Links und die Oberfläche sind noch nicht vollständig funktional. Wird bei Gelegenheit weiterentwickelt.",
     headlineMetric: { value: "deklarativ", label: "System als Code" },
+    // Dev-Lauf mit Stub-Adaptern und rein fiktiven Demo-Daten
+    // (Geräte, SSIDs, Tracks) — Kiosk-Viewport.
+    screenshots: [
+      {
+        src: "/projects/pa-streaming-hub/01-mieter-hub.webp",
+        thumb: "/projects/pa-streaming-hub/01-mieter-hub-thumb.webp",
+        alt: "Dunkle Kiosk-Oberfläche mit Kacheln zur Musikquellen-Auswahl, Now-Playing-Anzeige eines laufenden Spotify-Titels, Lautstärkeregler und drei DSP-Profil-Buttons.",
+        caption:
+          "Kiosk-Startseite für Mieter: Streaming-Quellen, Now-Playing-Banner, Lautstärke und DSP-Schnellwahl — bedienbar ohne IT-Kenntnisse.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/pa-streaming-hub/02-dsp-profile.webp",
+        thumb: "/projects/pa-streaming-hub/02-dsp-profile-thumb.webp",
+        alt: "Admin-Seite mit Signalketten-Anzeige (Highpass, EQ, DSP-Sink) und drei Profilkarten; das Profil Party ist als aktiv markiert.",
+        caption:
+          "DSP-Verwaltung mit visualisierter PipeWire-Signalkette und drei Klangprofilen (Hintergrund, Party, Sprache) inkl. LUFS-/SPL-Zielwerten.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/pa-streaming-hub/03-admin-dashboard.webp",
+        thumb: "/projects/pa-streaming-hub/03-admin-dashboard-thumb.webp",
+        alt: "Admin-Dashboard mit sechs grünen Status-Karten, Navigation zu DSP, WLAN, Bluetooth, USB und System-Reset sowie einem Audit-Log mit Zeitstempeln.",
+        caption:
+          "PIN-geschütztes Vermieter-Dashboard: Live-Status aller Subsysteme, Navigation und Audit-Log der letzten Admin-Aktionen.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/pa-streaming-hub/04-spotify-connect.webp",
+        thumb: "/projects/pa-streaming-hub/04-spotify-connect-thumb.webp",
+        alt: "Spotify-Connect-Seite mit Gerätenamen-Banner, großem QR-Code, nummerierter Drei-Schritte-Anleitung und laufendem Titel unten.",
+        caption:
+          "Spotify Connect ohne Geräte-Login: QR-Code, Gerätename für die Spotify-App und 3-Schritte-Anleitung für Mieter.",
+        width: 1600,
+        height: 1000,
+      },
+    ],
     caseStudy: {
       aiCore: false,
       problem: [
@@ -504,6 +656,8 @@ export const projects: Project[] = [
         "Weniger ist mehr: kein Desktop, kein Login, keine Angriffsfläche.",
         "Ehrlich bleiben über den Reifegrad — ein semi-funktionaler Prototyp ist kein fertiges Produkt.",
       ],
+      screenshotNote:
+        "Screenshots aus einem Dev-Lauf der Weboberfläche mit fiktiven Demo-Daten — auf dem Mini-PC bootet das System direkt in diese Ansicht.",
     },
   },
 ];
