@@ -266,6 +266,27 @@ export const projects: Project[] = [
     currentStatus:
       "Produktiv-Zweig (digitale Formulare) stabil; OCR-Zweig (Mistral/Ollama) als dokumentierter Prototyp.",
     headlineMetric: { value: "2 Wege", label: "EU-Cloud / lokal" },
+    // Demo-Lauf mit selbst erzeugtem, fiktivem Personalfragebogen.
+    screenshots: [
+      {
+        src: "/projects/ordio-csv/01-hauptfenster.webp",
+        thumb: "/projects/ordio-csv/01-hauptfenster-thumb.webp",
+        alt: "Tkinter-Hauptfenster von Ordio-Perso-CSV: Überschrift 'Personalfragebogen → Ordio-Import', Drop-Zone zum Auswählen von PDFs, Zielordner-Anzeige und Aktions-Buttons.",
+        caption:
+          "Bewusst einfache Oberfläche für den HR-Alltag: PDFs wählen, konvertieren, fertig — Zielordner und Status immer sichtbar.",
+        width: 640,
+        height: 420,
+      },
+      {
+        src: "/projects/ordio-csv/02-verarbeitung-erfolg.webp",
+        thumb: "/projects/ordio-csv/02-verarbeitung-erfolg-thumb.webp",
+        alt: "Dasselbe Fenster nach erfolgreicher Konvertierung: grüne Statuszeile mit erstelltem Paket Max-Mustermann-Stammdaten.zip.",
+        caption:
+          "Echte Verarbeitung eines fiktiven Personalfragebogens: Das Tool erzeugt das Import-Paket samt Kontroll-PDF — hier Max-Mustermann-Stammdaten.zip.",
+        width: 640,
+        height: 420,
+      },
+    ],
     caseStudy: {
       aiCore: true,
       problem: [
@@ -311,7 +332,7 @@ export const projects: Project[] = [
         "Strikte Validierung schlägt blindes Vertrauen ins Modell: lieber ein leeres Feld zur Nachprüfung als eine falsche Bankverbindung.",
       ],
       screenshotNote:
-        "Wegen der hochsensiblen Daten ohne Screenshots — die Verarbeitung zeige ich gern im Gespräch, mit fiktiven Mustern.",
+        "Screenshots aus einem Demo-Lauf mit einem selbst erzeugten, fiktiven Personalfragebogen — keine echten Personendaten.",
     },
   },
   {
@@ -555,6 +576,94 @@ export const projects: Project[] = [
       ],
       screenshotNote:
         "Ohne Screenshots — das Tool zeige ich gern live, ohne echte Registry-Daten.",
+    },
+  },
+  {
+    slug: "backup-tool",
+    title: "BackupTool",
+    tagline:
+      "Echtzeit-Backup mit Papierkorb: OneDrive → NAS — ohne dass Löschungen die Sicherung gleich mitreißen.",
+    featured: false,
+    status: "produktiv",
+    relevance: "Tooling",
+    repo: "https://github.com/CTreitges/BackupTool",
+    stack: ["Python", "watchdog", "Tkinter", "pystray", "pywin32", "PyInstaller"],
+    summary:
+      "Ein Windows-Hintergrund-Tool, das Ordnerpaare in eine Richtung synchronisiert (z. B. OneDrive → NAS): Änderungen werden per Dateisystem-Watcher in Echtzeit kopiert, ein periodischer Vollabgleich dient als Fangnetz. Der Clou: Gelöschtes wird im Ziel nicht entfernt, sondern mit Zeitstempel in einen eigenen Papierkorb verschoben und erst nach konfigurierbarer Frist endgültig gelöscht. Bedient wird alles über ein Tray-Icon mit Ampelfarben und ein Einstellungs-Fenster mit Live-Status.",
+    origin:
+      "Entstanden aus dem eigenen Bedarf: OneDrive zusätzlich aufs NAS sichern — und zwar so, dass ein versehentliches Löschen nicht sofort auch die Sicherung trifft.",
+    currentStatus:
+      "Produktiv im Eigengebrauch; zwei GitHub-Releases mit fertiger Windows-EXE (Tray-App, ohne Admin-Rechte nutzbar).",
+    headlineMetric: { value: "4", label: "Betriebsmodi aus einer Codebasis" },
+    // Demo-Lauf der Einstellungs-GUI mit fiktiven Ordnerpaaren.
+    screenshots: [
+      {
+        src: "/projects/backup-tool/01-folder-pairs.webp",
+        thumb: "/projects/backup-tool/01-folder-pairs-thumb.webp",
+        alt: "BackupTool-Einstellungsfenster, Tab Folder Pairs: Tabelle mit drei Ordnerpaaren (Source, Destination, Last Sync, State) und Buttons zum Hinzufügen und Entfernen.",
+        caption:
+          "Ordnerpaare (OneDrive → NAS) mit Live-Status pro Paar: erledigt, laufend mit Fortschritt, deaktiviert — Auto-Refresh alle 3 Sekunden.",
+        width: 920,
+        height: 540,
+      },
+      {
+        src: "/projects/backup-tool/02-settings.webp",
+        thumb: "/projects/backup-tool/02-settings-thumb.webp",
+        alt: "BackupTool-Einstellungsfenster, Tab Settings: Felder für Retention in Tagen und Scan-Intervall, Log-Level-Auswahl und Autostart-Optionen für Tray- oder Headless-Modus.",
+        caption:
+          "Aufbewahrungsfrist des Papierkorbs, Intervall des Vollabgleichs und Autostart wahlweise als Desktop-Tray oder Headless-Servermodus.",
+        width: 920,
+        height: 540,
+      },
+    ],
+    caseStudy: {
+      aiCore: false,
+      problem: [
+        "Cloud-Sync wie OneDrive ist kein Backup: Löschungen und fehlerhafte Überschreibungen propagieren sofort auf alle Geräte — wer eine Datei versehentlich löscht, verliert sie überall gleichzeitig.",
+        "Ein zusätzlicher Spiegel aufs NAS hilft nur, wenn das Sync-Tool Löschungen nicht blind nachzieht — und wenn es ohne Zutun im Hintergrund läuft, statt auf manuelle Backup-Läufe zu warten.",
+      ],
+      approach: [
+        "Zweistufige Sync-Mechanik: watchdog liefert Echtzeit-Events (pro Pfad entprellt, über eine Queue an einen Worker-Thread), ein periodischer Vollabgleich vergleicht Quell- und Zielbaum als Fangnetz für verpasste Events.",
+        "Papierkorb statt Löschen: Verwaiste Dateien wandern mit UTC-Zeitstempel im Dateinamen nach __RecycleBin__, die Ordnerstruktur bleibt erhalten; ein stündlicher Auto-Purge räumt nach Ablauf der Frist auf. Umbenennungen werden als Rename nachgezogen statt als Löschen+Kopieren.",
+        "Engine und GUI sind als Prozesse komplett entkoppelt: Die Engine schreibt status.json atomar (tmp + os.replace), die Oberfläche pollt und zeigt den Fortschritt live; Konfigurationsänderungen werden hot-reloadet. Vier Betriebsmodi aus einer Codebasis: Tray-App, Windows-Service, Headless-Servermodus, Debug.",
+      ],
+      architecture: {
+        nodes: [
+          { id: "src", label: "Quelle", sub: "z. B. OneDrive-Ordner", lane: 0 },
+          { id: "watch", label: "watchdog-Events", sub: "Echtzeit · Debounce", lane: 1 },
+          { id: "scan", label: "Vollabgleich", sub: "Fangnetz, alle 30 Min", lane: 1 },
+          { id: "engine", label: "Sync-Engine", sub: "Queue · Worker · status.json", lane: 2, accent: "cyan" },
+          { id: "dst", label: "Ziel (NAS)", lane: 3 },
+          { id: "bin", label: "__RecycleBin__", sub: "Zeitstempel · Auto-Purge", lane: 3, accent: "violet" },
+        ],
+        edges: [
+          { from: "src", to: "watch", animated: true },
+          { from: "src", to: "scan" },
+          { from: "watch", to: "engine", animated: true },
+          { from: "scan", to: "engine" },
+          { from: "engine", to: "dst", animated: true },
+          { from: "engine", to: "bin", label: "statt löschen", animated: true },
+        ],
+      },
+      results: [
+        "Läuft produktiv im Eigengebrauch: dauerhaft im Tray, sichert OneDrive-Ordner aufs NAS — Gelöschtes hat ein Wiederherstellungs-Fenster statt sofort weg zu sein.",
+        "Zwei GitHub-Releases mit fertiger Windows-EXE (PyInstaller + Inno-Setup-Installer) und deutschem Endanwender-README.",
+        "Bewusst ohne Server, Datenbank oder Abo — 13 Python-Module, 4 externe Abhängigkeiten.",
+      ],
+      metrics: [
+        { value: "13", label: "Python-Module" },
+        { value: "4", label: "Betriebsmodi" },
+        { value: "30 Tage", label: "Papierkorb-Frist (Default)" },
+      ],
+      itFabrik:
+        "Genau die Sorte robustes Klein-Werkzeug, die im Systemhaus-Alltag Gold wert ist: Es schließt die Backup-Lücke von Cloud-Sync ohne Server-Infrastruktur — und ist so gebaut, dass Endanwender es selbst bedienen können.",
+      learnings: [
+        "Windows-Services und Netzlaufwerke sind ein Minenfeld: LocalSystem sieht keine UNC-Pfade — die Lösung war, die Engine in die Tray-App im User-Kontext zu verlagern.",
+        "Dateisystem-Events allein reichen nicht: Debouncing gegen Event-Stürme plus periodischer Vollscan als Konsistenz-Fangnetz gehören zusammen.",
+        "Atomare JSON-Writes (tmp + os.replace) sind Pflicht, wenn GUI und Engine als getrennte Prozesse dieselben Status-Dateien teilen.",
+      ],
+      screenshotNote:
+        "Screenshots aus einem Demo-Lauf der Einstellungs-Oberfläche mit fiktiven Ordnerpaaren.",
     },
   },
   {

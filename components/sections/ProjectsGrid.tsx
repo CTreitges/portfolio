@@ -150,7 +150,7 @@ export default function ProjectsGrid() {
       id="projekte"
       eyebrow="// ARBEITSPROBEN"
       title="Projekte"
-      intro="Sieben Projekte — von lokaler KI-Dokumentenverarbeitung über produktive Büro-Automatisierung bis zur deklarativen Infrastruktur. Jede Karte führt zu einer Case-Study mit Architektur und Wirkung."
+      intro="Acht Projekte — von lokaler KI-Dokumentenverarbeitung über produktive Büro-Automatisierung bis zur deklarativen Infrastruktur. Jede Karte führt zu einer Case-Study mit Architektur und Wirkung."
     >
       {flagship && (
         <Reveal>
@@ -173,7 +173,7 @@ export default function ProjectsGrid() {
           <p className="font-mono text-xs uppercase tracking-wider text-text-faint">
             Außerdem auf GitHub
           </p>
-          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="mt-3 grid grid-cols-1 gap-3">
             {miniTools.map((t) => (
               <a
                 key={t.name}
