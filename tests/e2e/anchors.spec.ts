@@ -19,14 +19,23 @@ test("anker-links scrollen mit aktivem Lenis", async ({ page }) => {
   await page.waitForTimeout(1000);
 
   await page.getByRole("link", { name: "Projekte ansehen" }).click();
+  // Lenis scrollt smooth ans Ziel — auf rect.top des Ankers pollen, NICHT auf
+  // scrollY>500 und dann einmalig messen: Letzteres trifft mitten in die
+  // Animation (scrollY hat 500 längst passiert, während Lenis noch unterwegs
+  // ist) und ist damit flaky. rect.top<500 heißt: am Anker angekommen.
   await expect
-    .poll(() => page.evaluate(() => window.scrollY), { timeout: 5000 })
-    .toBeGreaterThan(500);
+    .poll(
+      () =>
+        page.evaluate(
+          () => document.getElementById("projekte")!.getBoundingClientRect().top
+        ),
+      { timeout: 5000 }
+    )
+    .toBeLessThan(500);
   const top = await page.evaluate(
     () => document.getElementById("projekte")!.getBoundingClientRect().top
   );
   expect(top).toBeGreaterThan(-250);
-  expect(top).toBeLessThan(500);
 
   // Header-Nav (plain <a href="#...">) muss ebenfalls funktionieren.
   await page
