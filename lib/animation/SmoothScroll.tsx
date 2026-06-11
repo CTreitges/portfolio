@@ -33,7 +33,9 @@ export default function SmoothScroll({
   if (reduced) return <>{children}</>;
 
   return (
-    <ReactLenis root options={{ lerp: 0.12, smoothWheel: true }}>
+    // anchors:true ist PFLICHT: ohne sie blockiert Lenis native Anker-Sprünge
+    // (#projekte etc.) — Hero-CTAs und Header-Nav wären tot (Bug 2026-06-11).
+    <ReactLenis root options={{ lerp: 0.12, smoothWheel: true, anchors: true }}>
       <LenisGsapBridge />
       {children}
     </ReactLenis>

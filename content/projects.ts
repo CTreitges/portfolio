@@ -781,9 +781,9 @@ export const featuredProjects = projects.filter((p) => p.featured);
  */
 export const miniTools: MiniTool[] = [
   {
-    name: "GazeFactory — Uni-Projekt, vor meiner KI-Zeit",
-    desc: "Blickführung (Gaze Guiding) in einer VR-Atomkraftwerk-Simulation: Das System leitet Probanden Schritt für Schritt durchs Hochfahren des Reaktors und reagiert auf Fehler. Entstanden im 4er-Team im Rahmen eines Informatikprojekts an der Universität Trier — komplett ohne KI-Unterstützung gebaut.",
+    name: "GazeFactory — Uni-Projekt im 4er-Team, vor meiner KI-Zeit",
+    desc: "Gaze Guiding heißt gezielte Blickführung: Das System lenkt den Blick eines Probanden in VR Schritt für Schritt zum jeweils nächsten Bedienelement — mit Hinweistexten und Markern an der richtigen Stelle und einem rot aufleuchtenden Sichtfeldrand (volle 360°), wenn das Ziel außerhalb des Blickfelds liegt. Fehlbedienungen erkennt es und färbt die Hinweise warnend um. Trainiert wird das am Hochfahren eines simulierten Atomkraftwerks — ein Szenario, in dem Prozeduren sitzen müssen. Entstanden als Informatikprojekt an der Universität Trier im 4er-Team: Zustandsmodell, Gaze-Guiding-Logik und alle Werkzeuge komplett selbst implementiert — Unity nur als Engine, kein vorgegebener Code, keine fertigen Frameworks. Und das Ganze ohne KI-Unterstützung, aus meiner Zeit vor dem KI-gestützten Entwickeln.",
     repo: "https://github.com/CTreitges/GazeFactory",
-    stack: ["Unity", "C#", "VR"],
+    stack: ["Unity", "C#", "VR", "Eigenbau ohne Frameworks"],
   },
 ];

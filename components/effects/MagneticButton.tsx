@@ -72,6 +72,11 @@ export default function MagneticButton({
         </a>
       );
     }
+    // Hash-Anker als plain <a>: ein Next-Link würde den Klick selbst
+    // preventDefault-en und am Lenis-Anchor-Handler vorbeinavigieren.
+    if (href.startsWith("#")) {
+      return <a href={href}>{inner}</a>;
+    }
     return <Link href={href}>{inner}</Link>;
   }
   return (
