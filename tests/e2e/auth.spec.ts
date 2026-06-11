@@ -158,4 +158,22 @@ test.describe("Auth-Gate", () => {
     expect((await res.json()).redirect).toBe("/");
     await api.dispose();
   });
+
+  test("Rechtstexte öffentlich erreichbar, restliche Routen weiter gated", async () => {
+    const api = await request.newContext({
+      baseURL: "http://localhost:3000",
+      extraHTTPHeaders: { "x-forwarded-for": "203.0.113.20" },
+    });
+    // Pflicht-Rechtstexte (§5 DDG / DSGVO) MÜSSEN ohne Session erreichbar sein
+    // — proxy.ts-Matcher-Ausnahme. Regression zum Whitelist-Edit (2026-06-11).
+    for (const path of ["/impressum", "/datenschutz"]) {
+      const res = await api.get(path, { maxRedirects: 0 });
+      expect(res.status(), `${path} sollte ohne Login 200 liefern`).toBe(200);
+    }
+    // Gegenprobe: geschützte Route ohne Session → 303 auf /unlock (Gate intakt).
+    const gated = await api.get("/projekte/docuflow", { maxRedirects: 0 });
+    expect(gated.status(), "geschützte Route ohne Session").toBe(303);
+    expect(gated.headers()["location"]).toContain("/unlock");
+    await api.dispose();
+  });
 });
