@@ -25,6 +25,16 @@ export default function SiteFooter() {
           >
             GitHub
           </a>
+          {!site.legal.addressPlaceholder && (
+            <>
+              <a href="/impressum" className="hover:text-accent-soft">
+                Impressum
+              </a>
+              <a href="/datenschutz" className="hover:text-accent-soft">
+                Datenschutz
+              </a>
+            </>
+          )}
         </div>
       </div>
     </footer>

@@ -52,6 +52,20 @@ export const site = {
   // Faktischer Datenschutz-Hinweis (keine Rechtsberatung, nur Transparenz).
   footerPrivacy:
     "Keine Tracker, keine Analytics, kein Cookie außer dem technisch nötigen Session-Cookie — gehostet auf eigenem Server.",
+
+  // Rechtstexte (Impressum/Datenschutz, öffentlich erreichbar vor dem Gate).
+  // Wohnanschrift trägt der Inhaber LOKAL ein: addressLines füllen +
+  // addressPlaceholder auf false setzen → neu deployen. Solange Placeholder
+  // true ist, blendet der Footer die Rechts-Links aus und die Seiten zeigen
+  // einen "wird ergänzt"-Hinweis statt unfertiger Platzhalter (kein halb
+  // veröffentlichtes Impressum).
+  legal: {
+    holder: "Christof Treitges",
+    addressLines: ["Straße und Hausnummer", "PLZ und Ort"],
+    addressPlaceholder: true,
+    hostingProvider: "Oracle Cloud Infrastructure",
+    hostingLocation: "Frankfurt am Main, Deutschland (Region eu-frankfurt-1)",
+  },
 } as const;
 
 export type Site = typeof site;

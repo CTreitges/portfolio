@@ -4,8 +4,10 @@ import { SESSION_COOKIE, verifySession } from "@/lib/auth/session";
 
 /**
  * Auth-Gate für die GESAMTE Site (Next 16: proxy.ts ersetzt middleware.ts,
- * läuft im Node-Runtime). Öffentlich sind nur /unlock, /api/unlock sowie
- * Build-Assets — alles andere braucht eine gültige Session.
+ * läuft im Node-Runtime). Öffentlich sind nur /unlock, /api/unlock, die
+ * Rechtstexte /impressum + /datenschutz (gesetzliche Pflichtangaben müssen
+ * ohne Login erreichbar sein) sowie Build-Assets — alles andere braucht eine
+ * gültige Session.
  */
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -38,6 +40,6 @@ export const config = {
   // könnte sonst geschützte Bilder (z.B. Projekt-Screenshots) öffentlich
   // ausliefern — die Site nutzt ihn nicht.
   matcher: [
-    "/((?!unlock|api/unlock|_next/static|favicon\\.ico|favicon\\.svg|icon\\.svg|apple-icon|og\\.png|robots\\.txt).*)",
+    "/((?!unlock|api/unlock|impressum|datenschutz|_next/static|favicon\\.ico|favicon\\.svg|icon\\.svg|apple-icon|og\\.png|robots\\.txt).*)",
   ],
 };
