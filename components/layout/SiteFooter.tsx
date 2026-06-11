@@ -7,6 +7,8 @@ export default function SiteFooter() {
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <p className="font-mono text-xs leading-relaxed text-text-faint">
           {site.footerTech}
+          <br />
+          {site.footerPrivacy}
         </p>
         <div className="flex items-center gap-4 text-sm text-text-muted">
           <a

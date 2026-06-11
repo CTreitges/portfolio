@@ -12,17 +12,29 @@ const statusTone: Record<LabStatus, string> = {
   konzept: "border-glow/40 bg-glow/10 text-glow-soft",
 };
 
+/* Laufendes zuerst, reine Konzepte zuletzt — ein Leser gewichtet
+   "läuft" deutlich höher als Visionsprosa. */
+const statusOrder: Record<LabStatus, number> = {
+  laeuft: 0,
+  prototyp: 1,
+  "in-arbeit": 2,
+  konzept: 3,
+};
+
 /** Lab / Visionen — Konzept-Karten mit ehrlichem Status-Badge + Mini-Diagramm. */
 export default function LabSection() {
+  const sorted = [...labConcepts].sort(
+    (a, b) => statusOrder[a.status] - statusOrder[b.status]
+  );
   return (
     <Section
       id="lab"
       eyebrow="// LAB & VISIONEN"
       title="Woran ich denke"
-      intro="Zwei Ideen, an denen ich aktiv baue — mit ehrlichem Status. Beide zielen auf den gleichen Kern: leistungsfähige KI, lokal kontrolliert."
+      intro="Ideen, die mich bewegen — mit ehrlichem Status. Von aktiv gebaut bis frisch erforscht, alle zielen auf den gleichen Kern: leistungsfähige KI, lokal kontrolliert."
     >
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        {labConcepts.map((c, i) => (
+        {sorted.map((c, i) => (
           <Reveal key={c.id} delay={i * 0.07}>
             <SpotlightCard className="flex h-full flex-col p-6">
               <div className="flex items-start justify-between gap-3">
@@ -30,7 +42,7 @@ export default function LabSection() {
                   {c.title}
                 </h3>
                 <span
-                  className={`shrink-0 rounded-full border px-2.5 py-1 font-mono text-[11px] ${statusTone[c.status]}`}
+                  className={`max-w-[11rem] shrink-0 whitespace-normal rounded-full border px-2.5 py-1 text-center font-mono text-[11px] leading-snug ${statusTone[c.status]}`}
                 >
                   {c.statusNote}
                 </span>

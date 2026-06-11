@@ -48,6 +48,10 @@ export const site = {
 
   footerTech:
     "Next.js 16 · React 19 · selbst gehostet auf eigenem ARM-Server · geschützt durch ein selbst gebautes Auth-Gate",
+
+  // Faktischer Datenschutz-Hinweis (keine Rechtsberatung, nur Transparenz).
+  footerPrivacy:
+    "Keine Tracker, keine Analytics, kein Cookie außer dem technisch nötigen Session-Cookie — gehostet auf eigenem Server.",
 } as const;
 
 export type Site = typeof site;

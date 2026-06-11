@@ -6,7 +6,7 @@
 export const about = {
   // Kurzprofil (überarbeitet 2026-06-10 nach User-Vorgabe)
   profile:
-    "Informatikstudent an der Universität Trier (Bachelor kurz vor dem Abschluss), in der Eifel verwurzelt — daneben zwei eigene Kleingewerbe: IT-Dienstleistungen sowie Musikveranstaltungen mit PA-Verleih. Seit einem halben Jahr liegt mein Fokus, auch in der Freizeit, fast vollständig auf KI und den Lösungen, die damit möglich werden.",
+    "Informatikstudent an der Universität Trier (Bachelor kurz vor dem Abschluss), in der Eifel verwurzelt — daneben zwei eigene Kleingewerbe: IT-Dienstleistungen sowie Musikveranstaltungen mit PA-Verleih. Seit Anfang 2026 liegt mein Fokus, auch in der Freizeit, fast vollständig auf KI und den Lösungen, die damit möglich werden.",
 
   profileDrive:
     "Werkzeuge zu bauen, die anderen das Leben leichter machen, war schon vor der KI-Zeit mein Antrieb — damals noch mit dem klassischen Ziel Softwareentwickler. Klassische Berufserfahrung bringe ich noch nicht mit, dafür ein eigenes Gewerbe, erste Kundenprojekte und Software, die produktiv läuft.",

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import SmoothScroll from "@/lib/animation/SmoothScroll";
 import NoiseOverlay from "@/components/effects/NoiseOverlay";
 import ScrollProgress from "@/components/effects/ScrollProgress";
@@ -13,6 +14,12 @@ import LabSection from "@/components/sections/LabSection";
 import TimelineSection from "@/components/sections/TimelineSection";
 import MakingOfSection from "@/components/sections/MakingOfSection";
 import ContactSection from "@/components/sections/ContactSection";
+
+// Die Startseite ist nur mit Session erreichbar — der persönliche Titel
+// leakt also nichts; das generische "Zugang per Einladung" bleibt für /unlock.
+export const metadata: Metadata = {
+  title: "Christof Treitges — KI-Entwickler & Innovation Specialist",
+};
 
 export default function Home() {
   return (

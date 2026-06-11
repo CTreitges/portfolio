@@ -10,7 +10,7 @@ export const labConcepts: LabConcept[] = [
     id: "personal-support-bot",
     title: "Persönlicher Support-Bot",
     status: "konzept",
-    statusNote: "Konzept — die Bausteine laufen einzeln schon in meinem Setup",
+    statusNote: "Konzept",
     pitch:
       "Ein Assistent, der seine eigene Wissensbasis pflegt: Er liest alle verfügbaren Dateien — Dokumente, Notizen, Projektstände, Mails — und baut daraus automatisch eine durchsuchbare Datenbank über dich und deine Arbeit. Darauf aufbauend nimmt er echte Aufgaben ab: eingehende E-Mails lesen, Antwortentwürfe im eigenen Schreibstil vorbereiten und sie in einem eigenen UI zur Freigabe vorlegen. Den Stil lernt er aus deinen bisherigen Texten. Und er bleibt nicht stehen: In kurzen Interviews fragt er gezielt nach, was ihm an Wissen fehlt — und verbessert sich damit selbst.",
     kmuAngle:
@@ -38,7 +38,7 @@ export const labConcepts: LabConcept[] = [
     id: "usecase-benchmarks",
     title: "Benchmark-System für meine Use-Cases",
     status: "konzept",
-    statusNote: "Konzept — erste Modellvergleiche laufen bereits manuell",
+    statusNote: "Konzept",
     pitch:
       "Ein eigenes Benchmark-System, das keine generischen Leaderboards nachbetet, sondern meine echten Use-Cases testet: Parsing-Regeln vorschlagen, deutsche Belege extrahieren, Automations-Skripte schreiben. Gemessen wird pro Modell und pro Effort-Stufe — vom schnellen Solo-Lauf bis zum Multi-Agent-Workflow — nach Qualität, Kosten und Latenz. Weil sich die Modell-Landschaft wöchentlich ändert, läuft das System regelmäßig neu und gibt aktiv Feedback: 'Für Aufgabe X lohnt sich jetzt Modell Y.'",
     kmuAngle:
@@ -64,7 +64,7 @@ export const labConcepts: LabConcept[] = [
     id: "model-specialization",
     title: "Modell-Spezialisierung statt Modell-Gigantismus",
     status: "konzept",
-    statusNote: "Konzept — Open-Weight-Begeisterung mit konkretem Ziel",
+    statusNote: "Konzept",
     pitch:
       "Open-Weight-Modelle (lokal via Ollama oder über Ollama Cloud) gezielt auf einen Use-Case nachtrainieren, statt für alles das größte Modell zu mieten: ein kleines Modell, das nur deutsche Geschäftsbelege oder das eigene Produktvokabular versteht — dafür schneller, günstiger und komplett on-prem. Die Trainingsdaten entstehen bei mir nebenbei: die 364 kuratierten Regeln des Lieferschein-Processors und die bestätigten Extraktionen aus DocuFlow sind genau die Feedback-Datensätze, die man dafür braucht.",
     kmuAngle:
@@ -90,7 +90,7 @@ export const labConcepts: LabConcept[] = [
     id: "meta-prompting",
     title: "Meta-Prompting — ein Agent promptet den Agenten",
     status: "konzept",
-    statusNote: "Konzept — das Hermes-Gateway dafür läuft bereits",
+    statusNote: "Konzept",
     pitch:
       "Hermes führt das Vorgespräch mit mir: Er fragt nach, bis klar ist, was ich wirklich will — und formuliert daraus den präzisen Arbeitsauftrag für eine Claude-Code-Session, deutlich besser als ein schneller Prompt zwischen Tür und Angel. Dazu verwaltet er die Kontingente: Aufträge landen in einer Warteschlange und starten automatisch, sobald das Session-Limit wieder frei ist — auch nachts um drei.",
     kmuAngle:
@@ -142,7 +142,7 @@ export const labConcepts: LabConcept[] = [
     id: "hermes-hub",
     title: "Hermes — lokaler Agent-Hub",
     status: "laeuft",
-    statusNote: "läuft als Gateway auf meinem Server",
+    statusNote: "läuft auf meinem Server",
     pitch:
       "Ein zentraler Hub im eigenen Netz, der Anfragen aus verschiedenen Kanälen entgegennimmt und je nach Anwendungsfall den passenden KI-Agenten ansteuert — Recherche, Dokumente, Automatisierung. Das Gateway läuft bereits dauerhaft auf meinem VPS.",
     kmuAngle:
