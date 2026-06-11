@@ -15,7 +15,7 @@ export const site = {
   proofChips: [
     { value: "wöchentlich", label: "produktiv beim Kunden" },
     { value: "8+", label: "Projekte & Tools" },
-    { value: "100 %", label: "lokal möglich" },
+    { value: "13", label: "MCP-Server im Setup" },
   ],
 
   contact: {

@@ -63,13 +63,6 @@ export const timeline: TimelineEntry[] = [
     type: "ausbildung",
     track: "haupt",
   },
-  {
-    period: "2008–2012",
-    title: "Grundschule",
-    org: "Hillesheim",
-    type: "ausbildung",
-    track: "haupt",
-  },
 
   // ── KI-Spur (Interview D, 2026-06-09; neuestes zuerst) ────────────
   {

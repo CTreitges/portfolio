@@ -12,7 +12,7 @@ export const about = {
     "Werkzeuge zu bauen, die anderen das Leben leichter machen, war schon vor der KI-Zeit mein Antrieb — damals noch mit dem klassischen Ziel Softwareentwickler. Klassische Berufserfahrung bringe ich noch nicht mit, dafür ein eigenes Gewerbe, erste Kundenprojekte und Software, die produktiv läuft.",
 
   profilePersonal:
-    "Ich habe ADHS — und habe gelernt, es für mich arbeiten zu lassen: Der Hyperfokus ist mein Werkzeug, um mich in kurzer Zeit tief in neue Themen einzuarbeiten. Und wenn ich etwas schaffen will, habe ich Biss.",
+    "Wenn ein Thema mich packt, arbeite ich mich mit echtem Hyperfokus in kurzer Zeit tief hinein — das ist mein stärkstes Werkzeug, um Neues zu durchdringen. Und wenn ich etwas schaffen will, habe ich Biss.",
 
   howIWork:
     "Hands-on und autodidaktisch. Ich baue Dinge, bis sie produktiv laufen — nicht bis sie demobereit sind. Und ich recherchiere gern, bis ich die technisch beste Lösung gefunden habe.",
