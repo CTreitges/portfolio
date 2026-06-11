@@ -25,7 +25,7 @@ export default function ImpressumPage() {
           <p>
             Kontakt:{" "}
             <a
-              className="text-accent-soft hover:underline"
+              className="text-accent-soft underline"
               href={`mailto:${site.contact.email}`}
             >
               {site.contact.email}
@@ -55,7 +55,7 @@ export default function ImpressumPage() {
         <p>
           E-Mail:{" "}
           <a
-            className="text-accent-soft hover:underline"
+            className="text-accent-soft underline"
             href={`mailto:${site.contact.email}`}
           >
             {site.contact.email}

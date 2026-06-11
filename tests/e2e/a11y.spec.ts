@@ -37,3 +37,18 @@ test("a11y: unlock + home", async ({ page }) => {
   expect(unlockSerious, "unlock serious violations").toEqual([]);
   expect(homeSerious, "home serious violations").toEqual([]);
 });
+
+test("a11y: Rechtstexte öffentlich (Impressum + Datenschutz)", async ({
+  page,
+}) => {
+  await page.goto("/impressum");
+  await page.waitForTimeout(200);
+  const impSerious = await scan(page, "/impressum");
+
+  await page.goto("/datenschutz");
+  await page.waitForTimeout(200);
+  const datSerious = await scan(page, "/datenschutz");
+
+  expect(impSerious, "impressum serious violations").toEqual([]);
+  expect(datSerious, "datenschutz serious violations").toEqual([]);
+});

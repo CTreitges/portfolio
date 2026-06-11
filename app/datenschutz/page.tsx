@@ -23,12 +23,12 @@ export default function DatenschutzPage() {
           <p>
             Verantwortlich für die Datenverarbeitung auf dieser Website ist{" "}
             {legal.holder}. Die vollständige Anschrift wird im{" "}
-            <a className="text-accent-soft hover:underline" href="/impressum">
+            <a className="text-accent-soft underline" href="/impressum">
               Impressum
             </a>{" "}
             ergänzt. Kontakt:{" "}
             <a
-              className="text-accent-soft hover:underline"
+              className="text-accent-soft underline"
               href={`mailto:${site.contact.email}`}
             >
               {site.contact.email}
@@ -47,7 +47,7 @@ export default function DatenschutzPage() {
             ))}
             E-Mail:{" "}
             <a
-              className="text-accent-soft hover:underline"
+              className="text-accent-soft underline"
               href={`mailto:${site.contact.email}`}
             >
               {site.contact.email}
