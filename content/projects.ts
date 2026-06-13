@@ -31,6 +31,8 @@ export const projects: Project[] = [
     currentStatus:
       "Seit September 2025 in wöchentlichem Produktiveinsatz, laufend weiterentwickelt.",
     headlineMetric: { value: "482", label: "automatisierte Tests" },
+    itFabrikShort:
+      "Interne Büro-Abläufe automatisieren — produktiv beim Kunden, getestet, wartbar ohne mich.",
     // Alle Aufnahmen mit einer rein synthetischen Dummy-Bedarfsübersicht
     // (Event "Musterfirma") — keine echten Event-/Kunden-/Gästedaten.
     screenshots: [
@@ -123,7 +125,7 @@ export const projects: Project[] = [
         { value: "~2–4", label: "Std/Woche gespart" },
       ],
       itFabrik:
-        "Das Paradebeispiel für 'interne Abläufe automatisieren': ein wiederkehrender, manueller Büroprozess, der durch Regel-Engine plus KI-Unterstützung auf Knopfdruck läuft — produktiv, getestet, gewartet. Genau die Art Lösung, die ein KMU-Systemhaus für seine Kunden baut.",
+        "Das Paradebeispiel für 'interne Abläufe automatisieren': ein wiederkehrender, manueller Büroprozess, der durch Regel-Engine plus KI-Unterstützung auf Knopfdruck läuft — produktiv, getestet, gewartet. Genau die Art Lösung, die ein KMU-Systemhaus für seine Kunden baut. Und übergebbar statt an mich gebunden: selbst-aktualisierende EXE plus versioniertes Regelwerk machen die Lösung wartbar ohne den ursprünglichen Entwickler.",
       learnings: [
         "Regelwerk + KI-Vorschläge schlägt reines LLM-Parsing: nachvollziehbar, korrigierbar, kein Halluzinieren von Mengen.",
         "Ein Accept/Reject-Loop macht die KI zum Assistenten statt zur Blackbox — der Mensch behält die Kontrolle.",
@@ -150,12 +152,14 @@ export const projects: Project[] = [
     repo: "https://github.com/CTreitges/DocuFlow",
     stack: ["Python", "FastAPI", "Svelte 5", "Ollama", "german-ocr", "SQLite"],
     summary:
-      "Ein Dokumenten-Tool, das eingehende PDFs und Bilder per lokalem OCR-Modell (german-ocr über Ollama) ausliest — ein Cloud-Modell (Qwen über Ollama Cloud) springt nur als Fallback ein —, bekannte Absender über Templates erkennt und nach selbst definierten Regeln einsortiert. Im Normalfall verlässt kein Dokument das Haus. Aus bestätigten Extraktionen generiert es automatisch neue Templates und wird mit jedem Beleg schneller.",
+      "Ein Dokumenten-Tool, das eingehende PDFs und Bilder per Vision-KI ausliest — als Hybrid mit lokalem Schwerpunkt: die lokale OCR-Stufe (german-ocr über Ollama) erledigt den Normalfall, Qwen3-VL über Ollama Cloud dient als Gegencheck, und ein EU-Cloud-Modell (Mistral) lässt sich als Option zuschalten oder fängt lokale Lastspitzen ab. Bekannte Absender erkennt es über Templates und sortiert nach selbst definierten Regeln. Rein lokal betrieben verlässt kein Dokument das Haus; Gegencheck und Fallback laufen wahlweise über DSGVO-konforme EU-Cloud. Aus bestätigten Extraktionen generiert es automatisch neue Templates und wird mit jedem Beleg schneller.",
     origin:
       "Entstanden aus der Anfrage eines Kumpels, der einen Elektriker-Betrieb führt und seine Belege nicht in die Cloud geben wollte.",
     currentStatus:
       "In aktiver Entwicklung; Frontend auf Svelte 5 + FastAPI migriert, OCR-Pipeline steht.",
     headlineMetric: { value: "3-stufig", label: "OCR-Pipeline" },
+    itFabrikShort:
+      "KI-Dokumentenverarbeitung on-prem oder als EU-Cloud-Hybrid — für sensible Kundendaten.",
     // Demo-Lauf mit fiktiven Rechnungen (Elektro Mustermann GmbH u.a.),
     // ungültigen IBANs (DE00…) und neutralen Pfaden.
     screenshots: [
@@ -203,7 +207,7 @@ export const projects: Project[] = [
         "Cloud-OCR-Dienste scheiden für sensible Geschäftsdokumente aus Datenschutzgründen aus.",
       ],
       approach: [
-        "Dreistufige Pipeline: zuerst nativer PDF-Text, dann Template-Match für bekannte Absender, erst zuletzt das OCR-Modell — primär lokal (german-ocr über Ollama), ein Cloud-Modell (Qwen über Ollama Cloud) nur als Fallback.",
+        "Dreistufige Pipeline: zuerst nativer PDF-Text, dann Template-Match für bekannte Absender, erst zuletzt das OCR-Modell — mit lokalem Schwerpunkt (german-ocr über Ollama), Qwen3-VL über Ollama Cloud als Gegencheck und einem EU-Cloud-Modell (Mistral) als optionalem Fallback bei lokaler Last.",
         "Aus bestätigten KI-Extraktionen generiert das System automatisch neue Templates — es wird mit jedem Beleg schneller und sicherer.",
         "Sortier-Regeln (WANN → WOHIN → WIE-BENANNT) als visueller Editor; Inbox-Workflow mit menschlicher Bestätigung vor jeder Ablage.",
       ],
@@ -212,7 +216,7 @@ export const projects: Project[] = [
           { id: "in", label: "PDF / Bild", lane: 0 },
           { id: "text", label: "Text-Extraktion", sub: "PyMuPDF", lane: 1 },
           { id: "tpl", label: "Template-Match", sub: "bekannte Absender", lane: 1, accent: "violet" },
-          { id: "ocr", label: "OCR-Modell", sub: "german-ocr lokal · Qwen Fallback", lane: 2, accent: "cyan" },
+          { id: "ocr", label: "OCR-Modell", sub: "german-ocr lokal · Qwen3-VL Cloud · Mistral EU optional", lane: 2, accent: "cyan" },
           { id: "rules", label: "Regel-Engine", lane: 3 },
           { id: "out", label: "Sortiert + benannt", lane: 4 },
         ],
@@ -230,14 +234,14 @@ export const projects: Project[] = [
         "Selbstlernendes Template-System reduziert die LLM-Aufrufe über die Zeit.",
       ],
       metrics: [
-        { value: "lokal", label: "german-ocr (Cloud nur Fallback)" },
+        { value: "lokal", label: "Schwerpunkt (german-ocr über Ollama)" },
         { value: "3", label: "Pipeline-Stufen" },
-        { value: "on-prem", label: "Default ohne Cloud" },
+        { value: "Hybrid", label: "EU-Cloud als Gegencheck/Fallback" },
       ],
       itFabrik:
-        "Genau das Muster, das ein KMU-Systemhaus für seine Kunden braucht: KI-gestützte Dokumentenverarbeitung, die aus Datenschutzgründen komplett on-premise läuft.",
+        "Genau das Muster, das ein KMU-Systemhaus für seine Kunden braucht: KI-gestützte Dokumentenverarbeitung, die wahlweise komplett on-premise oder als datenschutzkonformer EU-Cloud-Hybrid läuft — je nach Sensibilität der Daten und verfügbarer Hardware beim Kunden.",
       learnings: [
-        "Ein lokales Vision-LLM ist für deutsche Geschäftsdokumente praxistauglich — wenn man es als Fallback hinter günstigere Stufen setzt.",
+        "Ein gestuftes Hybrid-Setup schlägt die Entweder-oder-Frage: günstige lokale Stufen zuerst, das Vision-LLM nur wenn nötig — lokal oder über DSGVO-konforme EU-Cloud, je nach Hardware und Datensensibilität.",
         "Menschliche Bestätigung vor der Ablage ist kein Rückschritt, sondern schafft Vertrauen in die Automatisierung.",
       ],
       screenshotNote: "Demo mit Dummy-Belegen.",
@@ -267,6 +271,8 @@ export const projects: Project[] = [
     currentStatus:
       "Produktiv-Zweig (digitale Formulare) stabil; OCR-Zweig (Mistral/Ollama) als dokumentierter Prototyp.",
     headlineMetric: { value: "2 Wege", label: "EU-Cloud / lokal" },
+    itFabrikShort:
+      "Datenschutz als Design: lokale oder EU-Cloud-OCR mit sauberer Auftragsverarbeitung.",
     // Demo-Lauf mit selbst erzeugtem, fiktivem Personalfragebogen.
     screenshots: [
       {
@@ -353,6 +359,8 @@ export const projects: Project[] = [
     currentStatus:
       "Übergangsprojekt, heute durch Claude-Code-Eigenentwicklungen abgelöst; Konzept und Telegram-Live-Steuerung leben weiter.",
     headlineMetric: { value: "3 Rollen", label: "Plan · Implement · Review" },
+    itFabrikShort:
+      "Multi-Agent-Orchestrierung mit Kostensteuerung über mehrere Modelle.",
     caseStudy: {
       aiCore: true,
       problem: [
@@ -482,6 +490,8 @@ export const projects: Project[] = [
       "Entstanden aus Ärger über die Abo-Gebühren vergleichbarer DJ-Software zur Set-Vorbereitung — also habe ich es selbst gebaut.",
     currentStatus: "Stabil (Version 5); modularisiert, Rekordbox-kompatibel.",
     headlineMetric: { value: "50+", label: "automatisierte Tests" },
+    itFabrikShort:
+      "Sauberes Engineering: Engine, CLI und GUI getrennt, über 50 Tests.",
     // GUI offscreen gerendert; ausschließlich fiktive Demo-Tracks
     // (per ffmpeg generierte Sinus-WAVs).
     screenshots: [
@@ -549,6 +559,8 @@ export const projects: Project[] = [
       "Entstanden aus den Abo-Gebühren vergleichbarer Umzugs-Tools — und weil die nötigen Microsoft-Bordmittel ohnehin verfügbar waren, lag es nahe, es selbst zu bauen.",
     currentStatus: "Funktionsfähig auf Windows 10/11; gelegentlich erweitert.",
     headlineMetric: { value: "4×", label: "parallele Jobs" },
+    itFabrikShort:
+      "Windows/PowerShell fürs Tagesgeschäft — PC-Rollouts und Hardware-Wechsel beim Kunden.",
     caseStudy: {
       aiCore: false,
       problem: [
@@ -596,6 +608,8 @@ export const projects: Project[] = [
     currentStatus:
       "Produktiv im Eigengebrauch; zwei GitHub-Releases mit fertiger Windows-EXE (Tray-App, ohne Admin-Rechte nutzbar).",
     headlineMetric: { value: "4", label: "Betriebsmodi aus einer Codebasis" },
+    itFabrikShort:
+      "Robustes Klein-Werkzeug: schließt die Backup-Lücke von Cloud-Sync, ganz ohne Server.",
     // Demo-Lauf der Einstellungs-GUI mit fiktiven Ordnerpaaren.
     screenshots: [
       {
@@ -683,6 +697,8 @@ export const projects: Project[] = [
     currentStatus:
       "Grundstein gelegt: Architektur und Backend stehen, aber die Streaming-Dienst-Links und die Oberfläche sind noch nicht vollständig funktional. Wird bei Gelegenheit weiterentwickelt.",
     headlineMetric: { value: "deklarativ", label: "System als Code" },
+    itFabrikShort:
+      "Infrastruktur- und Linux-Tiefe — das Fundament für sauber betriebene KI.",
     // Dev-Lauf mit Stub-Adaptern und rein fiktiven Demo-Daten
     // (Geräte, SSIDs, Tracks) — Kiosk-Viewport.
     screenshots: [
@@ -783,7 +799,7 @@ export const featuredProjects = projects.filter((p) => p.featured);
 export const miniTools: MiniTool[] = [
   {
     name: "GazeFactory — Uni-Projekt im 4er-Team, vor meiner KI-Zeit",
-    desc: "Gaze Guiding heißt gezielte Blickführung: Das System lenkt den Blick eines Probanden in VR Schritt für Schritt zum jeweils nächsten Bedienelement — mit Hinweistexten und Markern an der richtigen Stelle und einem rot aufleuchtenden Sichtfeldrand (volle 360°), wenn das Ziel außerhalb des Blickfelds liegt. Fehlbedienungen erkennt es und färbt die Hinweise warnend um. Trainiert wird das am Hochfahren eines simulierten Atomkraftwerks — ein Szenario, in dem Prozeduren sitzen müssen. Entstanden als Informatikprojekt an der Universität Trier im 4er-Team: Zustandsmodell, Gaze-Guiding-Logik und alle Werkzeuge komplett selbst implementiert — Unity nur als Engine, kein vorgegebener Code, keine fertigen Frameworks. Und das Ganze ohne KI-Unterstützung, aus meiner Zeit vor dem KI-gestützten Entwickeln.",
+    desc: "Gaze Guiding heißt gezielte Blickführung: Das System lenkt den Blick eines Probanden in VR Schritt für Schritt zum jeweils nächsten Bedienelement — mit Hinweistexten und Markern an der richtigen Stelle und einem rot aufleuchtenden Sichtfeldrand (volle 360°), wenn das Ziel außerhalb des Blickfelds liegt. Fehlbedienungen erkennt es und färbt die Hinweise warnend um. Trainiert wird das am Hochfahren eines simulierten Atomkraftwerks — ein Szenario, in dem Prozeduren sitzen müssen. Entstanden als Informatikprojekt an der Universität Trier im 4er-Team: Zustandsmodell, Gaze-Guiding-Logik und alle Werkzeuge komplett selbst implementiert — Unity nur als Engine, kein vorgegebener Code, keine fertigen Frameworks. Entwickelt im Juli 2023 — komplett von Hand, ohne KI-Unterstützung, noch vor der KI-Code-Ära (GitHub Copilot steckte gerade in den ersten Previews).",
     repo: "https://github.com/CTreitges/GazeFactory",
     stack: ["Unity", "C#", "VR", "Eigenbau ohne Frameworks"],
   },

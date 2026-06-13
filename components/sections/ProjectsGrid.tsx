@@ -78,6 +78,17 @@ function ProjectHead({ p }: { p: Project }) {
   );
 }
 
+/** Maßgeschneiderte „Für die IT-Fabrik"-Zeile direkt auf der Karte (Scan-Ebene). */
+function ItFabrikLine({ p }: { p: Project }) {
+  if (!p.itFabrikShort) return null;
+  return (
+    <p className="mt-3 border-l-2 border-accent/40 pl-3 text-xs leading-relaxed text-text-muted">
+      <span className="font-semibold text-accent-soft">Für die IT-Fabrik: </span>
+      {p.itFabrikShort}
+    </p>
+  );
+}
+
 /** Volle Breite, 2-spaltig — fürs Aushängeschild. */
 function FlagshipCard({ p }: { p: Project }) {
   return (
@@ -95,6 +106,7 @@ function FlagshipCard({ p }: { p: Project }) {
           <p className="mt-3 text-sm leading-relaxed text-text-faint">
             {p.summary}
           </p>
+          <ItFabrikLine p={p} />
           {p.currentStatus && (
             <p className="mt-3 font-mono text-[11px] leading-relaxed text-text-faint">
               Stand: {p.currentStatus}
@@ -128,6 +140,7 @@ function ProjectCard({ p, featured }: { p: Project; featured: boolean }) {
             {p.summary}
           </p>
         )}
+        <ItFabrikLine p={p} />
         {p.currentStatus && (
           <p className="mt-3 font-mono text-[11px] leading-relaxed text-text-faint">
             Stand: {p.currentStatus}

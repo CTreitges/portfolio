@@ -14,7 +14,7 @@ export const site = {
   // Recruiter-lesbare Beweis-Chips: Flagship-Fakt, Breite, roter Faden.
   proofChips: [
     { value: "wöchentlich", label: "produktiv beim Kunden" },
-    { value: "8+", label: "Projekte & Tools" },
+    { value: "on-prem", label: "DSGVO-konforme KI" },
     { value: "13", label: "MCP-Server im Setup" },
   ],
 

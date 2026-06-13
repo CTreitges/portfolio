@@ -9,13 +9,13 @@ export const about = {
     "Informatikstudent an der Universität Trier (Bachelor kurz vor dem Abschluss), in der Eifel verwurzelt — daneben zwei eigene Kleingewerbe: IT-Dienstleistungen sowie Musikveranstaltungen mit PA-Verleih. Seit Anfang 2026 liegt mein Fokus, auch in der Freizeit, fast vollständig auf KI und den Lösungen, die damit möglich werden.",
 
   profileDrive:
-    "Werkzeuge zu bauen, die anderen das Leben leichter machen, war schon vor der KI-Zeit mein Antrieb — damals noch mit dem klassischen Ziel Softwareentwickler. Klassische Berufserfahrung bringe ich noch nicht mit, dafür ein eigenes Gewerbe, erste Kundenprojekte und Software, die produktiv läuft.",
+    "Werkzeuge zu bauen, die anderen das Leben leichter machen, war schon vor der KI-Zeit mein Antrieb — damals noch mit dem klassischen Ziel Softwareentwickler. Klassische Berufserfahrung bringe ich noch nicht mit, dafür ein eigenes Gewerbe, erste Kundenprojekte und Software, die produktiv läuft. Den nächsten Schritt will ich bewusst in einem Team gehen — ein gutes Umfeld, in dem ich mein Können gezielt ausbaue und an Kundenprojekten arbeite, auf die ich richtig Lust habe.",
 
   profilePersonal:
     "Wenn ein Thema mich packt, arbeite ich mich mit echtem Hyperfokus in kurzer Zeit tief hinein — das ist mein stärkstes Werkzeug, um Neues zu durchdringen. Und wenn ich etwas schaffen will, habe ich Biss.",
 
   howIWork:
-    "Hands-on und autodidaktisch. Ich baue Dinge, bis sie produktiv laufen — nicht bis sie demobereit sind. Und ich recherchiere gern, bis ich die technisch beste Lösung gefunden habe.",
+    "Hands-on und autodidaktisch. Ich baue Dinge, bis sie produktiv laufen — nicht bis sie demobereit sind. Und ich recherchiere gern, bis ich die technisch beste Lösung gefunden habe. Das geht auch ganz ohne KI: Mein VR-Projekt GazeFactory (Uni, 4er-Team, 2023) habe ich von Grund auf selbst gebaut — Zustandsmodell und Blickführungs-Logik in Eigenregie, vor der KI-Code-Ära.",
 
   // Warum KI — die persönliche Anekdote (Interview B, geschärft 2026-06-10)
   whyAI:
@@ -37,7 +37,7 @@ export const about = {
     },
     {
       title: "Lokale KI & Agenten",
-      desc: "MCP-Server, Memory-Systeme und Agenten-Orchestrierung auf eigener Infrastruktur.",
+      desc: "MCP-Server, Memory-Systeme und Agenten-Orchestrierung auf eigener Infrastruktur — modell-agnostisch von lokalen Open-Weights (Ollama) bis EU-Cloud, je nach Kosten und Datenschutz.",
     },
   ],
 

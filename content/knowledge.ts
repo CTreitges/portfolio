@@ -77,7 +77,7 @@ export const nodes: KnowledgeNode[] = [
     x: 62,
     y: 11,
     level: "satellite",
-    desc: "Qwen3-VL liest deutsche Geschäftsdokumente lokal aus — kein Cloud-Upload.",
+    desc: "Vision-OCR für deutsche Geschäftsdokumente — hybrid: lokale Stufe im Normalfall, Qwen3-VL als Gegencheck über Ollama Cloud, EU-Cloud (Mistral) als Option und Fallback bei lokaler Last.",
     proof: { text: "DocuFlow", href: "/projekte/docuflow" },
   },
   {
@@ -87,7 +87,7 @@ export const nodes: KnowledgeNode[] = [
     x: 88,
     y: 27,
     level: "satellite",
-    desc: "Sensible Daten verlassen nie das Haus — der entscheidende Hebel für KMU.",
+    desc: "Sensible Daten müssen das Haus nicht verlassen — wahlweise komplett lokal, der entscheidende Hebel für KMU.",
     proof: { text: "Hintergrund im Lab", href: "#lab" },
   },
 

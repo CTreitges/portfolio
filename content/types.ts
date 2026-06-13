@@ -85,6 +85,8 @@ export interface Project {
   currentStatus?: string;
   /** Akzent-Metrik auf der Karte */
   headlineMetric?: Metric;
+  /** Einzeiler „Für die IT-Fabrik" direkt auf der Grid-Karte (verdichtet aus caseStudy.itFabrik). */
+  itFabrikShort?: string;
   caseStudy: {
     problem: string[];
     approach: string[];
