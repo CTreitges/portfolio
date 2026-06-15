@@ -26,7 +26,7 @@ Diese README beschreibt die **Engineering-Substanz**: Architektur, Security-Desi
 | Runtime        | Node `>=20`                                                          |
 | Reverse-Proxy  | Caddy (TLS, systemd-managed)                                         |
 
-> Hinweis: `@react-three/drei` liegt in `package.json`, wird aktuell aber nirgends importiert — die 3D-Szene (`HeroBackdrop.tsx`) nutzt nur `three` + `@react-three/fiber`.
+> 3D: Die Hero-Szene (`HeroBackdrop.tsx`) nutzt `three` + `@react-three/fiber` direkt, ohne zusätzlichen Helper-Layer.
 
 ---
 

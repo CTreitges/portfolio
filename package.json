@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2",
-    "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "gsap": "^3.15.0",
     "jose": "^6.2.3",
