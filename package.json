@@ -2,11 +2,32 @@
   "name": "portfolio",
   "version": "0.1.0",
   "private": true,
+  "description": "Persönliches Bewerbungs-Portfolio — Next.js 16, React 19, Tailwind v4; mit Code-Gate (Argon2/JWT), Test-Suite und Self-Hosting-Deploy.",
+  "author": "Christof Treitges <Christof.Treitges@outlook.de>",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/CTreitges/portfolio#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CTreitges/portfolio.git"
+  },
+  "keywords": [
+    "portfolio",
+    "nextjs",
+    "react",
+    "typescript",
+    "tailwindcss",
+    "ai"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test"
   },
