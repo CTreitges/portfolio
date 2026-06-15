@@ -116,7 +116,7 @@ export default function DatenschutzPage() {
       <LegalSection heading="Verschlüsselung">
         <p>
           Die Verbindung zu dieser Website ist per TLS verschlüsselt (erkennbar
-          am „https" in der Adresszeile), um die Übertragung Ihrer Daten zu
+          am „https&ldquo; in der Adresszeile), um die Übertragung Ihrer Daten zu
           schützen.
         </p>
       </LegalSection>

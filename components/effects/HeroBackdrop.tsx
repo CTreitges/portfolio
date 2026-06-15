@@ -129,6 +129,9 @@ export default function HeroBackdrop() {
   const [frameloop, setFrameloop] = useState<"always" | "never">("always");
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect --
+       Client-Gate nach Mount: matchMedia + Visibility sind SSR-fremd, der
+       Canvas wird bewusst erst nach dem Mount aktiviert (hydration-sicher). */
     // Gate erst clientseitig auswerten (kein SSR-Read).
     const smallViewport = window.matchMedia("(max-width: 767px)").matches;
     if (prefersReducedMotion() || smallViewport) {
@@ -143,6 +146,7 @@ export default function HeroBackdrop() {
     }
     document.addEventListener("visibilitychange", onVisibility);
     return () => document.removeEventListener("visibilitychange", onVisibility);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   if (!enabled) return null;

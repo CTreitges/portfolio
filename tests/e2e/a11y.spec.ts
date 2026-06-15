@@ -13,12 +13,12 @@ async function scan(page: import("@playwright/test").Page, label: string) {
   const serious = results.violations.filter(
     (v) => v.impact === "serious" || v.impact === "critical"
   );
-  console.log(
-    `AXE ${label}: ${results.violations.length} violations (${serious.length} serious/critical)`
-  );
-  for (const v of serious) {
-    console.log(`  [${v.impact}] ${v.id}: ${v.help} (${v.nodes.length} nodes)`);
-  }
+  test.info().annotations.push({
+    type: `axe ${label}`,
+    description:
+      `${results.violations.length} violations (${serious.length} serious/critical)` +
+      serious.map((v) => `\n  [${v.impact}] ${v.id}: ${v.help}`).join(""),
+  });
   return serious;
 }
 

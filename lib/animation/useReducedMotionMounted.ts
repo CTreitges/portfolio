@@ -1,21 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribe(callback: () => void): () => void {
+  const mq = window.matchMedia(QUERY);
+  mq.addEventListener?.("change", callback);
+  return () => mq.removeEventListener?.("change", callback);
+}
 
 /**
- * Liefert prefers-reduced-motion — aber HYDRATION-SICHER: der erste Render
- * (Server wie Client) gibt immer `false` zurück, erst nach dem Mount wird der
- * echte Wert gesetzt. So entspricht der erste Client-Render dem Server-Render
- * (kein Mismatch), und Animationen werden erst danach abgeschaltet.
+ * Liefert prefers-reduced-motion — HYDRATION-SICHER über useSyncExternalStore:
+ * Der Server-Snapshot ist immer `false`, sodass der erste Client-Render dem
+ * Server-Render entspricht (kein Mismatch). Nach der Hydration liefert der
+ * Client-Snapshot den echten matchMedia-Wert und reagiert auf Änderungen.
  */
 export function useReducedMotionMounted(): boolean {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const onChange = () => setReduced(mq.matches);
-    mq.addEventListener?.("change", onChange);
-    return () => mq.removeEventListener?.("change", onChange);
-  }, []);
-  return reduced;
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(QUERY).matches,
+    () => false,
+  );
 }

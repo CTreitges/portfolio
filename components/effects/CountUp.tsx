@@ -29,6 +29,7 @@ export default function CountUp({
 
     // Kein Hochzählen möglich/gewünscht → einfach den Endwert zeigen.
     if (!inView || !numeric || Number.isNaN(target) || reduced) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Endwert ohne Animation; Teil der Animations-Steuerung
       setDisplay(value);
       return;
     }

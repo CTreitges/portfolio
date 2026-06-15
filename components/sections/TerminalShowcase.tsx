@@ -57,6 +57,7 @@ export default function TerminalShowcase() {
 
   useEffect(() => {
     // Bei jedem (Re-)Start von vorn.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Animations-Reset bei (Re-)Start (in-view-gesteuert)
     setRevealed(0);
     if (!inView) return;
 

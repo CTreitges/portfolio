@@ -84,6 +84,7 @@ export default function UnlockForm() {
       } catch {
         /* kaputtes Fragment → unverändert versuchen */
       }
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Code aus URL-Fragment nach Mount (nur clientseitig verfügbar)
       setCode(fromHash);
       history.replaceState(
         null,

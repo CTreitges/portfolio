@@ -29,7 +29,7 @@ export default function ContactSection() {
       <div className="mx-auto max-w-3xl text-center">
         <Reveal>
           <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-accent">
-            // KONTAKT
+            {"// KONTAKT"}
           </p>
           <h2
             id="kontakt-title"

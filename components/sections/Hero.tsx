@@ -27,6 +27,7 @@ export default function Hero() {
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Client-Init nach Mount (matchMedia, SSR-sicher)
     if (desktop && !reduced) setShowBackdrop(true);
   }, []);
 

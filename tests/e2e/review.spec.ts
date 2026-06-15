@@ -71,11 +71,13 @@ test("review sweep: viewports, routes, overflow, console", async ({ page }) => {
     fullPage: true,
   });
 
-  console.log("OVERFLOW " + JSON.stringify(overflow));
-  console.log(
-    "CONSOLE_ERRORS count=" +
-      errors.length +
-      " " +
-      JSON.stringify([...new Set(errors)].slice(0, 20))
+  test.info().annotations.push(
+    { type: "overflow", description: JSON.stringify(overflow) },
+    {
+      type: "console-errors",
+      description:
+        `count=${errors.length} ` +
+        JSON.stringify([...new Set(errors)].slice(0, 20)),
+    }
   );
 });
