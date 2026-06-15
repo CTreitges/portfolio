@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { site } from "@/content/site";
 
 /**
@@ -15,13 +16,13 @@ export default function LegalPage({
   children: React.ReactNode;
 }) {
   return (
-    <main className="mx-auto min-h-dvh max-w-2xl px-5 py-16">
-      <a
+    <main id="main" tabIndex={-1} className="mx-auto min-h-dvh max-w-2xl px-5 py-16">
+      <Link
         href="/"
         className="font-mono text-xs text-text-faint transition-colors hover:text-accent-soft"
       >
         ← Zurück zum Portfolio
-      </a>
+      </Link>
       <h1 className="mt-6 font-display text-3xl font-bold text-text">{title}</h1>
       {updated ? (
         <p className="mt-2 text-xs text-text-faint">Stand: {updated}</p>

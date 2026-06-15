@@ -11,7 +11,7 @@ export const metadata: Metadata = {
  */
 export default function UnlockPage() {
   return (
-    <main className="relative flex min-h-dvh items-center justify-center overflow-hidden px-4">
+    <main id="main" tabIndex={-1} className="relative flex min-h-dvh items-center justify-center overflow-hidden px-4">
       <div aria-hidden className="aurora pointer-events-none absolute inset-0" />
       <div aria-hidden className="noise-overlay" />
 

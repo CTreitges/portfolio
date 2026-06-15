@@ -26,7 +26,7 @@ const jetbrainsMono = JetBrains_Mono({
  * ohne Inhalte zu leaken.
  */
 export const metadata: Metadata = {
-  metadataBase: new URL("https://<SERVER_IP>"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com"),
   title: {
     default: "Portfolio — Zugang per Einladung",
     template: "%s",
@@ -67,7 +67,12 @@ export default function RootLayout({
       lang="de"
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-bg text-text">{children}</body>
+      <body className="min-h-full bg-bg text-text">
+        <a href="#main" className="skip-link">
+          Zum Inhalt springen
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

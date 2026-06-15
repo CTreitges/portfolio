@@ -27,7 +27,7 @@ export default function Home() {
       <NoiseOverlay />
       <ScrollProgress />
       <SiteHeader />
-      <main>
+      <main id="main" tabIndex={-1}>
         <Hero />
         <About />
         <ProjectsGrid />

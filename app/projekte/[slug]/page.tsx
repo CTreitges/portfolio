@@ -42,7 +42,7 @@ export default async function ProjectPage({
   return (
     <SmoothScroll>
       <NoiseOverlay />
-      <main className="mx-auto max-w-3xl px-5 pb-16 pt-10">
+      <main id="main" tabIndex={-1} className="mx-auto max-w-3xl px-5 pb-16 pt-10">
         <Link
           href="/#projekte"
           className="font-mono text-sm text-text-muted hover:text-accent"

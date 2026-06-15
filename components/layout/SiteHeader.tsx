@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { site } from "@/content/site";
 
 /** Sticky-Header mit Glas-Effekt nach Scroll, Scroll-Spy und Mobile-Overlay. */
@@ -9,6 +9,29 @@ export default function SiteHeader() {
   // Leer = nichts markiert (Besucher ist oben im Hero, der nicht in der Nav steht).
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
+  const burgerRef = useRef<HTMLButtonElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
+
+  // Mobile-Overlay-a11y: Escape schließt, Body-Scroll-Lock während offen,
+  // Fokus beim Öffnen ins Overlay und beim Schließen zurück zum Burger.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    mobileNavRef.current?.querySelector("a")?.focus();
+    // Burger referenzstabil festhalten (Button bleibt gemountet) — vermeidet
+    // die react-hooks/exhaustive-deps-Warnung zu ref.current im Cleanup.
+    const burger = burgerRef.current;
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+      burger?.focus();
+    };
+  }, [open]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -69,6 +92,7 @@ export default function SiteHeader() {
         </nav>
 
         <button
+          ref={burgerRef}
           type="button"
           aria-label={open ? "Menü schließen" : "Menü öffnen"}
           aria-expanded={open}
@@ -84,7 +108,12 @@ export default function SiteHeader() {
 
       {/* Mobile-Overlay */}
       {open && (
-        <nav id="mobile-nav" className="glass border-t border-border md:hidden">
+        <nav
+          ref={mobileNavRef}
+          id="mobile-nav"
+          aria-label="Hauptnavigation"
+          className="glass border-t border-border md:hidden"
+        >
           <ul className="mx-auto max-w-6xl px-5 py-3">
             {site.nav.map((n) => (
               <li key={n.id}>

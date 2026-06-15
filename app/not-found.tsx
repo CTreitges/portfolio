@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-center">
+    <main id="main" tabIndex={-1} className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-center">
       <div aria-hidden className="aurora pointer-events-none absolute inset-0 opacity-60" />
       <p className="font-mono text-sm uppercase tracking-[0.2em] text-accent">
-        // 404
+        {"// 404"}
       </p>
       <h1 className="mt-3 font-display text-4xl font-bold tracking-tight sm:text-6xl">
         Seite nicht gefunden

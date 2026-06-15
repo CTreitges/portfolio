@@ -72,6 +72,31 @@ body {
   border-radius: 4px;
 }
 
+/* Skip-Link (WCAG 2.4.1): visuell versteckt, bei Tastatur-Fokus sichtbar.
+   Springt zum #main-Landmark, damit Tastatur/Screenreader die wiederholte
+   Header-Navigation überspringen können. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 60;
+  transform: translateY(-160%);
+  transition: transform 0.18s var(--ease-out-quint);
+  border-radius: 0.5rem;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+/* #main als Sprungziel nicht mit eigenem Fokus-Ring umranden. */
+#main:focus {
+  outline: none;
+}
+
 /* ───────────────────────────────────────────────────────────────────────────
    Effekt-Utilities
    ─────────────────────────────────────────────────────────────────────────── */
