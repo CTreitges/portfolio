@@ -89,6 +89,16 @@ function ItFabrikLine({ p }: { p: Project }) {
   );
 }
 
+/** Letzte-Aktualisierung-Zeile — in Flagship- und Projektkarte identisch. */
+function StatusLine({ p }: { p: Project }) {
+  if (!p.currentStatus) return null;
+  return (
+    <p className="mt-3 font-mono text-[11px] leading-relaxed text-text-faint">
+      Stand: {p.currentStatus}
+    </p>
+  );
+}
+
 /** Volle Breite, 2-spaltig — fürs Aushängeschild. */
 function FlagshipCard({ p }: { p: Project }) {
   return (
@@ -107,11 +117,7 @@ function FlagshipCard({ p }: { p: Project }) {
             {p.summary}
           </p>
           <ItFabrikLine p={p} />
-          {p.currentStatus && (
-            <p className="mt-3 font-mono text-[11px] leading-relaxed text-text-faint">
-              Stand: {p.currentStatus}
-            </p>
-          )}
+          <StatusLine p={p} />
         </div>
         <div className="flex flex-col justify-center border-t border-border pt-5 md:border-l md:border-t-0 md:pl-8 md:pt-0">
           <CardThumb p={p} />
@@ -141,11 +147,7 @@ function ProjectCard({ p, featured }: { p: Project; featured: boolean }) {
           </p>
         )}
         <ItFabrikLine p={p} />
-        {p.currentStatus && (
-          <p className="mt-3 font-mono text-[11px] leading-relaxed text-text-faint">
-            Stand: {p.currentStatus}
-          </p>
-        )}
+        <StatusLine p={p} />
         <div className="mt-auto pt-5">
           <MetaBlock p={p} max={featured ? 6 : 4} />
         </div>
@@ -154,16 +156,29 @@ function ProjectCard({ p, featured }: { p: Project; featured: boolean }) {
   );
 }
 
+// Zahlwörter 0–12 für den Intro-Satz; höhere Zahlen fallen auf die Ziffer
+// zurück. Erste Stelle wird am Satzanfang großgeschrieben.
+const COUNT_WORDS = [
+  "null", "ein", "zwei", "drei", "vier", "fünf", "sechs",
+  "sieben", "acht", "neun", "zehn", "elf", "zwölf",
+];
+
 export default function ProjectsGrid() {
   const flagship = projects.find((p) => p.flagship);
   const others = projects.filter((p) => !p.flagship && !p.hidden);
+
+  // Sichtbare Projekte (Flagship + Karten) — die Zahl im Intro daraus ableiten,
+  // damit sie nicht driftet, wenn ein Projekt dazukommt oder ausgeblendet wird.
+  const visibleCount = (flagship ? 1 : 0) + others.length;
+  const countWord = COUNT_WORDS[visibleCount] ?? String(visibleCount);
+  const countLabel = countWord.charAt(0).toUpperCase() + countWord.slice(1);
 
   return (
     <Section
       id="projekte"
       eyebrow="// ARBEITSPROBEN"
       title="Projekte"
-      intro="Acht Projekte — von lokaler KI-Dokumentenverarbeitung über produktive Büro-Automatisierung bis zur deklarativen Infrastruktur. Jede Karte führt zu einer Case-Study mit Architektur und Wirkung."
+      intro={`${countLabel} Projekte — von lokaler KI-Dokumentenverarbeitung über produktive Büro-Automatisierung bis zur deklarativen Infrastruktur. Jede Karte führt zu einer Case-Study mit Architektur und Wirkung.`}
     >
       {flagship && (
         <Reveal>
