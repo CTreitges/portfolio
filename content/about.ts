@@ -12,7 +12,7 @@ export const about = {
     "Werkzeuge zu bauen, die anderen das Leben leichter machen, war schon vor der KI-Zeit mein Antrieb — damals noch mit dem klassischen Ziel Softwareentwickler. Klassische Berufserfahrung bringe ich noch nicht mit, dafür ein eigenes Gewerbe, erste Kundenprojekte und Software, die produktiv läuft. Den nächsten Schritt will ich bewusst in einem Team gehen — ein gutes Umfeld, in dem ich mein Können gezielt ausbaue und an Kundenprojekten arbeite, auf die ich richtig Lust habe.",
 
   profilePersonal:
-    "Wenn ein Thema mich packt, arbeite ich mich mit echtem Hyperfokus in kurzer Zeit tief hinein — das ist mein stärkstes Werkzeug, um Neues zu durchdringen. Und wenn ich etwas schaffen will, habe ich Biss.",
+    "Wenn ein Thema mich packt, arbeite ich mich mit Hyperfokus in kurzer Zeit tief hinein — das ist mein stärkstes Werkzeug, um Neues zu durchdringen. Und wenn ich etwas schaffen will, habe ich Biss.",
 
   howIWork:
     "Hands-on und autodidaktisch. Ich baue Dinge, bis sie produktiv laufen — nicht bis sie demobereit sind. Und ich recherchiere gern, bis ich die technisch beste Lösung gefunden habe. Das geht auch ganz ohne KI: Mein VR-Projekt GazeFactory (Uni, 4er-Team, 2023) habe ich von Grund auf selbst gebaut — Zustandsmodell und Blickführungs-Logik in Eigenregie, vor der KI-Code-Ära.",
@@ -47,7 +47,7 @@ export const about = {
     "Schnelle Auffassungsgabe, hohe Lernbereitschaft",
     "Ausdauer bei kniffligen Problemen",
     "Gründliche Recherche der besten technischen Lösung",
-    "Teamarbeit",
+    "Verantwortung im Team — als langjähriger Pfadfinder-Leiter und im Uni-Projektteam",
   ],
 
   // Abseits des Rechners (Interview C, überarbeitet 2026-06-10)

@@ -27,7 +27,7 @@ export const projects: Project[] = [
     summary:
       "Mein Aushängeschild: eine produktiv genutzte Anwendung für einen Gastronomiebetrieb (DerTeller Gastronomics). Sie liest die PDF-Bedarfsübersichten der Events ein — also welche Lebensmittel und Gerichte fürs jeweilige Event gebraucht werden — und überträgt sie über ein 364-Regeln-Regelwerk in eine Excel-Produktionsübersicht für die Küche. Parallel entstehen Beschriftungskarten mit den passenden Allergenen. Eine Fehlererkennung fängt unbekannte Positionen ab, und die Regelwerk-Pflege ist KI-gestützt: für jede unbekannte Position schlägt Claude eine neue Regel vor — mit Begründung und Accept/Reject.",
     origin:
-      "Entstanden in meinem Werkstudenten-Job bei DerTeller Gastronomics aus der Frage, ob sich so etwas mit KI lösen ließe — ich habe mich reingefuchst und es bis zum Produktivbetrieb gebracht. Der Betrieb, in dem ich arbeite, ist zugleich der, der die Anwendung wöchentlich nutzt: kurze Wege zu den echten Anforderungen, direktes Feedback und echter Produktivdruck statt Demo-Szenario.",
+      "Entstanden in meinem Werkstudenten-Job bei DerTeller Gastronomics aus der Frage, ob sich so etwas mit KI lösen ließe — ich habe mich reingefuchst und es bis zum Produktivbetrieb gebracht. Der Betrieb, in dem ich arbeite, ist zugleich der, der die Anwendung wöchentlich nutzt: kurze Wege zu den tatsächlichen Anforderungen, direktes Feedback und echter Produktivdruck statt Demo-Szenario.",
     currentStatus:
       "Seit September 2025 in wöchentlichem Produktiveinsatz, laufend weiterentwickelt.",
     headlineMetric: { value: "482", label: "automatisierte Tests" },

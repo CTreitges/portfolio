@@ -68,7 +68,7 @@ export const nodes: KnowledgeNode[] = [
     y: 9,
     level: "satellite",
     desc: "Lokale Inferenz auf eigenem Server — läuft 24/7 auf meinem VPS.",
-    proof: { text: "DocuFlow nutzt es produktiv", href: "/projekte/docuflow" },
+    proof: { text: "DocuFlow nutzt es", href: "/projekte/docuflow" },
   },
   {
     id: "l-vision",

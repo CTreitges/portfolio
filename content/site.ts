@@ -1,5 +1,16 @@
 /** Globale Site-Daten: Identität, Navigation, Kontakt, Hero-Texte. */
 
+// Ladungsfähige Anschrift fürs Impressum (§ 5 DDG) — kommt aus der
+// Server-Umgebung, NICHT aus dem (öffentlichen) Repo, damit die Privatadresse
+// nicht in der git-History liegt. Format: '|'-getrennte Zeilen, z. B.
+// LEGAL_ADDRESS_LINES="Musterstr. 1|12345 Musterstadt". Auf dem VPS in
+// /etc/portfolio/portfolio.env (wird beim Build gesourct). Fehlt sie, bleibt es
+// beim Platzhalter → addressPlaceholder ist automatisch true.
+const legalAddressLines = (process.env.LEGAL_ADDRESS_LINES ?? "")
+  .split("|")
+  .map((line) => line.trim())
+  .filter(Boolean);
+
 export const site = {
   name: "Christof Treitges",
   role: "KI-Entwickler & Innovation Specialist",
@@ -9,7 +20,6 @@ export const site = {
   // seinen eigenen Satz ersetzen.
   heroSubline:
     "Ich baue lokale, datenschutzkonforme KI-Lösungen, die im Mittelstand echte Abläufe automatisieren — produktiv im Einsatz, nicht nur als Demo.",
-  heroSublinePlaceholder: false,
 
   // Recruiter-lesbare Beweis-Chips: Flagship-Fakt, Breite, roter Faden.
   proofChips: [
@@ -43,7 +53,7 @@ export const site = {
   target: {
     company: "IT-Fabrik Bitburg",
     positioning:
-      "Lokale, datenschutzkonforme KI und echte Prozess-Automatisierung für den Mittelstand.",
+      "Lokale, datenschutzkonforme KI und spürbare Prozess-Automatisierung für den Mittelstand.",
   },
 
   footerTech:
@@ -54,15 +64,17 @@ export const site = {
     "Keine Tracker, keine Analytics, kein Cookie außer dem technisch nötigen Session-Cookie — gehostet auf eigenem Server.",
 
   // Rechtstexte (Impressum/Datenschutz, öffentlich erreichbar vor dem Gate).
-  // Wohnanschrift trägt der Inhaber LOKAL ein: addressLines füllen +
-  // addressPlaceholder auf false setzen → neu deployen. Solange Placeholder
-  // true ist, blendet der Footer die Rechts-Links aus und die Seiten zeigen
-  // einen "wird ergänzt"-Hinweis statt unfertiger Platzhalter (kein halb
-  // veröffentlichtes Impressum).
+  // Die Anschrift kommt aus LEGAL_ADDRESS_LINES (siehe oben) — solange sie
+  // fehlt, ist addressPlaceholder automatisch true: der Footer blendet die
+  // Rechts-Links aus und die Seiten zeigen einen "wird ergänzt"-Hinweis statt
+  // unfertiger Platzhalter (kein halb veröffentlichtes Impressum).
   legal: {
     holder: "Christof Treitges",
-    addressLines: ["Straße und Hausnummer", "PLZ und Ort"],
-    addressPlaceholder: true,
+    addressLines:
+      legalAddressLines.length > 0
+        ? legalAddressLines
+        : ["Straße und Hausnummer", "PLZ und Ort"],
+    addressPlaceholder: legalAddressLines.length === 0,
     hostingProvider: "Oracle Cloud Infrastructure",
     hostingLocation: "Frankfurt am Main, Deutschland (Region eu-frankfurt-1)",
   },

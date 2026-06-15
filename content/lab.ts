@@ -12,7 +12,7 @@ export const labConcepts: LabConcept[] = [
     status: "konzept",
     statusNote: "Konzept",
     pitch:
-      "Ein Assistent, der seine eigene Wissensbasis pflegt: Er liest alle verfügbaren Dateien — Dokumente, Notizen, Projektstände, Mails — und baut daraus automatisch eine durchsuchbare Datenbank über dich und deine Arbeit. Darauf aufbauend nimmt er echte Aufgaben ab: eingehende E-Mails lesen, Antwortentwürfe im eigenen Schreibstil vorbereiten und sie in einem eigenen UI zur Freigabe vorlegen. Den Stil lernt er aus deinen bisherigen Texten. Und er bleibt nicht stehen: In kurzen Interviews fragt er gezielt nach, was ihm an Wissen fehlt — und verbessert sich damit selbst.",
+      "Ein Assistent, der seine eigene Wissensbasis pflegt: Er liest alle verfügbaren Dateien — Dokumente, Notizen, Projektstände, Mails — und baut daraus automatisch eine durchsuchbare Datenbank über dich und deine Arbeit. Darauf aufbauend nimmt er Routineaufgaben ab: eingehende E-Mails lesen, Antwortentwürfe im eigenen Schreibstil vorbereiten und sie in einem eigenen UI zur Freigabe vorlegen. Den Stil lernt er aus deinen bisherigen Texten. Und er bleibt nicht stehen: In kurzen Interviews fragt er gezielt nach, was ihm an Wissen fehlt — und verbessert sich damit selbst.",
     kmuAngle:
       "Der Schritt von 'KI als Werkzeug' zu 'KI als eingearbeitete Assistenz': eine Instanz, die das Wissen einer Person oder Abteilung selbstständig aktuell hält und Routinekommunikation vorbereitet — freigegeben wird von Menschen. Mein RLM-Memory und die Hook-Pipeline sind im Kleinen genau das.",
     flow: {

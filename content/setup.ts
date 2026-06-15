@@ -54,7 +54,7 @@ export const setupCapabilities: { title: string; desc: string }[] = [
   },
   {
     title: "MCP-Werkzeuge",
-    desc: "13 angebundene Server geben dem Assistenten echte Werkzeuge an die Hand: Git, Dateisystem, Recherche, Issue-Tracker und mehr.",
+    desc: "13 angebundene Server geben dem Assistenten Werkzeuge an die Hand: Git, Dateisystem, Recherche, Issue-Tracker und mehr.",
   },
   {
     title: "Hooks für Konsistenz",
