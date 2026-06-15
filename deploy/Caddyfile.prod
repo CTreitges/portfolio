@@ -5,10 +5,10 @@
 	# Clients, die per IP zugreifen, senden KEIN SNI (SNI ist für Hostnamen).
 	# Ohne das matcht Caddy die Site nicht → TLS "internal error". default_sni
 	# behandelt SNI-lose Handshakes als die IP-Site.
-	default_sni <SERVER_IP>
+	default_sni {$SITE_HOST}
 }
 
-https://<SERVER_IP> {
+https://{$SITE_HOST} {
 	tls {
 		issuer acme {
 			profile shortlived

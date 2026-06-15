@@ -21,7 +21,7 @@
 #      ~/.acme.sh/<SERVER_IP>*/<SERVER_IP>.conf  Le_RenewalDays=3 setzen.
 #   5) Diese Datei nach /etc/caddy/Caddyfile kopieren + systemctl reload caddy.
 
-https://<SERVER_IP> {
+https://{$SITE_HOST} {
 	tls /etc/portfolio/certs/ip-fullchain.pem /etc/portfolio/certs/ip-key.pem
 	encode zstd gzip
 	header X-Robots-Tag "noindex, nofollow, noarchive"

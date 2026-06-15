@@ -5,7 +5,7 @@ Site von außen unerreichbar:
 
 ## Tür 1 — OCI Security List (Cloud-Konsole)
 
-1. <https://cloud.oracle.com> → Compute → Instances → Instanz (`<SERVER_INSTANCE>`)
+1. <https://cloud.oracle.com> → Compute → Instances → Instanz (`<INSTANCE_NAME>`)
 2. Unter **Primary VNIC** → Subnet anklicken → **Security Lists** → Default Security List
 3. **Add Ingress Rules** (2 Regeln):
 

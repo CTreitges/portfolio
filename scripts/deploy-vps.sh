@@ -25,6 +25,25 @@ loaded=$(curl -s --max-time 3 localhost:11434/api/ps 2>/dev/null | grep -c '"nam
 if [ "${SKIP_BUILD:-0}" != "1" ]; then
   step "2/5 Build (next build, standalone)"
   export NODE_OPTIONS=--max-old-space-size=4096
+  # Build-Zeit-Env aus der Service-Env laden (Impressum-Anschrift + Public-URL),
+  # damit static-prerenderte Seiten echte Werte bekommen statt Platzhalter.
+  # Datei liegt nur auf dem Server (root:portfolio, 0640) — nie im Repo.
+  # NICHT sourcen: die Datei ist systemd-EnvironmentFile-Syntax, kein Shell-
+  # Skript. Werte enthalten '$' (argon2-Hashes in ACCESS_CODES) und Leerzeichen
+  # (Anschrift) — bash würde sie expandieren bzw. als Kommando interpretieren
+  # und unter `set -e` den Deploy abbrechen. Darum nur die beiden Build-Keys
+  # literal einlesen und exportieren.
+  ENV_FILE="${PORTFOLIO_ENV:-/etc/portfolio/portfolio.env}"
+  if [ -r "$ENV_FILE" ]; then
+    echo "Build-Env aus $ENV_FILE geladen (NEXT_PUBLIC_SITE_URL, LEGAL_ADDRESS_LINES)"
+    while IFS='=' read -r key val || [ -n "$key" ]; do
+      case "$key" in
+        NEXT_PUBLIC_SITE_URL | LEGAL_ADDRESS_LINES) export "$key=$val" ;;
+      esac
+    done < "$ENV_FILE"
+  else
+    echo "WARNUNG: $ENV_FILE nicht lesbar — Impressum/URL nutzen Platzhalter/Fallback."
+  fi
   npm run build 2>&1 | tail -8
   # Standalone-Falle: static + public manuell in den standalone-Baum kopieren.
   cp -r public .next/standalone/
@@ -49,7 +68,7 @@ step "5/5 Health-Gate"
 code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 8 http://127.0.0.1:3100/unlock)
 echo "lokal /unlock → HTTP $code"
 [ "$code" = "200" ] || fail "Health-Check lokal fehlgeschlagen"
-code=$(curl -ks -o /dev/null -w "%{http_code}" --max-time 8 https://<SERVER_IP>/unlock)
+code=$(curl -ks -o /dev/null -w "%{http_code}" --max-time 8 "https://${SITE_HOST:-your.server.ip}/unlock")
 echo "extern /unlock → HTTP $code"
 
 echo

@@ -4,7 +4,7 @@
 # TODO (Phase 5): Telegram-Alarm anbinden, sobald Token-Quelle geklärt.
 set -u
 
-HOST="<SERVER_IP>"
+HOST="${SITE_HOST:-your.server.ip}"
 PORT=443
 WARN_DAYS=3
 FLAG="/opt/portfolio/logs/cert-warning.flag"
