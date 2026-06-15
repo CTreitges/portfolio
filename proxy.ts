@@ -40,6 +40,9 @@ export const config = {
   // könnte sonst geschützte Bilder (z.B. Projekt-Screenshots) öffentlich
   // ausliefern — die Site nutzt ihn nicht.
   matcher: [
-    "/((?!unlock|api/unlock|impressum|datenschutz|_next/static|favicon\\.ico|favicon\\.svg|icon\\.svg|apple-icon|og\\.png|robots\\.txt).*)",
+    // Seiten-Tokens segment-verankert ((?:/|$)), damit eine künftige Route wie
+    // /impressum-intern NICHT als öffentlich durchrutscht, nur weil sie mit
+    // "impressum" beginnt. Asset-Tokens sind über ihre Endung schon eindeutig.
+    "/((?!unlock(?:/|$)|api/unlock(?:/|$)|impressum(?:/|$)|datenschutz(?:/|$)|_next/static|favicon\\.ico|favicon\\.svg|icon\\.svg|apple-icon|og\\.png|robots\\.txt).*)",
   ],
 };

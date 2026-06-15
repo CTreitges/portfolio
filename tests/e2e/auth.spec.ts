@@ -174,6 +174,15 @@ test.describe("Auth-Gate", () => {
     const gated = await api.get("/projekte/docuflow", { maxRedirects: 0 });
     expect(gated.status(), "geschützte Route ohne Session").toBe(303);
     expect(gated.headers()["location"]).toContain("/unlock");
+
+    // Präfix-Bypass-Härtung: Routen, die nur mit einem Whitelist-Token BEGINNEN
+    // (z.B. /impressum-intern), dürfen NICHT öffentlich sein — der Matcher ist
+    // segment-verankert (proxy.ts). Regression zur Matcher-Härtung 2026-06-15.
+    for (const sneaky of ["/impressum-intern", "/datenschutz-x", "/unlockX"]) {
+      const res = await api.get(sneaky, { maxRedirects: 0 });
+      expect(res.status(), `${sneaky} darf nicht am Gate vorbei`).toBe(303);
+      expect(res.headers()["location"]).toContain("/unlock");
+    }
     await api.dispose();
   });
 });
