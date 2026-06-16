@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Section from "@/components/ui/Section";
 import SpotlightCard from "@/components/effects/SpotlightCard";
 import Reveal from "@/components/effects/Reveal";
@@ -14,12 +13,13 @@ export default function About() {
         {/* Foto-Slot */}
         <Reveal>
           <SpotlightCard className="flex h-full min-h-[200px] flex-col items-center justify-center p-6 text-center">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element -- bewusst kein next/image: Optimizer-Pfad läge vor dem Auth-Gate */}
+            <img
               src="/profil.webp"
               alt="Christof Treitges"
               width={96}
               height={96}
-              priority
+              decoding="async"
               className="h-24 w-24 rounded-full border border-accent/30 object-cover"
             />
             <p className="mt-4 text-sm text-text-muted">Christof Treitges</p>
