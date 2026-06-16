@@ -3,7 +3,7 @@ import type { FlowSpec, SetupStat } from "./types";
 /**
  * „Mein Maschinenraum" — Zahlen nach der eigenen Architektur-Doku
  * (claude-setup-dokumentation.html, 17 Sektionen). Dev-Kern: 13 MCP,
- * 16 Hook-Skripte über 6 Events, 6 Skills, 5 Commands. Kein Telegram im
+ * 16 Hook-Skripte über 6 Events, 6 Skills, 10 Commands. Kein Telegram im
  * täglichen Claude-Code-Flow — Output ist Linear + Git. Plan-Modus + Effort.
  */
 
@@ -12,8 +12,8 @@ export const setupStats: SetupStat[] = [
   { value: "13", label: "MCP-Server", source: "12 stdio + 1 SSE" },
   { value: "16", label: "Hook-Skripte", source: "über 6 Events" },
   { value: "6", label: "Skills" },
-  { value: "5", label: "Commands" },
-  { value: "730+", label: "RLM-Insights", source: "rlm_status live" },
+  { value: "10", label: "Commands" },
+  { value: "760+", label: "RLM-Insights", source: "rlm_status live" },
   { value: "1", label: "Plugin", source: "frontend-design" },
   { value: "24/7", label: "VPS-Session", source: "systemd, reboot-fest" },
 ];

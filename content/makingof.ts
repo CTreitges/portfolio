@@ -3,17 +3,17 @@ import type { FlowSpec, Metric, SetupStat } from "./types";
 /**
  * Making-of: wie dieses Portfolio entstand. Die Sektion ist selbst ein
  * Arbeitsbeispiel — Zahlen belegbar (Session-Logs, Test-Suite), nichts
- * geschönt. Der <5h-Wert meint reale Arbeitszeit des Menschen.
+ * geschönt. Der <10h-Wert meint reale Arbeitszeit des Menschen.
  */
 
 export const makingOfIntro =
-  "Diese Seite ist selbst ein Arbeitsbeispiel: gebaut mit meinem eigenen Claude-Code-Setup — in unter 5 Stunden realer Arbeitszeit. Möglich, weil mein KI-System mich und meine Projekte längst kannte. Architektur, Entscheidungen und Qualitätskontrolle bleiben dabei meine Arbeit.";
+  "Diese Seite ist selbst ein Arbeitsbeispiel: gebaut mit meinem eigenen Claude-Code-Setup — in unter 10 Stunden realer Arbeitszeit. Möglich, weil mein KI-System mich und meine Projekte längst kannte. Architektur, Entscheidungen und Qualitätskontrolle bleiben dabei meine Arbeit.";
 
 export const makingOfStats: (Metric | SetupStat)[] = [
-  { value: "< 5 h", label: "reale Arbeitszeit" },
-  { value: "730+", label: "Memory-Insights als Wissensbasis" },
-  { value: "15", label: "Screenshots — von Agenten selbst erstellt" },
-  { value: "17", label: "E2E-Tests grün vor jedem Deploy" },
+  { value: "< 10 h", label: "reale Arbeitszeit" },
+  { value: "760+", label: "Memory-Insights als Wissensbasis" },
+  { value: "19", label: "Screenshots — von Agenten selbst erstellt" },
+  { value: "20", label: "E2E-Tests grün vor jedem Deploy" },
 ];
 
 export const makingOfSteps: { title: string; desc: string }[] = [
@@ -43,7 +43,7 @@ export const makingOfFlow: FlowSpec = {
   nodes: [
     { id: "plan", label: "Plan-Modus", sub: "Scope · Architektur", lane: 0 },
     { id: "interview", label: "KI-Interview", sub: "Werdegang · O-Töne", lane: 0 },
-    { id: "mem", label: "RLM-Memory + Graph", sub: "730+ Insights über meine Arbeit", lane: 1, accent: "cyan" },
+    { id: "mem", label: "RLM-Memory + Graph", sub: "760+ Insights über meine Arbeit", lane: 1, accent: "cyan" },
     { id: "git", label: "Git- & MCP-Zugriff", sub: "Fakten aus den Repos", lane: 1 },
     { id: "ultra", label: "ultracode-Workflows", sub: "parallele Agenten bauen & prüfen", lane: 2, accent: "violet" },
     { id: "verify", label: "Verifikation", sub: "Playwright · axe · Lighthouse", lane: 3 },

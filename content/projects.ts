@@ -426,7 +426,7 @@ export const projects: Project[] = [
       "Aus täglicher Arbeit gewachsen: je ernsthafter ich mit Claude Code arbeitete, desto mehr Gedächtnis, Werkzeuge und Leitplanken brauchte es — bis daraus ein eigenes System wurde.",
     currentStatus:
       "Täglich produktiv; zuletzt: VPS als dauerhafter Node, Effort-gesteuerte Workflows. Dokumentiert in einer eigenen 17-Sektionen-Architektur-Doku.",
-    headlineMetric: { value: "730+", label: "persistierte Memories" },
+    headlineMetric: { value: "760+", label: "persistierte Memories" },
     caseStudy: {
       aiCore: true,
       problem: [
@@ -457,8 +457,8 @@ export const projects: Project[] = [
         ],
       },
       results: [
-        "730+ persistierte Insights, über drei Maschinen synchron gehalten (VPS als kanonische Quelle).",
-        "16 Hook-Skripte über 6 Events, 6 Skills, 5 Commands, 13 MCP-Server, 1 Plugin.",
+        "760+ persistierte Insights, über drei Maschinen synchron gehalten (VPS als kanonische Quelle).",
+        "16 Hook-Skripte über 6 Events, 6 Skills, 10 Commands, 13 MCP-Server, 1 Plugin.",
         "Plan-Modus + Effort-Stufen steuern, wie gründlich eine Aufgabe angegangen wird; ein VPS dient als vollwertiger, reboot-fester KI-Node mit persistenter Session.",
       ],
       metrics: [

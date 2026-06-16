@@ -162,7 +162,7 @@ export const nodes: KnowledgeNode[] = [
     x: 92,
     y: 45,
     level: "satellite",
-    desc: "Selbst gebautes Memory: 730+ Insights, sessionübergreifend abrufbar.",
+    desc: "Selbst gebautes Memory: 760+ Insights, sessionübergreifend abrufbar.",
     proof: { text: "Im Setup", href: "#setup" },
   },
   {
