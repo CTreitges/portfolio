@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Section from "@/components/ui/Section";
 import SpotlightCard from "@/components/effects/SpotlightCard";
 import Reveal from "@/components/effects/Reveal";
@@ -13,9 +14,14 @@ export default function About() {
         {/* Foto-Slot */}
         <Reveal>
           <SpotlightCard className="flex h-full min-h-[200px] flex-col items-center justify-center p-6 text-center">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full border border-accent/30 bg-accent/5 font-display text-3xl font-bold text-accent">
-              CT
-            </div>
+            <Image
+              src="/profil.webp"
+              alt="Christof Treitges"
+              width={96}
+              height={96}
+              priority
+              className="h-24 w-24 rounded-full border border-accent/30 object-cover"
+            />
             <p className="mt-4 text-sm text-text-muted">Christof Treitges</p>
             <p className="mt-1 font-mono text-xs text-text-faint">
               KI-Entwickler
