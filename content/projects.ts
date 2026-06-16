@@ -115,7 +115,7 @@ export const projects: Project[] = [
       results: [
         "Im realen wöchentlichen Einsatz bei DerTeller Gastronomics — von der Event-Bedarfsübersicht zum fertigen Küchen-Produktionsplan plus Beschriftungskarten.",
         "Spart im Wochenbetrieb geschätzt 2–4 Stunden manuelle Büroarbeit: Der Produktionsplan entsteht auf Knopfdruck, statt die Bedarfsübersichten von Hand in die Excel-Tabelle zu übertragen.",
-        "364 Regeln (rund 200 mit Allergen-, ~150 mit Beschriftungs-Angaben); 83 KI-Vorschläge bearbeitet (67 angenommen, 16 abgelehnt).",
+        "364 Regeln (rund 200 mit Allergen-, ~150 mit Beschriftungs-Angaben).",
         "Abgesichert durch eine 482-Tests-Suite (Parser-Korpus + Playwright-E2E gegen die laufende App), zuletzt vollständig grün.",
         "~16.000 Zeilen Code im Kern; ausgeliefert als selbst-aktualisierendes Windows-Programm.",
       ],
