@@ -1,5 +1,6 @@
 import Section from "@/components/ui/Section";
 import SpotlightCard from "@/components/effects/SpotlightCard";
+import ProfilePhoto from "@/components/ui/ProfilePhoto";
 import Reveal from "@/components/effects/Reveal";
 import Marquee from "@/components/effects/Marquee";
 import { about } from "@/content/about";
@@ -13,15 +14,7 @@ export default function About() {
         {/* Foto-Slot */}
         <Reveal>
           <SpotlightCard className="flex h-full min-h-[200px] flex-col items-center justify-center p-6 text-center">
-            {/* eslint-disable-next-line @next/next/no-img-element -- bewusst kein next/image: Optimizer-Pfad läge vor dem Auth-Gate */}
-            <img
-              src="/profil.webp"
-              alt="Christof Treitges"
-              width={96}
-              height={96}
-              decoding="async"
-              className="h-24 w-24 rounded-full border border-accent/30 object-cover"
-            />
+            <ProfilePhoto src="/profil.webp" alt="Christof Treitges" />
             <p className="mt-4 text-sm text-text-muted">Christof Treitges</p>
             <p className="mt-1 font-mono text-xs text-text-faint">
               KI-Entwickler
