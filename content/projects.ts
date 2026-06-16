@@ -248,6 +248,127 @@ export const projects: Project[] = [
     },
   },
   {
+    slug: "geschenke-manager",
+    title: "Geschenke-Manager",
+    tagline:
+      "Gruppen-Geschenke im Freundeskreis koordinieren — fertige App, für 0 € serverlos gehostet.",
+    featured: true,
+    status: "produktiv",
+    relevance: "Tooling",
+    repo: "https://github.com/CTreitges/Geschenke-Manager",
+    liveUrl: "https://geschenke-manager-ec19e.web.app",
+    stack: [
+      "React 18",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "Firebase Firestore",
+      "Firebase Auth",
+      "Cloud Functions",
+      "PWA",
+    ],
+    summary:
+      "Eine fertige, live betriebene Web-App (installierbare PWA), mit der ein Freundeskreis gemeinsame Geschenke organisiert: Geburtstags-Übersicht mit automatischem Geschenk-Stack, Wunschlisten, Teilnehmer mit Live-Budget und eine transparente Abstimmung. Komplett serverlos auf Firebase gebaut und im kostenlosen Free-Tier für 0 € gehostet — Firestore als Echtzeit-Datenbank, Google-Login (plus anonymer Geräte-Login ohne Account-Zwang) für die Anmeldung und Cloud Functions für Gruppen-Beitritt, Geburtstags-Erinnerungen und Push. Das Projekt zeigt, dass ich mit KI nicht nur Prototypen, sondern abgeschlossene, gepflegte Apps baue und kosteneffizient betreibe.",
+    origin:
+      "Im Freundeskreis versanken Sammel-Geschenke regelmäßig in WhatsApp-Verläufen und Tabellen — wer macht mit, welches Budget, welche Idee. Das wollte ich in eine saubere App gießen.",
+    currentStatus:
+      "Live und im Freundeskreis im Einsatz; installierbare PWA mit Mehr-Gruppen-Support, Mail-Erinnerungen und Web-Push.",
+    headlineMetric: { value: "0 €", label: "Hosting (Firebase Free-Tier)" },
+    itFabrikShort:
+      "Beweis, dass ich fertige Apps baue UND serverlos zu Null-Fixkosten betreibe — von Auth über Datenbank bis Deploy.",
+    // Demo-Gruppe mit erfundenen Personen (Lena, Jonas, Mara …) und
+    // ausgedachten Geschenk-Ideen; keine echten Kontakt- oder Gästedaten.
+    screenshots: [
+      {
+        src: "/projects/geschenke-manager/01-uebersicht.webp",
+        thumb: "/projects/geschenke-manager/01-uebersicht-thumb.webp",
+        alt: "Zwei Handy-Screens der Geschenke-Manager-PWA im Dark Mode: links die Startseite mit der nächsten Geburtstags-Person als Hero-Karte und dem Geschenk-Stack darunter, rechts die Personen-Übersicht des Freundeskreises mit Geburtstags-Countdown.",
+        caption:
+          "Startseite & Personen: die nächste Geburtstags-Person als Hero, darunter der automatische Geschenk-Stack (ab 30 Tage vorher), rechts der ganze Freundeskreis mit Countdown.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/geschenke-manager/02-geschenk-abstimmung.webp",
+        thumb: "/projects/geschenke-manager/02-geschenk-abstimmung-thumb.webp",
+        alt: "Zwei Handy-Screens des Geschenk-Details: links Teilnehmer als farbige Chips mit Live-Budget (4 × 10 € = 40 €), rechts gesammelte Vorschläge mit Preisen und eine laufende Abstimmung samt Voter-Avataren.",
+        caption:
+          "Geschenk-Detail: Teilnehmer mit Live-Budget (Anzahl × Pro-Kopf), gesammelte Vorschläge und eine transparente Abstimmung, bei der jede Stimme für alle sichtbar ist.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/geschenke-manager/03-anmeldung.webp",
+        thumb: "/projects/geschenke-manager/03-anmeldung-thumb.webp",
+        alt: "Login-Screen der Geschenke-Manager-PWA mit Button „Mit Google anmelden“, darunter Felder für Gruppen-ID und Passwort sowie dem Hinweis „Vertrauensbasis, kein Account-Zwang“.",
+        caption:
+          "Anmeldung: Google-Login für geräteübergreifende Mitgliedschaft oder einfach Gruppen-ID + Passwort — sofort anonym nutzbar, ohne Account-Zwang.",
+        width: 1600,
+        height: 1000,
+      },
+      {
+        src: "/projects/geschenke-manager/04-einstellungen.webp",
+        thumb: "/projects/geschenke-manager/04-einstellungen-thumb.webp",
+        alt: "Einstellungen der Geschenke-Manager-PWA: Konto-Bereich mit „Mit Google verknüpfen“, aktive Gruppe samt Lösch-Option, „Wer bin ich?“-Identitätsauswahl und Dark-Mode-Schalter.",
+        caption:
+          "Einstellungen: Google-Konto-Sync, Gruppen-Verwaltung, „Wer bin ich?“-Identität, Default-Budget, Dark Mode und Web-Push — alles serverlos über Firebase.",
+        width: 1600,
+        height: 1000,
+      },
+    ],
+    caseStudy: {
+      aiCore: false,
+      problem: [
+        "Sammel-Geschenke im Freundeskreis zu organisieren — wer ist dabei, welches Budget, welche Idee gewinnt — versinkt in Chat-Verläufen und Tabellen.",
+        "Eine eigene App dafür sollte nichts kosten: kein Server, keine monatliche Hosting-Rechnung und keine Account-Hürde für die Freunde.",
+      ],
+      approach: [
+        "Komplett serverlose Architektur auf Firebase: das statische Frontend liegt auf Firebase Hosting, Firestore dient als Echtzeit-Datenbank, und Cloud Functions übernehmen die wenigen serverseitigen Aktionen. Cloud Functions setzen den Blaze-Plan (pay-as-you-go) voraus, bleiben bei dieser Nutzung aber vollständig im kostenlosen Free-Tier-Kontingent — laufende Kosten 0 €.",
+        "Niedrigschwellige Anmeldung: anonyme Firebase-Auth beim ersten Öffnen (sofort nutzbar) plus optionaler Google-Login, um geräteübergreifend dieselbe Mitgliedschaft zu behalten. Gruppen-Zugang über geteilte ID + Passwort, serverseitig in einer Cloud Function geprüft.",
+        "Sicherheit trotz Trust-Prinzip: Firestore Security Rules geben Daten nur eingetragenen Gruppen-Mitgliedern frei; die Passwort-Hashes liegen für Clients unerreichbar und werden ausschließlich von Cloud Functions verarbeitet.",
+        "Echtes Produkt-Finish statt Prototyp: installierbare PWA mit Offline-Cache und Web-Push, automatischer Geschenk-Stack 30 Tage vor dem Geburtstag, Mail-Erinnerungen, Mehr-Gruppen-Umschalter und Dark Mode.",
+      ],
+      architecture: {
+        nodes: [
+          { id: "host", label: "Firebase Hosting", sub: "liefert die PWA · CDN · 0 €", lane: 0, accent: "muted" },
+          { id: "app", label: "PWA-Frontend", sub: "React · Vite · Tailwind", lane: 1 },
+          { id: "auth", label: "Firebase Auth", sub: "Anonym + Google", lane: 2, accent: "violet" },
+          { id: "db", label: "Firestore", sub: "Echtzeit-DB · Security Rules", lane: 3, accent: "cyan" },
+          { id: "fns", label: "Cloud Functions", sub: "Beitritt · Erinnerungen · Push", lane: 3, accent: "violet" },
+          { id: "msg", label: "Mail + Web-Push", sub: "Geburtstags-Erinnerungen", lane: 4, accent: "muted" },
+        ],
+        edges: [
+          { from: "host", to: "app", animated: true },
+          { from: "app", to: "auth", animated: true },
+          { from: "auth", to: "db" },
+          { from: "app", to: "db", animated: true },
+          { from: "app", to: "fns", animated: true },
+          { from: "fns", to: "db" },
+          { from: "fns", to: "msg", animated: true },
+        ],
+      },
+      results: [
+        "Live unter geschenke-manager-ec19e.web.app, als PWA installierbar und im Freundeskreis in Benutzung.",
+        "Laufende Infrastrukturkosten: 0 € — Hosting, Datenbank und Functions bleiben im Firebase-Free-Tier.",
+        "Von der ersten Idee bis zur deploybaren, gepflegten App vollständig mit KI-Assistenz gebaut.",
+      ],
+      metrics: [
+        { value: "0 €", label: "Hosting (Free-Tier)" },
+        { value: "serverlos", label: "Firestore · Auth · Functions" },
+        { value: "PWA", label: "installierbar + Web-Push" },
+      ],
+      itFabrik:
+        "Zeigt genau die Fähigkeit, die ein KMU-Systemhaus für schlanke interne Tools oder Kunden-MVPs braucht: eine vollständige App von Auth über Echtzeit-Datenbank bis Deploy eigenständig bauen und auf einer Managed-Plattform zu minimalen Fixkosten betreiben — schnell live, ohne eigenen Server-Betrieb.",
+      learnings: [
+        "Eine Managed-Serverless-Plattform (Firebase) bringt ein kleines Projekt ohne Fixkosten und ohne eigene Server-Wartung produktiv — der Free-Tier deckt einen realen Freundeskreis vollständig ab.",
+        "Anonyme Auth als Default plus optionaler Google-Login senkt die Einstiegshürde radikal, ohne auf geräteübergreifende Konten zu verzichten.",
+        "Sicherheits-Logik gehört in Security Rules und Cloud Functions, nicht ins Frontend — gerade bei einer „Trust“-App, die trotzdem nicht offen im Netz stehen soll.",
+      ],
+      screenshotNote:
+        "Demo-Gruppe mit erfundenen Personen und Dummy-Geschenken — keine echten Kontakte oder Gästedaten.",
+    },
+  },
+  {
     slug: "ordio-csv",
     title: "Ordio-Perso-CSV",
     tagline:

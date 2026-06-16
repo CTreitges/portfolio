@@ -72,6 +72,8 @@ export interface Project {
   relevance: RelevanceTag;
   /** Repo/Link, optional (private Repos: weglassen) */
   repo?: string;
+  /** Live-Demo der gehosteten App, optional (z.B. Firebase-Hosting-URL). */
+  liveUrl?: string;
   /** Karte im Grid ausblenden; Case-Study-Seite bleibt erreichbar. */
   hidden?: boolean;
   /** UI-Screenshots (Dummy-Daten); erstes Element = Karten-Thumb. */

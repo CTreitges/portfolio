@@ -81,6 +81,18 @@ export default async function ProjectPage({
               ↗ Quellcode auf GitHub
             </a>
           )}
+          {p.liveUrl && (
+            <a
+              href={p.liveUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={`mt-4 inline-block font-mono text-sm text-accent hover:text-accent-soft${
+                p.repo ? " ml-4" : ""
+              }`}
+            >
+              ↗ Live ansehen
+            </a>
+          )}
         </header>
 
         {/* So kam ich dazu */}
