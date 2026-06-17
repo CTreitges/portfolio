@@ -251,7 +251,7 @@ export const projects: Project[] = [
     slug: "geschenke-manager",
     title: "Geschenke-Manager",
     tagline:
-      "Gruppen-Geschenke im Freundeskreis koordinieren — fertige App, für 0 € serverlos gehostet.",
+      "Gruppen-Geschenke im Freundeskreis koordinieren — fertige App, kostenlos gehostet.",
     featured: true,
     status: "produktiv",
     relevance: "Tooling",
