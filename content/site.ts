@@ -32,8 +32,12 @@ export const site = {
     email: "Christof.Treitges@outlook.de",
     github: "https://github.com/CTreitges",
     githubHandle: "CTreitges",
-    // Telefon/Standort bewusst NICHT öffentlich (Interview-Entscheidung:
-    // im Gespräch klären).
+    // Telefon kommt aus der Server-Umgebung (CONTACT_PHONE in
+    // /etc/portfolio/portfolio.env), NICHT aus dem öffentlichen Repo — dieselbe
+    // Privacy-Linie wie die Impressum-Adresse. Nur hinter dem Auth-Gate
+    // sichtbar (als Prop an die Kontakt-Sektion gereicht, nie im öffentlichen
+    // Client-Bundle). Leer → der Telefon-Button wird ausgeblendet.
+    phone: (process.env.CONTACT_PHONE ?? "").trim(),
   },
 
   // Reihenfolge = Dramaturgie = Scroll-Spy-Reihenfolge.

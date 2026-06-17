@@ -9,6 +9,8 @@ import type { FlowSpec, Metric, SetupStat } from "./types";
 export const makingOfIntro =
   "Diese Seite ist selbst ein Arbeitsbeispiel: gebaut mit meinem eigenen Claude-Code-Setup — in unter 10 Stunden realer Arbeitszeit. Möglich, weil mein KI-System mich und meine Projekte längst kannte. Architektur, Entscheidungen und Qualitätskontrolle bleiben dabei meine Arbeit.";
 
+export const makingOfRepoUrl = "https://github.com/CTreitges/portfolio";
+
 export const makingOfStats: (Metric | SetupStat)[] = [
   { value: "< 10 h", label: "reale Arbeitszeit" },
   { value: "760+", label: "Memory-Insights als Wissensbasis" },

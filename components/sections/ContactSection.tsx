@@ -6,8 +6,13 @@ import MagneticButton from "@/components/effects/MagneticButton";
 import Reveal from "@/components/effects/Reveal";
 import { site } from "@/content/site";
 
-export default function ContactSection() {
+export default function ContactSection({ phone = "" }: { phone?: string }) {
   const [copied, setCopied] = useState(false);
+
+  // tel:-Href aus der Anzeige-Nummer ableiten (nur Ziffern; führende 0 → +49).
+  const phoneHref = phone
+    ? `tel:+49${phone.replace(/\D/g, "").replace(/^0/, "")}`
+    : "";
 
   async function copyEmail() {
     try {
@@ -56,6 +61,11 @@ export default function ContactSection() {
             >
               {copied ? "Kopiert ✓" : "E-Mail kopieren"}
             </button>
+            {phone && (
+              <MagneticButton href={phoneHref} variant="ghost">
+                {phone}
+              </MagneticButton>
+            )}
             <MagneticButton href={site.contact.github} variant="ghost">
               GitHub · {site.contact.githubHandle}
             </MagneticButton>

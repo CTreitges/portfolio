@@ -14,6 +14,7 @@ import LabSection from "@/components/sections/LabSection";
 import TimelineSection from "@/components/sections/TimelineSection";
 import MakingOfSection from "@/components/sections/MakingOfSection";
 import ContactSection from "@/components/sections/ContactSection";
+import { site } from "@/content/site";
 
 // Die Startseite ist nur mit Session erreichbar — der persönliche Titel
 // leakt also nichts; das generische "Zugang per Einladung" bleibt für /unlock.
@@ -37,7 +38,7 @@ export default function Home() {
         <LabSection />
         <TimelineSection />
         <MakingOfSection />
-        <ContactSection />
+        <ContactSection phone={site.contact.phone} />
       </main>
       <SiteFooter />
     </SmoothScroll>

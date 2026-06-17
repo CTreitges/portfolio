@@ -5,6 +5,7 @@ import FlowDiagram from "@/components/effects/FlowDiagram";
 import {
   makingOfFlow,
   makingOfIntro,
+  makingOfRepoUrl,
   makingOfStats,
   makingOfSteps,
 } from "@/content/makingof";
@@ -71,6 +72,18 @@ export default function MakingOfSection() {
           </Reveal>
         ))}
       </div>
+      <Reveal delay={0.1}>
+        <div className="mt-6 flex justify-center">
+          <a
+            href={makingOfRepoUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex w-fit items-center gap-1.5 rounded-lg border border-border px-4 py-2 font-mono text-xs text-text-muted transition-colors hover:border-accent/40 hover:text-accent"
+          >
+            Code dieser Seite auf GitHub ansehen →
+          </a>
+        </div>
+      </Reveal>
     </Section>
   );
 }

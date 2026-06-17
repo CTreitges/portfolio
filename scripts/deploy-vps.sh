@@ -45,10 +45,10 @@ if [ "${SKIP_BUILD:-0}" != "1" ]; then
   # und unter `set -e` den Deploy abbrechen. Darum nur die Build-Keys literal
   # einlesen und exportieren.
   if [ -r "$ENV_FILE" ]; then
-    echo "Build-Env aus $ENV_FILE (NEXT_PUBLIC_SITE_URL, NEXT_PUBLIC_BASE_PATH, LEGAL_ADDRESS_LINES)"
+    echo "Build-Env aus $ENV_FILE (NEXT_PUBLIC_SITE_URL, NEXT_PUBLIC_BASE_PATH, LEGAL_ADDRESS_LINES, CONTACT_PHONE)"
     while IFS='=' read -r key val || [ -n "$key" ]; do
       case "$key" in
-        NEXT_PUBLIC_SITE_URL | NEXT_PUBLIC_BASE_PATH | LEGAL_ADDRESS_LINES)
+        NEXT_PUBLIC_SITE_URL | NEXT_PUBLIC_BASE_PATH | LEGAL_ADDRESS_LINES | CONTACT_PHONE)
           # explizit übergebene Env nicht überschreiben (env > file)
           [ -z "${!key:-}" ] && export "$key=$val" ;;
       esac

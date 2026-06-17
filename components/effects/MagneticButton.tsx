@@ -64,7 +64,7 @@ export default function MagneticButton({
   );
 
   if (href) {
-    const external = href.startsWith("http") || href.startsWith("mailto:");
+    const external = href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:");
     if (external) {
       return (
         <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">

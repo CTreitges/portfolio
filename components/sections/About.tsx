@@ -38,7 +38,7 @@ export default function About() {
               {about.profilePersonal}
             </p>
             <Link
-              href="/studienleistungen"
+              href="/studienleistungen?from=about"
               className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 font-mono text-xs text-text-muted transition-colors hover:border-accent/40 hover:text-accent"
             >
               Studienleistungen ansehen →
