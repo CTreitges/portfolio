@@ -1,20 +1,53 @@
-# PRODUKTION: Let's-Encrypt-IP-Zertifikat (6-Tage-Profil "shortlived",
-# Caddy erneuert automatisch). Aktivieren NUR nachdem der Staging-Spike
-# (Caddyfile.staging) erfolgreich war.
+# PRODUKTION — eigene Domain (Let's-Encrypt, Auto-Renewal) + direkter IP-Zugriff.
+#
+# Hosts kommen aus der Umgebung (systemd-Drop-in caddy.service.d/override.conf),
+# damit das Repo host-agnostisch bleibt — KEINE Domain/IP hartkodieren:
+#   SITE_HOST=<domain>      z. B. example.de
+#   SERVER_IP=<server-ip>   z. B. 203.0.113.10
+#
+# Die Domain bekommt ein normales LE-Zertifikat (TLS-ALPN/HTTP-01). Der
+# IP-Block behält das 6-Tage-"shortlived"-Cert und hält bestehende
+# Magic-Links auf https://<ip> am Leben.
 {
 	# Clients, die per IP zugreifen, senden KEIN SNI (SNI ist für Hostnamen).
 	# Ohne das matcht Caddy die Site nicht → TLS "internal error". default_sni
 	# behandelt SNI-lose Handshakes als die IP-Site.
-	default_sni {$SITE_HOST}
+	default_sni {$SERVER_IP}
 }
 
-https://{$SITE_HOST} {
+# Gemeinsame Site-Konfiguration (Domain + IP teilen sie sich).
+(site) {
+	encode zstd gzip
+	header X-Robots-Tag "noindex, nofollow, noarchive"
+
+	# Die App lebt unter /portfolio (Next basePath). Nackte Root und alte
+	# /unlock-Magic-Links dorthin umleiten — das #code-Fragment hängt der
+	# Browser selbst an die Ziel-URL an. Temporär (302), damit nichts im
+	# Browser-Cache einrastet, solange die Struktur sich noch setzen kann.
+	@root path /
+	redir @root /portfolio
+	@unlock path /unlock /unlock/
+	redir @unlock /portfolio/unlock
+
+	reverse_proxy 127.0.0.1:3100
+}
+
+# www → apex (dauerhafte Weiterleitung).
+www.{$SITE_HOST} {
+	redir https://{$SITE_HOST}{uri} permanent
+}
+
+# Haupt-Site über die Domain.
+{$SITE_HOST} {
+	import site
+}
+
+# Fallback: direkter Zugriff per IP (6-Tage-IP-Cert).
+https://{$SERVER_IP} {
 	tls {
 		issuer acme {
 			profile shortlived
 		}
 	}
-	encode zstd gzip
-	header X-Robots-Tag "noindex, nofollow, noarchive"
-	reverse_proxy 127.0.0.1:3100
+	import site
 }

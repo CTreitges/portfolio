@@ -1,5 +1,6 @@
 import Section from "@/components/ui/Section";
 import Reveal from "@/components/effects/Reveal";
+import Link from "next/link";
 import { timeline } from "@/content/timeline";
 import type { TimelineEntry } from "@/content/types";
 
@@ -82,6 +83,14 @@ export default function TimelineSection() {
               </Reveal>
             ))}
           </div>
+          <Reveal delay={0.1}>
+            <Link
+              href="/studienleistungen"
+              className="mt-6 inline-flex w-fit items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 font-mono text-xs text-text-muted transition-colors hover:border-accent/40 hover:text-accent"
+            >
+              Studienleistungen ansehen →
+            </Link>
+          </Reveal>
         </div>
         <div>
           <p className="mb-6 font-mono text-xs uppercase tracking-wider text-accent">

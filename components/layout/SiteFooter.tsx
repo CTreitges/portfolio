@@ -1,4 +1,5 @@
 import { site } from "@/content/site";
+import { withBasePath } from "@/lib/base-path";
 
 /** Footer — bewusst auch Beweisführung (Tech-Stack der Seite selbst). */
 export default function SiteFooter() {
@@ -27,10 +28,16 @@ export default function SiteFooter() {
           </a>
           {!site.legal.addressPlaceholder && (
             <>
-              <a href="/impressum" className="hover:text-accent-soft">
+              <a
+                href={withBasePath("/impressum")}
+                className="hover:text-accent-soft"
+              >
                 Impressum
               </a>
-              <a href="/datenschutz" className="hover:text-accent-soft">
+              <a
+                href={withBasePath("/datenschutz")}
+                className="hover:text-accent-soft"
+              >
                 Datenschutz
               </a>
             </>

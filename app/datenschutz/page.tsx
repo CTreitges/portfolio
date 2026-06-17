@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import LegalPage, { LegalSection } from "@/components/layout/LegalPage";
 import { site } from "@/content/site";
+import { withBasePath } from "@/lib/base-path";
 
 export const metadata: Metadata = {
   title: "Datenschutzerklärung",
@@ -23,7 +24,10 @@ export default function DatenschutzPage() {
           <p>
             Verantwortlich für die Datenverarbeitung auf dieser Website ist{" "}
             {legal.holder}. Die vollständige Anschrift wird im{" "}
-            <a className="text-accent-soft underline" href="/impressum">
+            <a
+              className="text-accent-soft underline"
+              href={withBasePath("/impressum")}
+            >
               Impressum
             </a>{" "}
             ergänzt. Kontakt:{" "}

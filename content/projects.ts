@@ -268,14 +268,14 @@ export const projects: Project[] = [
       "PWA",
     ],
     summary:
-      "Eine fertige, live betriebene Web-App (installierbare PWA), mit der ein Freundeskreis gemeinsame Geschenke organisiert: Geburtstags-Übersicht mit automatischem Geschenk-Stack, Wunschlisten, Teilnehmer mit Live-Budget und eine transparente Abstimmung. Komplett serverlos auf Firebase gebaut und im kostenlosen Free-Tier für 0 € gehostet — Firestore als Echtzeit-Datenbank, Google-Login (plus anonymer Geräte-Login ohne Account-Zwang) für die Anmeldung und Cloud Functions für Gruppen-Beitritt, Geburtstags-Erinnerungen und Push. Das Projekt zeigt, dass ich mit KI nicht nur Prototypen, sondern abgeschlossene, gepflegte Apps baue und kosteneffizient betreibe.",
+      "Eine fertige, live betriebene Web-App (installierbare PWA), mit der ein Freundeskreis gemeinsame Geschenke organisiert: Geburtstags-Übersicht mit automatischem Geschenk-Stack, Wunschlisten, Teilnehmer mit Live-Budget und eine transparente Abstimmung. Komplett auf Firebase gebaut und im kostenlosen Free-Tier für 0 € gehostet — Firestore als Echtzeit-Datenbank, Google-Login (plus anonymer Geräte-Login ohne Account-Zwang) für die Anmeldung und Cloud Functions für Gruppen-Beitritt, Geburtstags-Erinnerungen und Push. Das Projekt zeigt, dass ich mit KI nicht nur Prototypen, sondern abgeschlossene, gepflegte Apps baue und kosteneffizient betreibe.",
     origin:
       "Im Freundeskreis versanken Sammel-Geschenke regelmäßig in WhatsApp-Verläufen und Tabellen — wer macht mit, welches Budget, welche Idee. Das wollte ich in eine saubere App gießen.",
     currentStatus:
       "Live und im Freundeskreis im Einsatz; installierbare PWA mit Mehr-Gruppen-Support, Mail-Erinnerungen und Web-Push.",
     headlineMetric: { value: "0 €", label: "Hosting (Firebase Free-Tier)" },
     itFabrikShort:
-      "Beweis, dass ich fertige Apps baue UND serverlos zu Null-Fixkosten betreibe — von Auth über Datenbank bis Deploy.",
+      "Beweis, dass ich fertige Apps baue UND zu Null-Fixkosten betreibe — von Auth über Datenbank bis Deploy.",
     // Demo-Gruppe mit erfundenen Personen (Lena, Jonas, Mara …) und
     // ausgedachten Geschenk-Ideen; keine echten Kontakt- oder Gästedaten.
     screenshots: [
@@ -311,7 +311,7 @@ export const projects: Project[] = [
         thumb: "/projects/geschenke-manager/04-einstellungen-thumb.webp",
         alt: "Einstellungen der Geschenke-Manager-PWA: Konto-Bereich mit „Mit Google verknüpfen“, aktive Gruppe samt Lösch-Option, „Wer bin ich?“-Identitätsauswahl und Dark-Mode-Schalter.",
         caption:
-          "Einstellungen: Google-Konto-Sync, Gruppen-Verwaltung, „Wer bin ich?“-Identität, Default-Budget, Dark Mode und Web-Push — alles serverlos über Firebase.",
+          "Einstellungen: Google-Konto-Sync, Gruppen-Verwaltung, „Wer bin ich?“-Identität, Default-Budget, Dark Mode und Web-Push — alles über Firebase.",
         width: 1600,
         height: 1000,
       },
@@ -323,7 +323,7 @@ export const projects: Project[] = [
         "Eine eigene App dafür sollte nichts kosten: kein Server, keine monatliche Hosting-Rechnung und keine Account-Hürde für die Freunde.",
       ],
       approach: [
-        "Komplett serverlose Architektur auf Firebase: das statische Frontend liegt auf Firebase Hosting, Firestore dient als Echtzeit-Datenbank, und Cloud Functions übernehmen die wenigen serverseitigen Aktionen. Cloud Functions setzen den Blaze-Plan (pay-as-you-go) voraus, bleiben bei dieser Nutzung aber vollständig im kostenlosen Free-Tier-Kontingent — laufende Kosten 0 €.",
+        "Komplett auf Firebase aufgebaute Architektur: das statische Frontend liegt auf Firebase Hosting, Firestore dient als Echtzeit-Datenbank, und Cloud Functions übernehmen die wenigen serverseitigen Aktionen. Cloud Functions setzen den Blaze-Plan (pay-as-you-go) voraus, bleiben bei dieser Nutzung aber vollständig im kostenlosen Free-Tier-Kontingent — laufende Kosten 0 €.",
         "Niedrigschwellige Anmeldung: anonyme Firebase-Auth beim ersten Öffnen (sofort nutzbar) plus optionaler Google-Login, um geräteübergreifend dieselbe Mitgliedschaft zu behalten. Gruppen-Zugang über geteilte ID + Passwort, serverseitig in einer Cloud Function geprüft.",
         "Sicherheit trotz Trust-Prinzip: Firestore Security Rules geben Daten nur eingetragenen Gruppen-Mitgliedern frei; die Passwort-Hashes liegen für Clients unerreichbar und werden ausschließlich von Cloud Functions verarbeitet.",
         "Echtes Produkt-Finish statt Prototyp: installierbare PWA mit Offline-Cache und Web-Push, automatischer Geschenk-Stack 30 Tage vor dem Geburtstag, Mail-Erinnerungen, Mehr-Gruppen-Umschalter und Dark Mode.",
@@ -354,7 +354,7 @@ export const projects: Project[] = [
       ],
       metrics: [
         { value: "0 €", label: "Hosting (Free-Tier)" },
-        { value: "serverlos", label: "Firestore · Auth · Functions" },
+        { value: "Firebase", label: "Firestore · Auth · Functions" },
         { value: "PWA", label: "installierbar + Web-Push" },
       ],
       itFabrik:

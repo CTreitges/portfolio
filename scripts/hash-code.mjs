@@ -40,7 +40,8 @@ const h = await hash(code, {
 
 console.log(`Name      : ${name}`);
 console.log(`Code      : ${code}`);
-console.log(`Magic-Link: https://${process.env.SITE_URL ?? "<SERVER_IP>"}/unlock#code=${encodeURIComponent(code)}`);
+const basePath = process.env.BASE_PATH ?? "";
+console.log(`Magic-Link: https://${process.env.SITE_URL ?? "<SERVER_IP>"}${basePath}/unlock#code=${encodeURIComponent(code)}`);
 console.log(`Eintrag   : ${name}:${h}`);
 console.log(
   `\nIn ACCESS_CODES mehrere Einträge mit ';' trennen. Nach Änderung: systemctl restart portfolio`

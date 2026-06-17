@@ -55,6 +55,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // App unter einem Unterpfad ausliefern (z. B. /portfolio). Muss zur Build-Zeit
+  // feststehen — der Wert wird in die Client-Bundles inlined. Leer/ungesetzt →
+  // App läuft auf "/" (Default, z. B. lokal). Quelle für den manuellen Präfix
+  // (fetch/Cookie/<a>): lib/base-path.ts.
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || undefined,
   // Minimaler Server für den VPS-Deploy (systemd startet .next/standalone/server.js).
   output: "standalone",
   // Ohne das inferiert Next ein Lockfile im Home-Verzeichnis als Workspace-Root

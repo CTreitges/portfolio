@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { withBasePath } from "@/lib/base-path";
 
 type FormState = "idle" | "loading" | "error" | "blocked" | "success";
 
@@ -43,7 +44,7 @@ export default function UnlockForm() {
       try {
         const from =
           new URLSearchParams(window.location.search).get("from") ?? "/";
-        const res = await fetch("/api/unlock", {
+        const res = await fetch(withBasePath("/api/unlock"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ code: value, from }),
@@ -54,7 +55,7 @@ export default function UnlockForm() {
         };
         if (res.ok && data.ok) {
           setState("success");
-          navigate(data.redirect ?? "/");
+          navigate(data.redirect ?? withBasePath("/"));
           return; // busyRef bleibt gesetzt — wir navigieren weg.
         }
         if (res.status === 429) {

@@ -2,7 +2,9 @@ import Section from "@/components/ui/Section";
 import SpotlightCard from "@/components/effects/SpotlightCard";
 import ProfilePhoto from "@/components/ui/ProfilePhoto";
 import Reveal from "@/components/effects/Reveal";
+import { withBasePath } from "@/lib/base-path";
 import Marquee from "@/components/effects/Marquee";
+import Link from "next/link";
 import { about } from "@/content/about";
 
 /** Bento-Grid. Foto-Slot + Profil, Warum-KI-Anekdote, Fähigkeiten,
@@ -14,7 +16,7 @@ export default function About() {
         {/* Foto-Slot */}
         <Reveal>
           <SpotlightCard className="flex h-full min-h-[200px] flex-col items-center justify-center p-6 text-center">
-            <ProfilePhoto src="/profil.webp" alt="Christof Treitges" />
+            <ProfilePhoto src={withBasePath("/profil.webp")} alt="Christof Treitges" />
             <p className="mt-4 text-sm text-text-muted">Christof Treitges</p>
             <p className="mt-1 font-mono text-xs text-text-faint">
               KI-Entwickler
@@ -35,6 +37,12 @@ export default function About() {
             <p className="mt-3 text-sm leading-relaxed text-text-faint">
               {about.profilePersonal}
             </p>
+            <Link
+              href="/studienleistungen"
+              className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 font-mono text-xs text-text-muted transition-colors hover:border-accent/40 hover:text-accent"
+            >
+              Studienleistungen ansehen →
+            </Link>
           </SpotlightCard>
         </Reveal>
 

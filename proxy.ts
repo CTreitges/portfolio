@@ -40,6 +40,10 @@ export const config = {
   // könnte sonst geschützte Bilder (z.B. Projekt-Screenshots) öffentlich
   // ausliefern — die Site nutzt ihn nicht.
   matcher: [
+    // Die Startseite explizit: mit gesetztem basePath (z. B. /portfolio) erfasst
+    // das Negativ-Pattern unten die nackte Root NICHT — sie bliebe sonst
+    // ungeschützt (Auth-Gate-Leck). "/" wird mit basePath zu /portfolio.
+    "/",
     // Seiten-Tokens segment-verankert ((?:/|$)), damit eine künftige Route wie
     // /impressum-intern NICHT als öffentlich durchrutscht, nur weil sie mit
     // "impressum" beginnt. Asset-Tokens sind über ihre Endung schon eindeutig.

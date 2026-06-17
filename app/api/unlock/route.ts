@@ -8,6 +8,7 @@ import {
 } from "@/lib/auth/session";
 import { checkRateLimit, getClientIp } from "@/lib/auth/rate-limit";
 import { logAccess } from "@/lib/auth/access-log";
+import { BASE_PATH, withBasePath } from "@/lib/base-path";
 
 /**
  * POST /api/unlock — { code, from? }
@@ -56,16 +57,19 @@ export async function POST(request: NextRequest) {
 
   void logAccess("unlock_ok", { code: codeName, ip, ua });
 
-  // Open-Redirect-Schutz: nur site-relative Pfade zulassen.
-  const redirect =
+  // Open-Redirect-Schutz: nur site-relative Pfade zulassen. Der Browser springt
+  // per window.location.assign dorthin → der Wert braucht den basePath-Präfix
+  // (withBasePath ist idempotent, falls "from" ihn schon trägt).
+  const safe =
     from && from.startsWith("/") && !from.startsWith("//") ? from : "/";
+  const redirect = withBasePath(safe);
 
   const res = NextResponse.json({ ok: true, redirect });
   res.cookies.set(SESSION_COOKIE, await signSession(codeName), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    path: "/",
+    path: BASE_PATH || "/",
     maxAge: SESSION_MAX_AGE_S,
   });
   return res;

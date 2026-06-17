@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { ResearchDoc } from "@/content/types";
+import { withBasePath } from "@/lib/base-path";
 
 /**
  * Vollbild-Viewer für ein research-pitch-HTML-Dokument.
@@ -14,7 +15,7 @@ import type { ResearchDoc } from "@/content/types";
  */
 export default function ResearchViewer({ doc }: { doc: ResearchDoc }) {
   const [loadMobile, setLoadMobile] = useState(false);
-  const src = `/research-docs/${doc.file}`;
+  const src = withBasePath(`/research-docs/${doc.file}`);
 
   return (
     <div className="flex h-dvh flex-col bg-bg">
