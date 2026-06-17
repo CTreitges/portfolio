@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { ProjectScreenshot } from "@/content/types";
+import { withBasePath } from "@/lib/base-path";
 
 /**
  * Screenshot-Galerie mit Lightbox auf Basis des nativen <dialog>-Elements:
@@ -36,7 +37,7 @@ export default function ScreenshotGallery({
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- bewusst kein next/image: Optimizer-Pfad läge vor dem Auth-Gate */}
               <img
-                src={s.src}
+                src={withBasePath(s.src)}
                 alt={s.alt}
                 loading="lazy"
                 decoding="async"
@@ -67,7 +68,7 @@ export default function ScreenshotGallery({
           <figure className="m-0">
             {/* eslint-disable-next-line @next/next/no-img-element -- bewusst kein next/image: Optimizer-Pfad läge vor dem Auth-Gate */}
             <img
-              src={active.src}
+              src={withBasePath(active.src)}
               alt={active.alt}
               width={active.width}
               height={active.height}

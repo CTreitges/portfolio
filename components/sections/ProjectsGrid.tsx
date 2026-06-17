@@ -5,6 +5,7 @@ import Reveal from "@/components/effects/Reveal";
 import Chip from "@/components/ui/Chip";
 import { miniTools, projects } from "@/content/projects";
 import type { Project } from "@/content/types";
+import { withBasePath } from "@/lib/base-path";
 
 // CTA: auf Touch-Geräten (kein Hover) dauerhaft sichtbar, sonst erst bei Hover.
 const ctaCls =
@@ -46,7 +47,7 @@ function CardThumb({ p }: { p: Project }) {
     <div className="mb-4 overflow-hidden rounded-lg border border-border">
       {/* eslint-disable-next-line @next/next/no-img-element -- bewusst kein next/image: Optimizer-Pfad läge vor dem Auth-Gate */}
       <img
-        src={shot.thumb ?? shot.src}
+        src={withBasePath(shot.thumb ?? shot.src)}
         alt={shot.alt}
         loading="lazy"
         decoding="async"

@@ -4,6 +4,7 @@ import SpotlightCard from "@/components/effects/SpotlightCard";
 import Reveal from "@/components/effects/Reveal";
 import Chip from "@/components/ui/Chip";
 import { researchDocs } from "@/content/research";
+import { withBasePath } from "@/lib/base-path";
 
 /**
  * Research-Showcase — Karten zu den HTML-Recherche-Dokumenten.
@@ -39,7 +40,7 @@ export default function ResearchSection() {
               <div className="mb-4 overflow-hidden rounded-lg border border-border">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={`/research-thumbs/${d.slug}.jpg`}
+                  src={withBasePath(`/research-thumbs/${d.slug}.jpg`)}
                   alt=""
                   loading="lazy"
                   width={1280}
