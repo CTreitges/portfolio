@@ -29,7 +29,38 @@
 	@unlock path /unlock /unlock/
 	redir @unlock /portfolio/unlock
 
-	reverse_proxy 127.0.0.1:3100
+	# Nature One Camp — Anmelde-App (FastAPI, systemd --user nature-camp, 127.0.0.1:8090).
+	# handle_path strippt das /nature-one-Prefix; die App laeuft intern unter "/".
+	handle_path /nature-one* {
+		reverse_proxy 127.0.0.1:8090
+	}
+
+	# Hevy -> Garmin Sync (FastAPI, systemd --user hevy-garmin-sync, 127.0.0.1:8091).
+	handle_path /Hevy2Garmin* {
+		reverse_proxy 127.0.0.1:8091
+	}
+
+	# Flip 7 — gemeinsamer Live-Punktezaehler (FastAPI, systemd --user
+	# flip7-live, 127.0.0.1:8092). handle_path strippt das /Flip7-Prefix;
+	# die Oberflaeche setzt es fuer ihre API-Aufrufe selbst wieder davor.
+	# Ohne Schrägstrich am Ende wuerden die relativen Verweise der Seite
+	# (Manifest, Symbole, Service Worker) eine Ebene zu hoch landen.
+	redir /Flip7 /Flip7/ 301
+
+	handle_path /Flip7* {
+		reverse_proxy 127.0.0.1:8092
+	}
+
+	# Vox — eigenes F-Droid-Repository (statische Dateien, systemd --user vox-fdroid,
+	# 127.0.0.1:8130). handle_path strippt /fdroid; der Index liegt unter /fdroid/repo/.
+	handle_path /fdroid* {
+		reverse_proxy 127.0.0.1:8130
+	}
+
+	# Portfolio (Next.js, 127.0.0.1:3100) — Catch-all fuer alles Uebrige.
+	handle {
+		reverse_proxy 127.0.0.1:3100
+	}
 }
 
 # www → apex (dauerhafte Weiterleitung).
