@@ -51,7 +51,7 @@
 		reverse_proxy 127.0.0.1:8092
 	}
 
-	# Vox — eigenes F-Droid-Repository (statische Dateien, systemd --user vox-fdroid,
+	# WhisperLoom — eigenes F-Droid-Repository (statische Dateien, systemd --user whisperloom-fdroid,
 	# 127.0.0.1:8130). handle_path strippt /fdroid; der Index liegt unter /fdroid/repo/.
 	handle_path /fdroid* {
 		reverse_proxy 127.0.0.1:8130
