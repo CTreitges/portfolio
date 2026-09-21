@@ -63,6 +63,13 @@
 	}
 }
 
+# Gemeinsame Basis für Subdomain-Dienste — bewusst OHNE den Portfolio-Catch-all
+# aus (site): eine Subdomain gehört genau einem Dienst.
+(subsite) {
+	encode zstd gzip
+	header X-Robots-Tag "noindex, nofollow, noarchive"
+}
+
 # www → apex (dauerhafte Weiterleitung).
 www.{$SITE_HOST} {
 	redir https://{$SITE_HOST}{uri} permanent
@@ -71,6 +78,13 @@ www.{$SITE_HOST} {
 # Haupt-Site über die Domain.
 {$SITE_HOST} {
 	import site
+}
+
+# hermes-bridge — nimmt Sprachaufträge von WhisperLoom entgegen und gibt sie an den
+# Hermes-Agenten weiter (systemd --user hermes-bridge, 127.0.0.1:8093).
+hermes-bridge.{$SITE_HOST} {
+	import subsite
+	reverse_proxy 127.0.0.1:8093
 }
 
 # Fallback: direkter Zugriff per IP (6-Tage-IP-Cert).
