@@ -87,6 +87,25 @@ hermes-bridge.{$SITE_HOST} {
 	reverse_proxy 127.0.0.1:8093
 }
 
+# Flux — Vorschau zum Anschauen, KEINE Produktion (Basic-Auth, Zugang in ~/.config/flux-preview/zugang).
+# Web = vite preview (systemd --user flux-preview-web, 127.0.0.1:8094), API = uvicorn
+# (flux-preview-api, 127.0.0.1:8095, DB flux_stage im Dev-Cluster). /api/* ohne Strip (flux m1-arbeitsplan AP05).
+flux.{$SITE_HOST} {
+	import subsite
+	basic_auth {
+		flux $2a$14$zvEX8J9le8tmwv1P6Sc2xeIVNG2TBQN.85RnGyN417sMrrcKkuIDK
+	}
+	handle /api/* {
+		reverse_proxy 127.0.0.1:8095
+	}
+	handle {
+		# vite preview lässt nur localhost als Host zu (preview.allowedHosts).
+		reverse_proxy 127.0.0.1:8094 {
+			header_up Host localhost
+		}
+	}
+}
+
 # Fallback: direkter Zugriff per IP (6-Tage-IP-Cert).
 https://{$SERVER_IP} {
 	tls {
