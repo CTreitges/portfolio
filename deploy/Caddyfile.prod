@@ -107,14 +107,6 @@ flux.{$SITE_HOST} {
 	}
 }
 
-# claude-novnc — noVNC-Fernsicht auf den Claude-Browser zum Lösen von CAPTCHAs.
-# websockify (systemd --user claude-novnc, 127.0.0.1:8096) läuft NUR bei Bedarf (sonst 502)
-# und macht Basic-Auth selbst (Zugangsdaten nur auf dem Server); kein basic_auth hier, das Repo ist öffentlich.
-browser.{$SITE_HOST} {
-	import subsite
-	reverse_proxy 127.0.0.1:8096
-}
-
 # Fallback: direkter Zugriff per IP (6-Tage-IP-Cert).
 https://{$SERVER_IP} {
 	tls {
